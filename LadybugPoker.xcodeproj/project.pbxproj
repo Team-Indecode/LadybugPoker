@@ -11,6 +11,12 @@
 		D19AFD532BBF9B7C008F9297 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD522BBF9B7C008F9297 /* ContentView.swift */; };
 		D19AFD552BBF9B7D008F9297 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D19AFD542BBF9B7D008F9297 /* Assets.xcassets */; };
 		D19AFD582BBF9B7D008F9297 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D19AFD572BBF9B7D008F9297 /* Preview Assets.xcassets */; };
+		D19AFD652BBF9BB5008F9297 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD642BBF9BB5008F9297 /* Font.swift */; };
+		D19AFD682BBF9DDF008F9297 /* SnowCrab.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D19AFD672BBF9DDF008F9297 /* SnowCrab.ttf */; };
+		D19AFD6A2BBF9E52008F9297 /* Yeongdeok Sea.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D19AFD692BBF9E52008F9297 /* Yeongdeok Sea.ttf */; };
+		D19AFD6D2BBF9F92008F9297 /* SigninView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD6C2BBF9F92008F9297 /* SigninView.swift */; };
+		D19AFD6F2BBF9F99008F9297 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD6E2BBF9F99008F9297 /* MainView.swift */; };
+		D19AFD712BBF9FB4008F9297 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD702BBF9FB4008F9297 /* Color.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +25,13 @@
 		D19AFD522BBF9B7C008F9297 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D19AFD542BBF9B7D008F9297 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D19AFD572BBF9B7D008F9297 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D19AFD642BBF9BB5008F9297 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		D19AFD662BBF9C0C008F9297 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D19AFD672BBF9DDF008F9297 /* SnowCrab.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SnowCrab.ttf; sourceTree = SOURCE_ROOT; };
+		D19AFD692BBF9E52008F9297 /* Yeongdeok Sea.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Yeongdeok Sea.ttf"; sourceTree = SOURCE_ROOT; };
+		D19AFD6C2BBF9F92008F9297 /* SigninView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; };
+		D19AFD6E2BBF9F99008F9297 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		D19AFD702BBF9FB4008F9297 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +64,11 @@
 		D19AFD4F2BBF9B7C008F9297 /* LadybugPoker */ = {
 			isa = PBXGroup;
 			children = (
+				D19AFD662BBF9C0C008F9297 /* Info.plist */,
+				D19AFD632BBF9BB0008F9297 /* Utils */,
+				D19AFD622BBF9BA8008F9297 /* Extensions */,
+				D19AFD5E2BBF9B86008F9297 /* Resources */,
+				D19AFD6B2BBF9F6A008F9297 /* Views */,
 				D19AFD502BBF9B7C008F9297 /* LadybugPokerApp.swift */,
 				D19AFD522BBF9B7C008F9297 /* ContentView.swift */,
 				D19AFD542BBF9B7D008F9297 /* Assets.xcassets */,
@@ -65,6 +83,48 @@
 				D19AFD572BBF9B7D008F9297 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D19AFD5E2BBF9B86008F9297 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D19AFD5F2BBF9B8E008F9297 /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D19AFD5F2BBF9B8E008F9297 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				D19AFD672BBF9DDF008F9297 /* SnowCrab.ttf */,
+				D19AFD692BBF9E52008F9297 /* Yeongdeok Sea.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		D19AFD622BBF9BA8008F9297 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		D19AFD632BBF9BB0008F9297 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				D19AFD642BBF9BB5008F9297 /* Font.swift */,
+				D19AFD702BBF9FB4008F9297 /* Color.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		D19AFD6B2BBF9F6A008F9297 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D19AFD6C2BBF9F92008F9297 /* SigninView.swift */,
+				D19AFD6E2BBF9F99008F9297 /* MainView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,6 +187,8 @@
 			files = (
 				D19AFD582BBF9B7D008F9297 /* Preview Assets.xcassets in Resources */,
 				D19AFD552BBF9B7D008F9297 /* Assets.xcassets in Resources */,
+				D19AFD682BBF9DDF008F9297 /* SnowCrab.ttf in Resources */,
+				D19AFD6A2BBF9E52008F9297 /* Yeongdeok Sea.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +201,10 @@
 			files = (
 				D19AFD532BBF9B7C008F9297 /* ContentView.swift in Sources */,
 				D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */,
+				D19AFD6D2BBF9F92008F9297 /* SigninView.swift in Sources */,
+				D19AFD6F2BBF9F99008F9297 /* MainView.swift in Sources */,
+				D19AFD652BBF9BB5008F9297 /* Font.swift in Sources */,
+				D19AFD712BBF9FB4008F9297 /* Color.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +341,7 @@
 				DEVELOPMENT_TEAM = JRXGXW25BG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LadybugPoker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -304,6 +371,7 @@
 				DEVELOPMENT_TEAM = JRXGXW25BG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LadybugPoker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
