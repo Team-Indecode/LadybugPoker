@@ -17,6 +17,10 @@
 		D19AFD6D2BBF9F92008F9297 /* SigninView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD6C2BBF9F92008F9297 /* SigninView.swift */; };
 		D19AFD6F2BBF9F99008F9297 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD6E2BBF9F99008F9297 /* MainView.swift */; };
 		D19AFD712BBF9FB4008F9297 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD702BBF9FB4008F9297 /* Color.swift */; };
+		D19AFD742BBFA0A9008F9297 /* GameRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD732BBFA0A9008F9297 /* GameRoomView.swift */; };
+		D19AFD772BBFA0C4008F9297 /* GameRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD762BBFA0C4008F9297 /* GameRoom.swift */; };
+		D19AFD792BBFA12F008F9297 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD782BBFA12F008F9297 /* User.swift */; };
+		D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD7B2BBFA238008F9297 /* GameRoom_Preview.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +36,10 @@
 		D19AFD6C2BBF9F92008F9297 /* SigninView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; };
 		D19AFD6E2BBF9F99008F9297 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D19AFD702BBF9FB4008F9297 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		D19AFD732BBFA0A9008F9297 /* GameRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomView.swift; sourceTree = "<group>"; };
+		D19AFD762BBFA0C4008F9297 /* GameRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoom.swift; sourceTree = "<group>"; };
+		D19AFD782BBFA12F008F9297 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		D19AFD7B2BBFA238008F9297 /* GameRoom_Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoom_Preview.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				D19AFD662BBF9C0C008F9297 /* Info.plist */,
+				D19AFD752BBFA0B4008F9297 /* Models */,
 				D19AFD632BBF9BB0008F9297 /* Utils */,
 				D19AFD622BBF9BA8008F9297 /* Extensions */,
 				D19AFD5E2BBF9B86008F9297 /* Resources */,
@@ -121,10 +130,37 @@
 		D19AFD6B2BBF9F6A008F9297 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D19AFD722BBFA09D008F9297 /* Main */,
 				D19AFD6C2BBF9F92008F9297 /* SigninView.swift */,
-				D19AFD6E2BBF9F99008F9297 /* MainView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		D19AFD722BBFA09D008F9297 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				D19AFD6E2BBF9F99008F9297 /* MainView.swift */,
+				D19AFD732BBFA0A9008F9297 /* GameRoomView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		D19AFD752BBFA0B4008F9297 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D19AFD7A2BBFA22A008F9297 /* GameRoom */,
+				D19AFD782BBFA12F008F9297 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D19AFD7A2BBFA22A008F9297 /* GameRoom */ = {
+			isa = PBXGroup;
+			children = (
+				D19AFD762BBFA0C4008F9297 /* GameRoom.swift */,
+				D19AFD7B2BBFA238008F9297 /* GameRoom_Preview.swift */,
+			);
+			path = GameRoom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,9 +235,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D19AFD772BBFA0C4008F9297 /* GameRoom.swift in Sources */,
+				D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */,
 				D19AFD532BBF9B7C008F9297 /* ContentView.swift in Sources */,
 				D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */,
 				D19AFD6D2BBF9F92008F9297 /* SigninView.swift in Sources */,
+				D19AFD742BBFA0A9008F9297 /* GameRoomView.swift in Sources */,
+				D19AFD792BBFA12F008F9297 /* User.swift in Sources */,
 				D19AFD6F2BBF9F99008F9297 /* MainView.swift in Sources */,
 				D19AFD652BBF9BB5008F9297 /* Font.swift in Sources */,
 				D19AFD712BBF9FB4008F9297 /* Color.swift in Sources */,
