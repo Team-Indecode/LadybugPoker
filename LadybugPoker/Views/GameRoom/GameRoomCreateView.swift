@@ -105,7 +105,12 @@ struct GameRoomCreateView: View {
             Spacer()
 
             Button {
-                
+                Task {
+                    //TODO: MyUserModel 추가하기
+                    let model = GameRoom.preview
+                    
+                    try await GameRoom.create(model: model)
+                }
             } label: {
                 Color.bugDark
                     .clipShape(RoundedRectangle(cornerRadius: 10))

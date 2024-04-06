@@ -10,8 +10,16 @@
 		D125B9C72BC1288F00A5AE03 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9C62BC1288F00A5AE03 /* Service.swift */; };
 		D125B9C92BC128D100A5AE03 /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9C82BC128D100A5AE03 /* Path.swift */; };
 		D125B9CC2BC12A0400A5AE03 /* GameRoomCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9CB2BC12A0400A5AE03 /* GameRoomCreateView.swift */; };
+		D125B9CF2BC14E1C00A5AE03 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = D125B9CE2BC14E1C00A5AE03 /* FirebaseAnalytics */; };
+		D125B9D12BC14E1C00A5AE03 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = D125B9D02BC14E1C00A5AE03 /* FirebaseAnalyticsOnDeviceConversion */; };
+		D125B9D32BC14E1C00A5AE03 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D125B9D22BC14E1C00A5AE03 /* FirebaseAnalyticsSwift */; };
+		D125B9D52BC14E1C00A5AE03 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D125B9D42BC14E1C00A5AE03 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		D125B9D72BC14E1C00A5AE03 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = D125B9D62BC14E1C00A5AE03 /* FirebaseAppCheck */; };
+		D125B9D92BC1503600A5AE03 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D125B9D82BC1503600A5AE03 /* GoogleService-Info.plist */; };
+		D125B9DC2BC1504300A5AE03 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9DB2BC1504300A5AE03 /* AppDelegate.swift */; };
+		D125B9DE2BC1517700A5AE03 /* GameRoom_Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9DD2BC1517700A5AE03 /* GameRoom_Functions.swift */; };
+		D125B9E12BC156CD00A5AE03 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D125B9E02BC156CD00A5AE03 /* FirebaseFirestore */; };
 		D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD502BBF9B7C008F9297 /* LadybugPokerApp.swift */; };
-		D19AFD532BBF9B7C008F9297 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD522BBF9B7C008F9297 /* ContentView.swift */; };
 		D19AFD552BBF9B7D008F9297 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D19AFD542BBF9B7D008F9297 /* Assets.xcassets */; };
 		D19AFD582BBF9B7D008F9297 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D19AFD572BBF9B7D008F9297 /* Preview Assets.xcassets */; };
 		D19AFD652BBF9BB5008F9297 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD642BBF9BB5008F9297 /* Font.swift */; };
@@ -30,9 +38,11 @@
 		D125B9C62BC1288F00A5AE03 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		D125B9C82BC128D100A5AE03 /* Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
 		D125B9CB2BC12A0400A5AE03 /* GameRoomCreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomCreateView.swift; sourceTree = "<group>"; };
+		D125B9D82BC1503600A5AE03 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		D125B9DB2BC1504300A5AE03 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D125B9DD2BC1517700A5AE03 /* GameRoom_Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoom_Functions.swift; sourceTree = "<group>"; };
 		D19AFD4D2BBF9B7C008F9297 /* LadybugPoker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LadybugPoker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D19AFD502BBF9B7C008F9297 /* LadybugPokerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LadybugPokerApp.swift; sourceTree = "<group>"; };
-		D19AFD522BBF9B7C008F9297 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D19AFD542BBF9B7D008F9297 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D19AFD572BBF9B7D008F9297 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D19AFD642BBF9BB5008F9297 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -53,6 +63,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D125B9D32BC14E1C00A5AE03 /* FirebaseAnalyticsSwift in Frameworks */,
+				D125B9CF2BC14E1C00A5AE03 /* FirebaseAnalytics in Frameworks */,
+				D125B9D12BC14E1C00A5AE03 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				D125B9D72BC14E1C00A5AE03 /* FirebaseAppCheck in Frameworks */,
+				D125B9D52BC14E1C00A5AE03 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				D125B9E12BC156CD00A5AE03 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,11 +92,27 @@
 			path = GameRoom;
 			sourceTree = "<group>";
 		};
+		D125B9DA2BC1503B00A5AE03 /* System */ = {
+			isa = PBXGroup;
+			children = (
+				D125B9DB2BC1504300A5AE03 /* AppDelegate.swift */,
+			);
+			path = System;
+			sourceTree = "<group>";
+		};
+		D125B9DF2BC156CD00A5AE03 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D19AFD442BBF9B7C008F9297 = {
 			isa = PBXGroup;
 			children = (
 				D19AFD4F2BBF9B7C008F9297 /* LadybugPoker */,
 				D19AFD4E2BBF9B7C008F9297 /* Products */,
+				D125B9DF2BC156CD00A5AE03 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,15 +127,16 @@
 		D19AFD4F2BBF9B7C008F9297 /* LadybugPoker */ = {
 			isa = PBXGroup;
 			children = (
+				D125B9DA2BC1503B00A5AE03 /* System */,
 				D125B9C52BC1288600A5AE03 /* Service */,
 				D19AFD662BBF9C0C008F9297 /* Info.plist */,
+				D125B9D82BC1503600A5AE03 /* GoogleService-Info.plist */,
 				D19AFD752BBFA0B4008F9297 /* Models */,
 				D19AFD632BBF9BB0008F9297 /* Utils */,
 				D19AFD622BBF9BA8008F9297 /* Extensions */,
 				D19AFD5E2BBF9B86008F9297 /* Resources */,
 				D19AFD6B2BBF9F6A008F9297 /* Views */,
 				D19AFD502BBF9B7C008F9297 /* LadybugPokerApp.swift */,
-				D19AFD522BBF9B7C008F9297 /* ContentView.swift */,
 				D19AFD542BBF9B7D008F9297 /* Assets.xcassets */,
 				D19AFD562BBF9B7D008F9297 /* Preview Content */,
 			);
@@ -184,6 +217,7 @@
 			children = (
 				D19AFD762BBFA0C4008F9297 /* GameRoom.swift */,
 				D19AFD7B2BBFA238008F9297 /* GameRoom_Preview.swift */,
+				D125B9DD2BC1517700A5AE03 /* GameRoom_Functions.swift */,
 			);
 			path = GameRoom;
 			sourceTree = "<group>";
@@ -204,6 +238,14 @@
 			dependencies = (
 			);
 			name = LadybugPoker;
+			packageProductDependencies = (
+				D125B9CE2BC14E1C00A5AE03 /* FirebaseAnalytics */,
+				D125B9D02BC14E1C00A5AE03 /* FirebaseAnalyticsOnDeviceConversion */,
+				D125B9D22BC14E1C00A5AE03 /* FirebaseAnalyticsSwift */,
+				D125B9D42BC14E1C00A5AE03 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				D125B9D62BC14E1C00A5AE03 /* FirebaseAppCheck */,
+				D125B9E02BC156CD00A5AE03 /* FirebaseFirestore */,
+			);
 			productName = LadybugPoker;
 			productReference = D19AFD4D2BBF9B7C008F9297 /* LadybugPoker.app */;
 			productType = "com.apple.product-type.application";
@@ -232,6 +274,9 @@
 				Base,
 			);
 			mainGroup = D19AFD442BBF9B7C008F9297;
+			packageReferences = (
+				D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = D19AFD4E2BBF9B7C008F9297 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -248,6 +293,7 @@
 			files = (
 				D19AFD582BBF9B7D008F9297 /* Preview Assets.xcassets in Resources */,
 				D19AFD552BBF9B7D008F9297 /* Assets.xcassets in Resources */,
+				D125B9D92BC1503600A5AE03 /* GoogleService-Info.plist in Resources */,
 				D19AFD682BBF9DDF008F9297 /* SnowCrab.ttf in Resources */,
 				D19AFD6A2BBF9E52008F9297 /* Yeongdeok Sea.ttf in Resources */,
 			);
@@ -262,10 +308,11 @@
 			files = (
 				D19AFD772BBFA0C4008F9297 /* GameRoom.swift in Sources */,
 				D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */,
-				D19AFD532BBF9B7C008F9297 /* ContentView.swift in Sources */,
 				D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */,
+				D125B9DC2BC1504300A5AE03 /* AppDelegate.swift in Sources */,
 				D19AFD6D2BBF9F92008F9297 /* SigninView.swift in Sources */,
 				D19AFD742BBFA0A9008F9297 /* GameRoomView.swift in Sources */,
+				D125B9DE2BC1517700A5AE03 /* GameRoom_Functions.swift in Sources */,
 				D125B9CC2BC12A0400A5AE03 /* GameRoomCreateView.swift in Sources */,
 				D19AFD792BBFA12F008F9297 /* User.swift in Sources */,
 				D19AFD6F2BBF9F99008F9297 /* MainView.swift in Sources */,
@@ -480,6 +527,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.23.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D125B9CE2BC14E1C00A5AE03 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		D125B9D02BC14E1C00A5AE03 /* FirebaseAnalyticsOnDeviceConversion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsOnDeviceConversion;
+		};
+		D125B9D22BC14E1C00A5AE03 /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		D125B9D42BC14E1C00A5AE03 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		D125B9D62BC14E1C00A5AE03 /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+		D125B9E02BC156CD00A5AE03 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D19AFD452BBF9B7C008F9297 /* Project object */;
 }

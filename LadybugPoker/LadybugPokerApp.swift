@@ -9,10 +9,13 @@ import SwiftUI
 
 @main
 struct LadybugPokerApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
                 .environmentObject(Service())
+                .preferredColorScheme(.light)
         }
     }
 }
