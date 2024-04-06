@@ -9,7 +9,10 @@ import Foundation
 
 struct GameRoom: Codable, Identifiable {
     let id: String
+    let hostId: String
+    let title: String
     let password: String?
+    let maxUserCount: Int
     let code: String
     let users: [User]
     

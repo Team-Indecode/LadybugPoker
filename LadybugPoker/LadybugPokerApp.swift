@@ -12,6 +12,7 @@ struct LadybugPokerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(Service())
         }
     }
 }
