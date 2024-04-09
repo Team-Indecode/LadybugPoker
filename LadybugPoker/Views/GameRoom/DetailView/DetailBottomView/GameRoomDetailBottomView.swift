@@ -15,12 +15,15 @@ struct GameRoomDetailBottomView: View {
     private let cancelText = "준비 취소"
     private let suggestReadyText = "준비 완료를 눌러주세요."
     private let suggestStartText = "게임 시작을 눌러주세요."
+    private let notAllPlayerReadiedText = "아직 모든 플레이어가 준비되지 않았습니다."
     private let startText = "게임 시작"
         
     @Binding var gameStatus: GameStatus
     @Binding var amIReadied: Bool
+    @State var allPlayerReadied: Bool
     
     @State private var chat: String = ""
+    @State var isHost: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -35,23 +38,42 @@ struct GameRoomDetailBottomView: View {
                 .padding(.bottom, 30)
 
             
-            if amIReadied == false {
-                Text(suggestReadyText)
-                    .font(.sea(35))
-
+            if isHost {
+                if allPlayerReadied {
+                    Text(suggestStartText)
+                        .font(.sea(35))
+                } else {
+                    Text(notAllPlayerReadiedText)
+                        .font(.sea(20))
+                }
             } else {
-                Text(readyText)
-                    .font(.sea(35))
+                if amIReadied == false {
+                    Text(suggestReadyText)
+                        .font(.sea(35))
 
+                } else {
+                    Text(readyText)
+                        .font(.sea(35))
+
+                }
             }
             
             Button {
-                amIReadied ? cancelReady() : ready()
-            } label: {
-                if amIReadied == false {
-                    Text(readyText)
+                if isHost {
+                    
                 } else {
-                    Text(cancelText)
+                    amIReadied ? cancelReady() : ready()
+                }
+            } label: {
+                if isHost {
+                    Text(startText)
+                        .opacity(allPlayerReadied ? 1 : 0.5)
+                } else {
+                    if amIReadied == false {
+                        Text(readyText)
+                    } else {
+                        Text(cancelText)
+                    }
                 }
             }
             .foregroundStyle(.black)
@@ -109,5 +131,5 @@ struct GameRoomDetailBottomView: View {
 }
 
 #Preview {
-    GameRoomDetailBottomView(gameStatus: .constant(.notStarted), amIReadied: .constant(false))
+    GameRoomDetailBottomView(gameStatus: .constant(.notStarted), amIReadied: .constant(false), allPlayerReadied: false, isHost: true)
 }
