@@ -16,8 +16,9 @@ struct GameRoomDetailBottomView: View {
     private let suggestReadyText = "준비 완료를 눌러주세요."
     private let suggestStartText = "게임 시작을 눌러주세요."
     private let startText = "게임 시작"
-    
+        
     @Binding var gameStatus: GameStatus
+    @Binding var amIReadied: Bool
     
     @State private var chat: String = ""
     
@@ -31,23 +32,34 @@ struct GameRoomDetailBottomView: View {
             
             Text(gameStatus == .notStarted || gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
                 .font(.sea(15))
+                .padding(.bottom, 30)
+
             
-            Button {
-                
-            } label: {
+            if amIReadied == false {
+                Text(suggestReadyText)
+                    .font(.sea(35))
+
+            } else {
                 Text(readyText)
                     .font(.sea(35))
+
             }
-            .foregroundStyle(.black)
-            .padding(.top, 30)
             
             Button {
-                
+                if amIReadied {
+                    
+                } else {
+                    ready()
+                }
             } label: {
-                Text(cancelText)
-                    .font(.sea(15))
+                if amIReadied == false {
+                    Text(readyText)
+                } else {
+                    Text(cancelText)
+                }
             }
             .foregroundStyle(.black)
+            .font(.sea(15))
             .padding(.top, 30)
             
             HStack(spacing: 5) {
@@ -85,8 +97,15 @@ struct GameRoomDetailBottomView: View {
         }
         .background(Color.bugLight)
     }
+    
+    func ready() {
+        withAnimation {
+            amIReadied = true
+        }
+    }
+    
 }
 
 #Preview {
-    GameRoomDetailBottomView(gameStatus: .constant(.notStarted))
+    GameRoomDetailBottomView(gameStatus: .constant(.notStarted), amIReadied: .constant(false))
 }
