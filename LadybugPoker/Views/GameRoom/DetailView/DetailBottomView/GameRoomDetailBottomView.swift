@@ -46,11 +46,7 @@ struct GameRoomDetailBottomView: View {
             }
             
             Button {
-                if amIReadied {
-                    
-                } else {
-                    ready()
-                }
+                amIReadied ? cancelReady() : ready()
             } label: {
                 if amIReadied == false {
                     Text(readyText)
@@ -101,6 +97,12 @@ struct GameRoomDetailBottomView: View {
     func ready() {
         withAnimation {
             amIReadied = true
+        }
+    }
+    
+    func cancelReady() {
+        withAnimation {
+            amIReadied = false
         }
     }
     
