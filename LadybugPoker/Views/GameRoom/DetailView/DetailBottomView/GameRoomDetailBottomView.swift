@@ -19,10 +19,16 @@ struct GameRoomDetailBottomView: View {
     private let startText = "게임 시작"
         
     @Binding var gameStatus: GameStatus
+    
+    /// 내가 준비 했는지
     @Binding var amIReadied: Bool
+    
+    /// 모든 플레이어가 준비했는지 (방장용)
     @State var allPlayerReadied: Bool
     
     @State private var chat: String = ""
+    
+    /// 내가 방장인지
     @State var isHost: Bool
     
     var body: some View {
