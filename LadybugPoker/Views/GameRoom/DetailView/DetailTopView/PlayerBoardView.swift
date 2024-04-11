@@ -22,18 +22,17 @@ struct PlayerBoardView: View {
             LazyVGrid(columns: columns) {
                 ForEach(self.cards, id: \.self) { card in
                     CardView(card: card, cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
+                        .padding(.bottom, 12)
                 }
             }
-            .frame(height: cards.count <= 4 ? 100 : 200)
-            .background(Color.blue)
+            .frame(height: cards.count <= 4 ? (boardHeight - 60)/2 : boardHeight - 60)
             Spacer()
         }
         .padding([.leading, .top], 5)
-        .frame(width: 250, height: 300)
-        .background(Color.red)
+        .frame(width: boardWidth, height: boardHeight)
     }
 }
 
 #Preview {
-    PlayerBoardView(user: User(id: "", displayName: "rayoung", profileUrl: "https://picsum.photos/200"), userCardCnt: 2, boardWidth: 100, boardHeight: 100, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5)])
+    PlayerBoardView(user: User(id: "", displayName: "rayoung", profileUrl: "https://picsum.photos/200"), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)])
 }

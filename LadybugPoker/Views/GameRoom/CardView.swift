@@ -38,7 +38,6 @@ struct CardView: View {
             .padding(4)
             .background(Color(hex: "FFF2E1"))
             .clipShape(Circle())
-            .padding(.bottom, isBottomViewCard ? 13 : 6)
     }
     
     /// 해당 곤충의 카드를 몇 장 모았는지
