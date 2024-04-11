@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Kingfisher
+import NukeUI
 
 /// 플레이어 프로필
 struct UserProfileView: View {
@@ -16,8 +16,8 @@ struct UserProfileView: View {
     
     var body: some View {
         HStack(spacing: 8) {
-            KFImage(URL(string: userImageUrl))
-                .resizable()
+            LazyImage(url: URL(string: userImageUrl))
+//                .processors([.resize(width: 10), .resize(height: 10)])
                 .frame(width: 30, height: 30)
                 .clipShape(Circle())
             VStack(spacing: 3) {
