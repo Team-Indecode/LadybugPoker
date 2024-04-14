@@ -17,16 +17,21 @@ struct CardView: View {
     let isBottomViewCard: Bool
     
     var body: some View {
-        VStack(spacing: 0) {
-            bugView
-            bugCntView
+        ZStack {
+            VStack(spacing: 0) {
+                bugView
+                bugCntView
+            }
+            .zIndex(1)
+            .frame(width: cardWidthSize, height: cardHeightSize)
+            .background(Color(hex: card.bug.colorHex))
+            .clipShape(RoundedRectangle(cornerRadius: cardWidthSize/5))
+            RoundedRectangle(cornerRadius: cardWidthSize/5)
+                .opacity(0.3)
+                .blur(radius: 3.0)
+                .offset(x: 0, y: 5)
+                .frame(width: cardWidthSize, height: cardHeightSize)
         }
-        .padding(.horizontal, 10)
-        .padding(.top, 6)
-        .padding(.bottom, 2)
-        .background(Color(hex: card.bug.colorHex))
-        .clipShape(RoundedRectangle(cornerRadius: cardWidthSize/5))
-        .frame(width: cardWidthSize, height: cardHeightSize)
     }
     
     /// 어떤 곤충인지
@@ -35,9 +40,9 @@ struct CardView: View {
             .resizable()
             .frame(width: cardWidthSize/2, height: cardWidthSize/2)
             .scaledToFit()
-            .padding(4)
             .background(Color(hex: "FFF2E1"))
             .clipShape(Circle())
+            .padding(4)
     }
     
     /// 해당 곤충의 카드를 몇 장 모았는지

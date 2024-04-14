@@ -20,6 +20,7 @@ struct PlayerBoardView: View {
     let gameStart: Bool
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+    
     var body: some View {
         VStack(spacing: 8) {
             if let userProfile = viewModel.userProfiles[userId] {
@@ -40,7 +41,7 @@ struct PlayerBoardView: View {
     var userIsPlayGame: some View {
         LazyVGrid(columns: columns) {
             ForEach(self.cards, id: \.self) { card in
-                CardView(card: card, cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
+                CardView(card: card, cardWidthSize: boardWidth / 4 - 8, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
                     .padding(.bottom, 12)
             }
         }
@@ -57,5 +58,5 @@ struct PlayerBoardView: View {
 
 #Preview {
 //    PlayerBoardView(user: User(id: "", displayName: "rayoung", profileUrl: "https://picsum.photos/200"), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)])
-    PlayerBoardView(userId: "123", userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, gameStart: false)
+    PlayerBoardView(userId: "123", userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, gameStart: true)
 }

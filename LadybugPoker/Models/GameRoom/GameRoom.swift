@@ -39,18 +39,22 @@ struct GameRoom: Codable, Identifiable {
             "maxUserCount": maxUserCount,
             "code": code,
             "users": users,
-            "usersInGame": usersInGame
+            "usersInGame": usersInGame,
+            "whoseTurn": whoseTurn,
+            "whoseGetting" : whoseGetting,
+            "selectedCard" : selectedCard,
+            "turnStartTime" : turnStartTime
         ]
     }
 }
 
-struct UserInGame: Codable {
+struct UserInGame: Codable, Hashable {
     /// 게임 시작 준비가 되었는지 안되었는지
     let readyOrNot: Bool
     /// 손에 쥔 카드
-    let handCard: Card
+    let handCard: [Card]
     /// 깔린 카드
-    let boardCard: Card
+    let boardCard: [Card]
     let userId: String
 }
 
