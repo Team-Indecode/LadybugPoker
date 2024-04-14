@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct GameRoomDetailTopView: View {
+    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    let sampleText: [String] = ["11", "22", "33", "44", "55", "66"]
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        LazyVGrid(columns: columns, content: {
+//            ForEach(s, content: <#T##(Identifiable) -> AccessibilityRotorContent#>)
+        })
     }
 }
 

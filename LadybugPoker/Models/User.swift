@@ -11,5 +11,4 @@ struct User: Codable, Identifiable {
     let id: String
     let displayName: String
     let profileUrl: String?
-    
 }

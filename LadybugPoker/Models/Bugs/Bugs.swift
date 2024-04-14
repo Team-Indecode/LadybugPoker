@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Bugs: String, Identifiable {
+enum Bugs: String, Identifiable, Codable {
     public var id: String { self.rawValue }
     
     case snake, ladybug, frog, rat, spider, snail, worm, bee

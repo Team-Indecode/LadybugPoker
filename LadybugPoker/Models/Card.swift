@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Card: Hashable {
+struct Card: Codable, Hashable {
     /// 어떤 타입의 벌레인지
     let bug: Bugs
     /// 해당 카드가 몇장이 있는지
