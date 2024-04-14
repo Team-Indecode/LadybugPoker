@@ -18,7 +18,7 @@ struct CardView: View {
     
     var body: some View {
         ZStack {
-            VStack(spacing: 0) {
+            VStack(spacing: 2) {
                 bugView
                 bugCntView
             }
@@ -42,7 +42,7 @@ struct CardView: View {
             .scaledToFit()
             .background(Color(hex: "FFF2E1"))
             .clipShape(Circle())
-            .padding(4)
+//            .padding(.top, 7)
     }
     
     /// 해당 곤충의 카드를 몇 장 모았는지
@@ -50,6 +50,7 @@ struct CardView: View {
         Text("\(card.cardCnt)")
             .font(isBottomViewCard ? .sea(30) : .sea(25))
             .foregroundStyle(card.cardCnt == 3 ? Color(hex: "FF0000") : Color.white)
+            .frame(height: 25)
     }
 }
 

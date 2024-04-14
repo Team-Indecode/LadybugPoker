@@ -22,7 +22,7 @@ struct PlayerBoardView: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 12) {
             if let userProfile = viewModel.userProfiles[userId] {
                 UserProfileView(userImageUrl: userProfile.profileUrl ?? "", userNickname: userProfile.displayName, userCardCnt: userCardCnt)
             }
@@ -41,7 +41,7 @@ struct PlayerBoardView: View {
     var userIsPlayGame: some View {
         LazyVGrid(columns: columns) {
             ForEach(self.cards, id: \.self) { card in
-                CardView(card: card, cardWidthSize: boardWidth / 4 - 8, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
+                CardView(card: card, cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
                     .padding(.bottom, 12)
             }
         }

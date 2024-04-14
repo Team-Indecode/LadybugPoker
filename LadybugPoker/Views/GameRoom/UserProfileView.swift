@@ -34,6 +34,7 @@ struct UserProfileView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+//        .padding(.bottom, 8)
     }
 }
 
