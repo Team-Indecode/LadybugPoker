@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D7583152BC56E86009B6489 /* GameRoomDetailTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7583142BC56E86009B6489 /* GameRoomDetailTopView.swift */; };
+		4D7583172BC572A0009B6489 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7583162BC572A0009B6489 /* CardView.swift */; };
+		4D7583192BC588B4009B6489 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7583182BC588B4009B6489 /* UserProfileView.swift */; };
+		4D75831F2BC83D4A009B6489 /* PlayerBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */; };
+		4D7583262BC8429D009B6489 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 4D7583252BC8429D009B6489 /* Nuke */; };
+		4D7583282BC8429D009B6489 /* NukeExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 4D7583272BC8429D009B6489 /* NukeExtensions */; };
+		4D75832A2BC8429D009B6489 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4D7583292BC8429D009B6489 /* NukeUI */; };
+		4D75832C2BC8429D009B6489 /* NukeVideo in Frameworks */ = {isa = PBXBuildFile; productRef = 4D75832B2BC8429D009B6489 /* NukeVideo */; };
+		4D75832E2BC8465D009B6489 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D75832D2BC8465D009B6489 /* Card.swift */; };
 		D125B9C72BC1288F00A5AE03 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9C62BC1288F00A5AE03 /* Service.swift */; };
 		D125B9C92BC128D100A5AE03 /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9C82BC128D100A5AE03 /* Path.swift */; };
 		D125B9CC2BC12A0400A5AE03 /* GameRoomCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9CB2BC12A0400A5AE03 /* GameRoomCreateView.swift */; };
@@ -41,6 +50,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4D7583142BC56E86009B6489 /* GameRoomDetailTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomDetailTopView.swift; sourceTree = "<group>"; };
+		4D7583162BC572A0009B6489 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		4D7583182BC588B4009B6489 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBoardView.swift; sourceTree = "<group>"; };
+		4D75832D2BC8465D009B6489 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		D125B9C62BC1288F00A5AE03 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		D125B9C82BC128D100A5AE03 /* Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
 		D125B9CB2BC12A0400A5AE03 /* GameRoomCreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomCreateView.swift; sourceTree = "<group>"; };
@@ -76,9 +90,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D125B9D32BC14E1C00A5AE03 /* FirebaseAnalyticsSwift in Frameworks */,
+				4D7583282BC8429D009B6489 /* NukeExtensions in Frameworks */,
 				D125B9CF2BC14E1C00A5AE03 /* FirebaseAnalytics in Frameworks */,
+				4D7583262BC8429D009B6489 /* Nuke in Frameworks */,
 				D125B9D12BC14E1C00A5AE03 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				D125B9D72BC14E1C00A5AE03 /* FirebaseAppCheck in Frameworks */,
+				4D75832A2BC8429D009B6489 /* NukeUI in Frameworks */,
+				4D75832C2BC8429D009B6489 /* NukeVideo in Frameworks */,
 				D125B9D52BC14E1C00A5AE03 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				D125B9E12BC156CD00A5AE03 /* FirebaseFirestore in Frameworks */,
 			);
@@ -87,6 +105,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D7583132BC56E73009B6489 /* DetailTopView */ = {
+			isa = PBXGroup;
+			children = (
+				4D7583142BC56E86009B6489 /* GameRoomDetailTopView.swift */,
+				4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */,
+			);
+			path = DetailTopView;
+			sourceTree = "<group>";
+		};
 		D125B9C52BC1288600A5AE03 /* Service */ = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +128,8 @@
 			children = (
 				D152E9A52BC4CAA4005535F1 /* DetailView */,
 				D125B9CB2BC12A0400A5AE03 /* GameRoomCreateView.swift */,
+				4D7583162BC572A0009B6489 /* CardView.swift */,
+				4D7583182BC588B4009B6489 /* UserProfileView.swift */,
 			);
 			path = GameRoom;
 			sourceTree = "<group>";
@@ -123,6 +152,7 @@
 		D152E9A52BC4CAA4005535F1 /* DetailView */ = {
 			isa = PBXGroup;
 			children = (
+				4D7583132BC56E73009B6489 /* DetailTopView */,
 				D152E9AE2BC4D2CB005535F1 /* DetailBottomView */,
 			);
 			path = DetailView;
@@ -266,6 +296,7 @@
 				D152E9A82BC4CD6C005535F1 /* GameStatus */,
 				D19AFD7A2BBFA22A008F9297 /* GameRoom */,
 				D19AFD782BBFA12F008F9297 /* User.swift */,
+				4D75832D2BC8465D009B6489 /* Card.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -303,6 +334,10 @@
 				D125B9D42BC14E1C00A5AE03 /* FirebaseAnalyticsWithoutAdIdSupport */,
 				D125B9D62BC14E1C00A5AE03 /* FirebaseAppCheck */,
 				D125B9E02BC156CD00A5AE03 /* FirebaseFirestore */,
+				4D7583252BC8429D009B6489 /* Nuke */,
+				4D7583272BC8429D009B6489 /* NukeExtensions */,
+				4D7583292BC8429D009B6489 /* NukeUI */,
+				4D75832B2BC8429D009B6489 /* NukeVideo */,
 			);
 			productName = LadybugPoker;
 			productReference = D19AFD4D2BBF9B7C008F9297 /* LadybugPoker.app */;
@@ -334,6 +369,7 @@
 			mainGroup = D19AFD442BBF9B7C008F9297;
 			packageReferences = (
 				D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				4D7583242BC8429D009B6489 /* XCRemoteSwiftPackageReference "Nuke" */,
 			);
 			productRefGroup = D19AFD4E2BBF9B7C008F9297 /* Products */;
 			projectDirPath = "";
@@ -365,6 +401,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D75831F2BC83D4A009B6489 /* PlayerBoardView.swift in Sources */,
 				D19AFD772BBFA0C4008F9297 /* GameRoom.swift in Sources */,
 				D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */,
 				D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */,
@@ -377,12 +414,16 @@
 				D125B9CC2BC12A0400A5AE03 /* GameRoomCreateView.swift in Sources */,
 				D152E9AA2BC4CD72005535F1 /* GameStatus.swift in Sources */,
 				D19AFD792BBFA12F008F9297 /* User.swift in Sources */,
+				4D7583152BC56E86009B6489 /* GameRoomDetailTopView.swift in Sources */,
 				D19AFD6F2BBF9F99008F9297 /* MainView.swift in Sources */,
 				D152E9B32BC4E700005535F1 /* Bugs.swift in Sources */,
+				4D7583172BC572A0009B6489 /* CardView.swift in Sources */,
 				D125B9C72BC1288F00A5AE03 /* Service.swift in Sources */,
 				D19AFD652BBF9BB5008F9297 /* Font.swift in Sources */,
+				4D75832E2BC8465D009B6489 /* Card.swift in Sources */,
 				D125B9C92BC128D100A5AE03 /* Path.swift in Sources */,
 				D19AFD712BBF9FB4008F9297 /* Color.swift in Sources */,
+				4D7583192BC588B4009B6489 /* UserProfileView.swift in Sources */,
 				D152E9B02BC4D2E0005535F1 /* GameRoomDetailBottomView+ViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -593,6 +634,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4D7583242BC8429D009B6489 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.5.0;
+			};
+		};
 		D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -604,6 +653,26 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4D7583252BC8429D009B6489 /* Nuke */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D7583242BC8429D009B6489 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = Nuke;
+		};
+		4D7583272BC8429D009B6489 /* NukeExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D7583242BC8429D009B6489 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeExtensions;
+		};
+		4D7583292BC8429D009B6489 /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D7583242BC8429D009B6489 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
+		};
+		4D75832B2BC8429D009B6489 /* NukeVideo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D7583242BC8429D009B6489 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeVideo;
+		};
 		D125B9CE2BC14E1C00A5AE03 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
