@@ -31,9 +31,11 @@ struct GameRoomDetailBottomView: View {
     /// 내가 방장인지
     @State var isHost: Bool
     /// 누구 턴인지
-    @Binding var userInTurn: User
+    @Binding var userInTurn: UserInGame
     /// 내 카드 목록
     @Binding var myCards: [Card]
+    /// 남은 시간
+    @Binding var secondsLeft: Int
     
     var body: some View {
         VStack(spacing: 0) {
@@ -44,7 +46,9 @@ struct GameRoomDetailBottomView: View {
                 .padding(.bottom, 12)
             
             if gameStatus == .onAir {
-                PlayingView(userInTurn: $userInTurn, myCards: $myCards)
+                PlayingView(userInTurn: $userInTurn,
+                            myCards: $myCards,
+                            secondsLeft: $secondsLeft)
 
             } else {
                 Text(gameStatus == .notStarted || gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
@@ -148,5 +152,21 @@ struct GameRoomDetailBottomView: View {
 }
 
 #Preview {
-    GameRoomDetailBottomView(gameStatus: .constant(.onAir), amIReadied: .constant(false), allPlayerReadied: false, isHost: true, userInTurn: .constant(User(id: "hihi", displayName: "shawn", profileUrl: nil)), myCards: .constant([Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 2), Card(bug: .ladybug, cardCnt: 3)]))
+    GameRoomDetailBottomView(
+        gameStatus: .constant(.onAir),
+        amIReadied: .constant(false),
+        allPlayerReadied: false,
+        isHost: true, 
+        userInTurn: .constant(
+            UserInGame(readyOrNot: true,
+                       handCard: [],
+                       boardCard: [],
+                       userId: "hihi")
+        ),
+        myCards: .constant(
+            [Card(bug: .bee, cardCnt: 3),
+             Card(bug: .frog, cardCnt: 2),
+             Card(bug: .ladybug, cardCnt: 3)]),
+        secondsLeft: .constant(48)
+    )
 }
