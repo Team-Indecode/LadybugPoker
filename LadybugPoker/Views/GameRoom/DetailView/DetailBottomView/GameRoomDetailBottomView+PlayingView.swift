@@ -10,14 +10,22 @@ import SwiftUI
 extension GameRoomDetailBottomView {
     
     struct PlayingView: View {
-        
         /// 현재 턴인 유저
         @Binding var userInTurn: User
+        /// 내 카드 목록
+        @Binding var myCards: [Card]
         
         var body: some View {
             VStack {
                 Text(userInTurn.displayName + " 턴 입니다.")
                     .font(.sea(15))
+                
+                HStack {
+                    ForEach(myCards) { card in
+                        CardView(card: card, cardWidthSize: 60, cardHeightSize: 80, isBottomViewCard: true)
+                    }
+                }
+
             }
         }
     }
@@ -25,5 +33,5 @@ extension GameRoomDetailBottomView {
 
 
 #Preview {
-    GameRoomDetailBottomView.PlayingView(userInTurn: .constant(User(id: "idsjafkl", displayName: "진서", profileUrl: nil)))
+    GameRoomDetailBottomView.PlayingView(userInTurn: .constant(User(id: "idsjafkl", displayName: "진서", profileUrl: nil)), myCards: .constant([Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 2), Card(bug: .ladybug, cardCnt: 3)]))
 }
