@@ -30,6 +30,10 @@ struct GameRoomDetailBottomView: View {
     
     /// 내가 방장인지
     @State var isHost: Bool
+    /// 누구 턴인지
+    @Binding var userInTurn: User
+    /// 내 카드 목록
+    @Binding var myCards: [Card]
     
     var body: some View {
         VStack(spacing: 0) {
@@ -39,66 +43,73 @@ struct GameRoomDetailBottomView: View {
                 .frame(height: 2)
                 .padding(.bottom, 12)
             
-            Text(gameStatus == .notStarted || gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
-                .font(.sea(15))
-                .padding(.bottom, 30)
+            if gameStatus == .onAir {
+                PlayingView(userInTurn: $userInTurn, myCards: $myCards)
 
-            
-            if isHost {
-                if allPlayerReadied {
-                    Text(suggestStartText)
-                        .font(.sea(35))
-                } else {
-                    Text(notAllPlayerReadiedText)
-                        .font(.sea(20))
-                }
             } else {
-                if amIReadied == false {
-                    Text(suggestReadyText)
-                        .font(.sea(35))
+                Text(gameStatus == .notStarted || gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
+                    .font(.sea(15))
+                    .padding(.bottom, 30)
 
-                } else {
-                    Text(readyText)
-                        .font(.sea(35))
-
-                }
-            }
-            
-            Button {
+                
                 if isHost {
-                    
-                } else {
-                    amIReadied ? cancelReady() : ready()
-                }
-            } label: {
-                if isHost {
-                    Text(startText)
-                        .opacity(allPlayerReadied ? 1 : 0.5)
+                    if allPlayerReadied {
+                        Text(suggestStartText)
+                            .font(.sea(35))
+                    } else {
+                        Text(notAllPlayerReadiedText)
+                            .font(.sea(20))
+                    }
                 } else {
                     if amIReadied == false {
-                        Text(readyText)
+                        Text(suggestReadyText)
+                            .font(.sea(35))
+
                     } else {
-                        Text(cancelText)
+                        Text(readyText)
+                            .font(.sea(35))
+
                     }
                 }
+                
+                Button {
+                    if isHost {
+                        
+                    } else {
+                        amIReadied ? cancelReady() : ready()
+                    }
+                } label: {
+                    if isHost {
+                        Text(startText)
+                            .opacity(allPlayerReadied ? 1 : 0.5)
+                    } else {
+                        if amIReadied == false {
+                            Text(readyText)
+                        } else {
+                            Text(cancelText)
+                        }
+                    }
+                }
+                .foregroundStyle(.black)
+                .font(.sea(15))
+                .padding(.top, 30)
+                
+                HStack(spacing: 5) {
+                    Spacer()
+                    
+                    Image("ladybug")
+                        .resizable()
+                        .frame(width: 27, height: 27)
+                    
+                    Text("무당벌레 포커")
+                        .font(.sea(15))
+                }
+                .padding(.trailing, 16)
+                .padding(.top, 20)
+                .padding(.bottom, 15)
             }
-            .foregroundStyle(.black)
-            .font(.sea(15))
-            .padding(.top, 30)
             
-            HStack(spacing: 5) {
-                Spacer()
-                
-                Image("ladybug")
-                    .resizable()
-                    .frame(width: 27, height: 27)
-                
-                Text("무당벌레 포커")
-                    .font(.sea(15))
-            }
-            .padding(.trailing, 16)
-            .padding(.top, 20)
-            .padding(.bottom, 15)
+
             
             TextField("메세지를 입력해주세요.", text: $chat)
                 .font(.sea(15))
@@ -137,5 +148,5 @@ struct GameRoomDetailBottomView: View {
 }
 
 #Preview {
-    GameRoomDetailBottomView(gameStatus: .constant(.notStarted), amIReadied: .constant(false), allPlayerReadied: false, isHost: true)
+    GameRoomDetailBottomView(gameStatus: .constant(.onAir), amIReadied: .constant(false), allPlayerReadied: false, isHost: true, userInTurn: .constant(User(id: "hihi", displayName: "shawn", profileUrl: nil)), myCards: .constant([Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 2), Card(bug: .ladybug, cardCnt: 3)]))
 }

@@ -20,12 +20,16 @@ extension GameRoomDetailBottomView {
                 Text(userInTurn.displayName + " 턴 입니다.")
                     .font(.sea(15))
                 
-                HStack {
-                    ForEach(myCards) { card in
-                        CardView(card: card, cardWidthSize: 60, cardHeightSize: 80, isBottomViewCard: true)
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(myCards) { card in
+                            CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: false)
+                                .padding(.leading, card == myCards.first ? 20 : 0)
+                        }
                     }
+                    .padding(.bottom, 15)
                 }
-
+                .padding(.bottom, 15)
             }
         }
     }

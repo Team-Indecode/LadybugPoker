@@ -9,4 +9,6 @@ import SwiftUI
 
 class Service: ObservableObject {
     @Published var path: [Path] = []
+    @Published var myUserModel: User!
+    
 }
