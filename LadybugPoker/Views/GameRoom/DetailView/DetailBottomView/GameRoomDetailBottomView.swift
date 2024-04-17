@@ -36,6 +36,10 @@ struct GameRoomDetailBottomView: View {
     @Binding var myCards: [Card]
     /// 남은 시간
     @Binding var secondsLeft: Int
+    /// 선택한 카드
+    @Binding var selectedCardType: Bugs?
+    /// 카드 선택 시 확인 팝업
+    @Binding var showCardSelectedPopup: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -48,7 +52,8 @@ struct GameRoomDetailBottomView: View {
             if gameStatus == .onAir {
                 PlayingView(userInTurn: $userInTurn,
                             myCards: $myCards,
-                            secondsLeft: $secondsLeft)
+                            secondsLeft: $secondsLeft,
+                            selectedCardType: $selectedCardType)
 
             } else {
                 Text(gameStatus == .notStarted || gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
@@ -167,6 +172,8 @@ struct GameRoomDetailBottomView: View {
             [Card(bug: .bee, cardCnt: 3),
              Card(bug: .frog, cardCnt: 2),
              Card(bug: .ladybug, cardCnt: 3)]),
-        secondsLeft: .constant(48)
+        secondsLeft: .constant(48),
+        selectedCardType: .constant(nil),
+        showCardSelectedPopup: .constant(false)
     )
 }

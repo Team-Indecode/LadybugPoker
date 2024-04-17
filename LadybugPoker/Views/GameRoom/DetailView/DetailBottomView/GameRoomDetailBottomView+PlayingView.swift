@@ -16,6 +16,7 @@ extension GameRoomDetailBottomView {
         @Binding var myCards: [Card]
         /// 남은 시간...
         @Binding var secondsLeft: Int
+        @Binding var selectedCardType: Bugs?
         
         
         var body: some View {
@@ -48,8 +49,14 @@ extension GameRoomDetailBottomView {
                 ScrollView(.horizontal) {
                     HStack {
                         ForEach(myCards) { card in
-                            CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: false)
-                                .padding(.leading, card == myCards.first ? 20 : 0)
+                            Button {
+                                withAnimation {
+                                    selectedCardType = card.bug
+                                }
+                            } label: {
+                                CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: false)
+                            }
+                            .padding(.leading, card == myCards.first ? 20 : 0)
                         }
                     }
                     .padding(.bottom, 15)
@@ -73,6 +80,7 @@ extension GameRoomDetailBottomView {
             [Card(bug: .bee, cardCnt: 3),
              Card(bug: .frog, cardCnt: 2),
              Card(bug: .ladybug, cardCnt: 3)]),
-        secondsLeft: .constant(48)
+        secondsLeft: .constant(48),
+        selectedCardType: .constant(nil)
     )
 }
