@@ -53,7 +53,9 @@ struct GameRoomDetailBottomView: View {
                 PlayingView(userInTurn: $userInTurn,
                             myCards: $myCards,
                             secondsLeft: $secondsLeft,
-                            selectedCardType: $selectedCardType)
+                            selectedCardType: $selectedCardType,
+                            showCardSelectedPopup: $showCardSelectedPopup
+                )
 
             } else {
                 Text(gameStatus == .notStarted || gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
@@ -117,8 +119,6 @@ struct GameRoomDetailBottomView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 15)
             }
-            
-
             
             TextField("메세지를 입력해주세요.", text: $chat)
                 .font(.sea(15))

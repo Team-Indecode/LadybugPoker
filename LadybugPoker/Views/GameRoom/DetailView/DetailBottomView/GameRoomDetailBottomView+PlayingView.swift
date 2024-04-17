@@ -18,6 +18,7 @@ extension GameRoomDetailBottomView {
         @Binding var secondsLeft: Int
         @Binding var selectedCardType: Bugs?
         
+        @Binding var showCardSelectedPopup: Bool
         
         var body: some View {
             VStack {
@@ -51,7 +52,7 @@ extension GameRoomDetailBottomView {
                         ForEach(myCards) { card in
                             Button {
                                 withAnimation {
-                                    selectedCardType = card.bug
+                                    showCardSelectedPopup.toggle()
                                 }
                             } label: {
                                 CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: false)
@@ -81,6 +82,7 @@ extension GameRoomDetailBottomView {
              Card(bug: .frog, cardCnt: 2),
              Card(bug: .ladybug, cardCnt: 3)]),
         secondsLeft: .constant(48),
-        selectedCardType: .constant(nil)
+        selectedCardType: .constant(nil),
+        showCardSelectedPopup: .constant(false)
     )
 }
