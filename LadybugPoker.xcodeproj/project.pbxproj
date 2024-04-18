@@ -35,6 +35,7 @@
 		D152E9AD2BC4D1AD005535F1 /* send.png in Resources */ = {isa = PBXBuildFile; fileRef = D152E9AC2BC4D1AD005535F1 /* send.png */; };
 		D152E9B02BC4D2E0005535F1 /* GameRoomDetailBottomView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9AF2BC4D2E0005535F1 /* GameRoomDetailBottomView+ViewModel.swift */; };
 		D152E9B32BC4E700005535F1 /* Bugs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9B22BC4E700005535F1 /* Bugs.swift */; };
+		D16AFC7F2BCFAD4400AEC3B2 /* CommonPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16AFC7E2BCFAD4400AEC3B2 /* CommonPopupView.swift */; };
 		D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD502BBF9B7C008F9297 /* LadybugPokerApp.swift */; };
 		D19AFD552BBF9B7D008F9297 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D19AFD542BBF9B7D008F9297 /* Assets.xcassets */; };
 		D19AFD582BBF9B7D008F9297 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D19AFD572BBF9B7D008F9297 /* Preview Assets.xcassets */; };
@@ -69,6 +70,7 @@
 		D152E9AC2BC4D1AD005535F1 /* send.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = send.png; sourceTree = "<group>"; };
 		D152E9AF2BC4D2E0005535F1 /* GameRoomDetailBottomView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameRoomDetailBottomView+ViewModel.swift"; sourceTree = "<group>"; };
 		D152E9B22BC4E700005535F1 /* Bugs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bugs.swift; sourceTree = "<group>"; };
+		D16AFC7E2BCFAD4400AEC3B2 /* CommonPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPopupView.swift; sourceTree = "<group>"; };
 		D19AFD4D2BBF9B7C008F9297 /* LadybugPoker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LadybugPoker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D19AFD502BBF9B7C008F9297 /* LadybugPokerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LadybugPokerApp.swift; sourceTree = "<group>"; };
 		D19AFD542BBF9B7D008F9297 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -195,6 +197,14 @@
 			path = Bugs;
 			sourceTree = "<group>";
 		};
+		D16AFC7D2BCFAD3A00AEC3B2 /* Popup */ = {
+			isa = PBXGroup;
+			children = (
+				D16AFC7E2BCFAD4400AEC3B2 /* CommonPopupView.swift */,
+			);
+			path = Popup;
+			sourceTree = "<group>";
+		};
 		D19AFD442BBF9B7C008F9297 = {
 			isa = PBXGroup;
 			children = (
@@ -276,6 +286,7 @@
 		D19AFD6B2BBF9F6A008F9297 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D16AFC7D2BCFAD3A00AEC3B2 /* Popup */,
 				D125B9CA2BC129F900A5AE03 /* GameRoom */,
 				D19AFD722BBFA09D008F9297 /* Main */,
 				D19AFD6C2BBF9F92008F9297 /* SigninView.swift */,
@@ -406,6 +417,7 @@
 			files = (
 				4D75831F2BC83D4A009B6489 /* PlayerBoardView.swift in Sources */,
 				D19AFD772BBFA0C4008F9297 /* GameRoom.swift in Sources */,
+				D16AFC7F2BCFAD4400AEC3B2 /* CommonPopupView.swift in Sources */,
 				D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */,
 				D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */,
 				D125B9DC2BC1504300A5AE03 /* AppDelegate.swift in Sources */,

@@ -8,5 +8,11 @@
 import SwiftUI
 
 class Service: ObservableObject {
+    static let shared = Service()
+    
     @Published var path: [Path] = []
+    @Published var myUserModel: User! = User(id: "hihi", displayName: "shawn", profileUrl: nil)
+    
+    private init() { }
+    
 }

@@ -55,5 +55,5 @@ struct MainView: View {
 
 #Preview {
     MainView()
-        .environmentObject(Service())
+        .environmentObject(Service.shared)
 }
