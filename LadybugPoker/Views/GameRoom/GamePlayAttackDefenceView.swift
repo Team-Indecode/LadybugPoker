@@ -10,10 +10,10 @@ import NukeUI
 
 struct GamePlayAttackDefenceView: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-    let bugs: [Bugs] = [.snake, .ladybug, .frog, .rat, .spider, .snail, .worm, .bee]
+
 //    let player: Player = .others
-    let player: Player = .defender
-//    let player: Player = .attacker
+//    let player: Player = .defender
+    let player: Player = .attacker
     
     @State private var timer: Int = 48
     /// 공격자가 선택한 벌레
@@ -140,7 +140,7 @@ struct GamePlayAttackDefenceView: View {
     /// 전체 벌레
     var bugsView: some View {
         LazyVGrid(columns: columns) {
-            ForEach(bugs, id: \.self) { bug in
+            ForEach(Bugs.allCases, id: \.self) { bug in
                 Button(action: {
                     attackBug = bug
                     print(#fileID, #function, #line, "- 공격자가 선택한 벌레: \(attackBug)")

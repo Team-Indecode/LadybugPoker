@@ -13,6 +13,7 @@ struct User: Codable, Identifiable {
     let profileUrl: String?
 }
 
+/// 플레이어 역할(공격자, 수비자, 둘다 아님)
 enum Player {
     case attacker
     case defender
