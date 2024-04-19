@@ -15,7 +15,10 @@ struct User: Codable, Identifiable {
 
 /// 플레이어 역할(공격자, 수비자, 둘다 아님)
 enum Player {
+    /// 공격자
     case attacker
+    /// 수비자
     case defender
+    /// 그 외
     case others
 }

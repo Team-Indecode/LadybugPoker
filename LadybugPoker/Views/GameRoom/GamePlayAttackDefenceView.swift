@@ -13,8 +13,9 @@ struct GamePlayAttackDefenceView: View {
 
 //    let player: Player = .others
 //    let player: Player = .defender
+    /// 플레이어 역할
     let player: Player = .attacker
-    
+    /// 남은 타이머
     @State private var timer: Int = 48
     /// 공격자가 선택한 벌레
     @State private var attackBug: Bugs? = nil
@@ -75,7 +76,9 @@ struct GamePlayAttackDefenceView: View {
         .background(.opacity(1.0))
     }
     
+    //MARK: - topView
     @MainActor
+    /// 플레이어가 공격자일떄 벌레 선택하는 뷰
     var playerAttackTopView: some View {
         VStack(spacing: 0) {
             HStack {
@@ -97,6 +100,7 @@ struct GamePlayAttackDefenceView: View {
     }
     
     @MainActor
+    /// 플레이어가 수비자 or 그 외 일때 topView
     var playerNotAttackerTopView: some View {
         VStack(spacing: 0) {
             HStack {
@@ -117,8 +121,8 @@ struct GamePlayAttackDefenceView: View {
         }
     }
     
-    /// 유저 뷰 제작
     @MainActor
+    /// 유저 프로필 뷰 제작
     func makeUserView(_ user: User) -> some View {
         return HStack {
             if let profileUrl = user.profileUrl {
@@ -137,13 +141,13 @@ struct GamePlayAttackDefenceView: View {
         .padding(.horizontal, 10)
     }
     
-    /// 전체 벌레
+    /// 전체 벌레(공격자가 벌레 선택하는 뷰)
     var bugsView: some View {
         LazyVGrid(columns: columns) {
             ForEach(Bugs.allCases, id: \.self) { bug in
                 Button(action: {
                     attackBug = bug
-                    print(#fileID, #function, #line, "- 공격자가 선택한 벌레: \(attackBug)")
+                    print(#fileID, #function, #line, "- 공격자가 선택한 벌레: \(String(describing: attackBug?.id))")
                 }, label: {
                     makeBug(bug)
                 })
@@ -153,6 +157,7 @@ struct GamePlayAttackDefenceView: View {
         .padding(.vertical)
     }
     
+    /// 수비자/그 외가 보는 뷰
     var bugAndCard: some View {
         HStack {
             cardView
@@ -185,6 +190,7 @@ struct GamePlayAttackDefenceView: View {
             .clipShape(Circle())
     }
     
+    /// ? 카드 제작
     var cardView: some View {
         VStack {
             Text("?")
@@ -226,6 +232,7 @@ struct GamePlayAttackDefenceView: View {
         .background(Color(hex: "D1BB9E"))
     }
     
+    /// 수비자가 해당 카드가 공격자가 말한 벌레가 맞는지 아닌지 판단
     var cardGuessChooseView: some View {
         VStack {
             HStack {
@@ -240,12 +247,18 @@ struct GamePlayAttackDefenceView: View {
         .padding(.top, 30)
     }
     
+    /// 수비자가 선택할 text
     func guessText(_ text: String) -> some View {
-        return Text(text)
-            .font(.sea(20))
-            .padding(.horizontal, 30)
-            .background(Color(hex: "F1F1F1"))
-            .clipShape(Capsule())
+        return Button(action: {
+            print(#fileID, #function, #line, "- 수비자가 선택한 text: \(text)")
+        }, label: {
+            Text(text)
+                .font(.sea(20))
+                .padding(.horizontal, 30)
+                .background(Color(hex: "F1F1F1"))
+                .clipShape(Capsule())
+        })
+        
     }
 }
 
