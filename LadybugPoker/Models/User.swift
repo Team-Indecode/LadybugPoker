@@ -12,3 +12,9 @@ struct User: Codable, Identifiable {
     let displayName: String
     let profileUrl: String?
 }
+
+enum Player {
+    case attacker
+    case defender
+    case others
+}
