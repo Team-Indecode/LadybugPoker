@@ -75,7 +75,7 @@ extension GameRoomDetailBottomView {
             UserInGame(readyOrNot: true,
                        handCard: [],
                        boardCard: [],
-                       userId: "hihi")
+                       userId: "hihi", displayName: "test")
         ),
         myCards: .constant(
             [Card(bug: .bee, cardCnt: 3),

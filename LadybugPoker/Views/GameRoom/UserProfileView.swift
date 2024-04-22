@@ -13,13 +13,14 @@ struct UserProfileView: View {
     let userImageUrl: String
     let userNickname: String
     let userCardCnt: Int
+    let isOdd: Bool
     
     var body: some View {
         HStack(spacing: 8) {
             LazyImage(url: URL(string: userImageUrl))
-//                .processors([.resize(width: 10), .resize(height: 10)])
                 .frame(width: 30, height: 30)
                 .clipShape(Circle())
+                
             VStack(spacing: 3) {
                 Text(userNickname)
                     .font(.sea(8))
@@ -33,11 +34,12 @@ struct UserProfileView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-//        .padding(.bottom, 8)
+        .frame(width: 80)
+        .frame(maxWidth: .infinity, alignment: isOdd ? .leading : .trailing)
+        
     }
 }
 
 #Preview {
-    UserProfileView(userImageUrl: "https://picsum.photos/200", userNickname: "라영", userCardCnt: 3)
+    UserProfileView(userImageUrl: "https://picsum.photos/200", userNickname: "라영", userCardCnt: 3, isOdd: false)
 }
