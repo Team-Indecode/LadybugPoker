@@ -9,4 +9,7 @@ import Foundation
 
 enum Path: Hashable {
     case createGameRoom
+    case signup(email: String, password: String)
+    case signin
+    case main
 }

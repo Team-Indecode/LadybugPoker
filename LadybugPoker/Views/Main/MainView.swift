@@ -39,13 +39,6 @@ struct MainView: View {
                 Color.bugLight
                     .ignoresSafeArea()
             }
-            .navigationDestination(for: Path.self) { path in
-                switch path {
-                case .createGameRoom:
-                    GameRoomCreateView()
-                        .navigationBarBackButtonHidden()
-                }
-            }
         }
         .onAppear {
             gameRooms = GameRoom.listPreview
