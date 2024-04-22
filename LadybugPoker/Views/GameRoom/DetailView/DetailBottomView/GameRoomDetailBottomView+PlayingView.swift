@@ -11,8 +11,10 @@ extension GameRoomDetailBottomView {
     
     struct PlayingView: View {
         /// 현재 턴인 유저
-        @Binding var userInTurn: UserInGame
+//        @Binding var userInTurn: UserInGame
+        @Binding var userInTurn: String?
         /// 내 카드 목록
+//        @Binding var myCards: [Card]
         @Binding var myCards: [Card]
         /// 남은 시간...
         @Binding var secondsLeft: Int
@@ -22,7 +24,8 @@ extension GameRoomDetailBottomView {
         
         var body: some View {
             VStack {
-                if Service.shared.myUserModel.id == userInTurn.userId {
+//                if Service.shared.myUserModel.id == userInTurn.userId {
+                if Service.shared.myUserModel.id == userInTurn {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("내 차례입니다 !")
@@ -42,8 +45,11 @@ extension GameRoomDetailBottomView {
                     }
 
                 } else {
-                    Text(userInTurn.userId + " 턴 입니다.")
-                        .font(.sea(15))
+                    if let userInTurn = userInTurn {
+                        Text(userInTurn + " 턴 입니다.")
+                            .font(.sea(15))
+                    }
+                    
                 }
 
                 
@@ -72,10 +78,7 @@ extension GameRoomDetailBottomView {
 #Preview {
     GameRoomDetailBottomView.PlayingView(
         userInTurn: .constant(
-            UserInGame(readyOrNot: true,
-                       handCard: [],
-                       boardCard: [],
-                       userId: "hihi", displayName: "test")
+            "123"
         ),
         myCards: .constant(
             [Card(bug: .bee, cardCnt: 3),
