@@ -8,9 +8,12 @@
 import Foundation
 
 struct User: Codable, Identifiable {
+    static let path = "USERS"
+    
     let id: String
     let displayName: String
     let profileUrl: String?
+    let history: [String]
 }
 
 /// 플레이어 역할(공격자, 수비자, 둘다 아님)
