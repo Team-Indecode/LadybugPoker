@@ -23,13 +23,13 @@ struct GameRoom: Codable, Identifiable {
     /// 유저들의 게임 데이터
     let usersInGame: [UserInGame]
     /// 누구 턴인지
-    let whoseTurn: String
+    var whoseTurn: String?
     /// 누구에게 카드를 건냈는지
-    let whoseGetting: String
+    let whoseGetting: String?
     /// 어떤 카드를 줬는지
-    let selectedCard: Bugs
+    var selectedCard: Bugs?
     /// 턴 시작 시간
-    let turnStartTime: Date
+    let turnStartTime: Date?
     
     var toJson: [String: Any] {
         [
@@ -50,13 +50,14 @@ struct GameRoom: Codable, Identifiable {
 
 struct UserInGame: Codable, Hashable {
     /// 게임 시작 준비가 되었는지 안되었는지
-    let readyOrNot: Bool
-    /// 손에 쥔 카드
-    let handCard: [Card]
-    /// 깔린 카드
-    let boardCard: [Card]
+    var readyOrNot: Bool
+    /// 손에 쥔 카드(ex, Sn3, L2, F3 etc)
+    var handCard: String
+    /// 깔린 카드(ex, Sn3, L2, F3 etc)
+    var boardCard: String
     let userId: String
     /// 닉네임 -> 누구누구 턴입니다 할때 사용
     let displayName: String
+    let profileUrl: String?
 }
 
