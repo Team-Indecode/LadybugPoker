@@ -9,6 +9,7 @@ import SwiftUI
 import KakaoSDKAuth
 import KakaoSDKUser
 
+
 struct SigninView: View {
     @EnvironmentObject private var service: Service
     
@@ -104,6 +105,9 @@ struct SigninView: View {
                             if let user {
                                 if let id = user.id {
 
+                                    
+                                                                
+                                    
                                 }
                             }
                         }
@@ -134,6 +138,10 @@ struct SigninView: View {
                     }
                 }
         }
+    }
+    
+    private func signInOnFirebase(email: String, password: String) async {
+        
     }
 }
 

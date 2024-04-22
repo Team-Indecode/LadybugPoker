@@ -40,6 +40,7 @@
 		D1418E1F2BD6376B00421904 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = D1418E1E2BD6376B00421904 /* KakaoSDKCommon */; };
 		D1418E222BD63BD100421904 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1418E212BD63BD100421904 /* SignUpView.swift */; };
 		D1418E242BD6400C00421904 /* DefaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1418E232BD6400C00421904 /* DefaultView.swift */; };
+		D1418E262BD6415200421904 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D1418E252BD6415200421904 /* FirebaseAuth */; };
 		D152E9A72BC4CABA005535F1 /* GameRoomDetailBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9A62BC4CABA005535F1 /* GameRoomDetailBottomView.swift */; };
 		D152E9AA2BC4CD72005535F1 /* GameStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9A92BC4CD72005535F1 /* GameStatus.swift */; };
 		D152E9AD2BC4D1AD005535F1 /* send.png in Resources */ = {isa = PBXBuildFile; fileRef = D152E9AC2BC4D1AD005535F1 /* send.png */; };
@@ -123,6 +124,7 @@
 				D125B9E12BC156CD00A5AE03 /* FirebaseFirestore in Frameworks */,
 				D1418E1F2BD6376B00421904 /* KakaoSDKCommon in Frameworks */,
 				D1418E192BD6376B00421904 /* KakaoSDKAuth in Frameworks */,
+				D1418E262BD6415200421904 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +393,7 @@
 				D1418E1A2BD6376B00421904 /* KakaoSDKCert */,
 				D1418E1C2BD6376B00421904 /* KakaoSDKCertCore */,
 				D1418E1E2BD6376B00421904 /* KakaoSDKCommon */,
+				D1418E252BD6415200421904 /* FirebaseAuth */,
 			);
 			productName = LadybugPoker;
 			productReference = D19AFD4D2BBF9B7C008F9297 /* LadybugPoker.app */;
@@ -796,6 +799,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D1418E152BD6376B00421904 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKCommon;
+		};
+		D1418E252BD6415200421904 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
