@@ -13,7 +13,7 @@ struct LadybugPokerApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainView()
+            DefaultView()
                 .environmentObject(Service.shared)
                 .preferredColorScheme(.light)
         }
