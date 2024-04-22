@@ -9,6 +9,8 @@ import SwiftUI
 import FirebaseAuth
 
 struct SignUpView: View {
+    @EnvironmentObject private var service: Service
+    
     @State private var displayName: String = ""
     
     var email: String
@@ -63,9 +65,12 @@ struct SignUpView: View {
             
             Button {
                 Task {
-                    let result = try await Auth.auth().signIn(withEmail: email, password: password)
-                    
-                    
+                    _ = try await Auth.auth().createUser(withEmail: email, password: password)
+                    if let user = Auth.auth().currentUser {
+                        print("user: \(user.uid)")
+                        try await User.create(id: user.uid, displayName: displayName)
+                        service.path = [.main]
+                    }
                 }
             } label: {
                 ZStack {
