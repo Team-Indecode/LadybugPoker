@@ -39,10 +39,27 @@ struct MainView: View {
                 .frame(height: 50)
                 .padding(.horizontal, 20)
             }
-            .background {
-                Color.bugLight
-                    .ignoresSafeArea()
+            
+            Spacer()
+            
+            
+            Button {
+                service.path.append(.createGameRoom)
+            } label: {
+                Color.bugDark
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .overlay {
+                        Text("방 만들기")
+                            .font(.sea(20))
+                            .foregroundStyle(Color.white)
+                    }
             }
+            .frame(height: 50)
+            .padding(.horizontal, 20)
+        }
+        .background {
+            Color.bugLight
+                .ignoresSafeArea()
         }
         .onAppear {
             gameRooms = GameRoom.listPreview

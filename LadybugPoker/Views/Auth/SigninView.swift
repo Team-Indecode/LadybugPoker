@@ -152,11 +152,13 @@ struct SigninView: View {
             
             if let user = Auth.auth().currentUser {
                 //TODO: 로그인 성공
-                service.path = [.main]
+                Task {
+//                    try await User.fetch(id: user.id)
+                    service.path = [.main]
+                }
             } else {
                 service.path.append(.signup(email: email, password: password))
             }
-
         } catch {
             print(error)
             service.path.append(.signup(email: email, password: password))
