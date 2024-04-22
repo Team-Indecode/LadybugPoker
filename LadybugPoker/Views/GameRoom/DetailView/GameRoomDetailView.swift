@@ -9,7 +9,11 @@ import SwiftUI
 
 struct GameRoomDetailView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            GameRoomDetailTopView()
+            
+            GameRoomDetailBottomView(gameStatus: <#T##Binding<GameStatus>#>, amIReadied: <#T##Binding<Bool>#>, allPlayerReadied: <#T##Bool#>, isHost: <#T##Bool#>, userInTurn: <#T##Binding<UserInGame>#>, myCards: <#T##Binding<[Card]>#>, secondsLeft: <#T##Binding<Int>#>, selectedCardType: <#T##Binding<Bugs?>#>, showCardSelectedPopup: <#T##Binding<Bool>#>)
+        }
     }
 }
 
