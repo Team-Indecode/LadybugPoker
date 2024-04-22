@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct DefaultView: View {
     @EnvironmentObject private var service: Service
@@ -13,7 +14,7 @@ struct DefaultView: View {
     var body: some View {
         NavigationStack(path: $service.path) {
             VStack {
-                
+                Color.bugLight
             }
             .navigationDestination(for: Path.self) { path in
                 switch path {
@@ -35,7 +36,17 @@ struct DefaultView: View {
                 }
             }
             .onAppear {
-                service.path.append(.signin)
+                Task {
+                    if let user = Auth.auth().currentUser {
+                        
+                        service.myUserModel = try await User.fetch(id: user.uid)
+                        
+                        service.path.append(service.myUserModel == nil ? .signin : .main)
+                        
+                    } else {
+                        service.path.append(.signin)
+                    }
+                }
             }
         }
     }
