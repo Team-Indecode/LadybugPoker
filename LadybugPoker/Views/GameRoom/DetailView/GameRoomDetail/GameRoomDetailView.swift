@@ -20,7 +20,7 @@ struct GameRoomDetailView: View {
             GameRoomDetailBottomView(amIReadied: $amIReadied, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
         }
         .onAppear {
-            myCards = viewModel.getUserHandCard(true)
+            myCards = viewModel.getUserCard(true)
         }
         
     }

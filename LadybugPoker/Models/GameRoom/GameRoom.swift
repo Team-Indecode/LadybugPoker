@@ -58,5 +58,6 @@ struct UserInGame: Codable, Hashable {
     let userId: String
     /// 닉네임 -> 누구누구 턴입니다 할때 사용
     let displayName: String
+    let profileUrl: String?
 }
 

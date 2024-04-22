@@ -18,8 +18,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     @Published var allPlayerReadied: Bool = false
     
-    @Published var user: User = User(id: "", displayName: "", profileUrl: "")
-    
     func getGameData() async throws {
        let gameData = db.collection(GameRoom.path).document(gameRoomData.id)
             .addSnapshotListener { doc, error in
@@ -33,7 +31,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
     }
     
-    func getUserHandCard(_ isHandCard: Bool) -> [Card] {
+    func getUserData(_ userID: String) -> UserInGame? {
+        return gameRoomData.usersInGame.first(where: { $0.userId == userID })
+    }
+    
+    func getUserCard(_ isHandCard: Bool) -> [Card] {
 //        guard let userId = Service.shared.myUserModel.id else { return [] }
         let userId = Service.shared.myUserModel.id
         
@@ -85,4 +87,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
             return Card(bug: .bee, cardCnt: 0)
         }
     }
+    
+    
 }

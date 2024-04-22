@@ -9,6 +9,7 @@ import SwiftUI
 import NukeUI
 
 struct GamePlayAttackDefenceView: View {
+    @StateObject var viewModel = GameRoomDetailViewViewModel()
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
 
 //    let player: Player = .others
@@ -82,7 +83,11 @@ struct GamePlayAttackDefenceView: View {
     var playerAttackTopView: some View {
         VStack(spacing: 0) {
             HStack {
-                makeUserView(User(id: "", displayName: "라영", profileUrl: "https://picsum.photos/200"))
+//                makeUserView(User(id: "", displayName: "라영", profileUrl: "https://picsum.photos/200"))
+                if let userData = viewModel.getUserData(viewModel.gameRoomData.whoseTurn ?? "") {
+                    makeUserView(userData)
+                }
+                
                 Spacer()
             }
             Text("이 카드는....")
@@ -94,7 +99,11 @@ struct GamePlayAttackDefenceView: View {
                 .foregroundStyle(Color.white)
             HStack {
                 Spacer()
-                makeUserView(User(id: "", displayName: "fkdud", profileUrl: "https://picsum.photos/200"))
+//                makeUserView(User(id: "", displayName: "fkdud", profileUrl: "https://picsum.photos/200"))
+                if let userData = viewModel.getUserData(viewModel.gameRoomData.whoseGetting ?? "") {
+                    makeUserView(userData)
+                }
+                
             }
         }
     }
@@ -104,7 +113,10 @@ struct GamePlayAttackDefenceView: View {
     var playerNotAttackerTopView: some View {
         VStack(spacing: 0) {
             HStack {
-                makeUserView(User(id: "", displayName: "라영", profileUrl: "https://picsum.photos/200"))
+//                makeUserView(User(id: "", displayName: "라영", profileUrl: "https://picsum.photos/200"))
+                if let userData = viewModel.getUserData(viewModel.gameRoomData.whoseTurn ?? "") {
+                    makeUserView(userData)
+                }
                 Spacer()
             }
             Text("이 카드는....")
@@ -116,14 +128,17 @@ struct GamePlayAttackDefenceView: View {
                 .foregroundStyle(Color.white)
             HStack {
                 Spacer()
-                makeUserView(User(id: "", displayName: "fkdud", profileUrl: "https://picsum.photos/200"))
+//                makeUserView(User(id: "", displayName: "fkdud", profileUrl: "https://picsum.photos/200"))
+                if let userData = viewModel.getUserData(viewModel.gameRoomData.whoseGetting ?? "") {
+                    makeUserView(userData)
+                }
             }
         }
     }
     
     @MainActor
     /// 유저 프로필 뷰 제작
-    func makeUserView(_ user: User) -> some View {
+    func makeUserView(_ user: UserInGame) -> some View {
         return HStack {
             if let profileUrl = user.profileUrl {
                 LazyImage(url: URL(string: profileUrl))

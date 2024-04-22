@@ -63,7 +63,7 @@ struct GameRoomDetailBottomView: View {
                     .padding(.bottom, 30)
 
                 
-                if viewModel.gameRoomData.hostId == viewModel.user.id {
+                if viewModel.gameRoomData.hostId == Service.shared.myUserModel.id {
                     if viewModel.allPlayerReadied {
                         Text(suggestStartText)
                             .font(.sea(35))
@@ -84,13 +84,13 @@ struct GameRoomDetailBottomView: View {
                 }
                 
                 Button {
-                    if viewModel.gameRoomData.hostId == viewModel.user.id {
+                    if viewModel.gameRoomData.hostId == Service.shared.myUserModel.id {
                         
                     } else {
                         amIReadied ? cancelReady() : ready()
                     }
                 } label: {
-                    if viewModel.gameRoomData.hostId == viewModel.user.id {
+                    if viewModel.gameRoomData.hostId == Service.shared.myUserModel.id {
                         Text(startText)
                             .opacity(viewModel.allPlayerReadied ? 1 : 0.5)
                     } else {
