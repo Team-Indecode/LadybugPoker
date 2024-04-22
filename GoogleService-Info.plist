@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyBEGs_5qHYGkudVw9EcN10vwZoz-fbxpKs</string>
+	<string>AIzaSyADDCyE08CrUCnALlH2wtsnaU95Jjr9n3E</string>
 	<key>GCM_SENDER_ID</key>
-	<string>272455516079</string>
+	<string>801793778820</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.indecode.LadybugPoker</string>
+	<string>com.indecode.LadybugPokerr</string>
 	<key>PROJECT_ID</key>
-	<string>ladybugpoker-7de6e</string>
+	<string>ladybugpoker-ba95d</string>
 	<key>STORAGE_BUCKET</key>
-	<string>ladybugpoker-7de6e.appspot.com</string>
+	<string>ladybugpoker-ba95d.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:272455516079:ios:6face857cca60d5328395a</string>
+	<string>1:801793778820:ios:f95e5c17638791937f4ed1</string>
 </dict>
 </plist>
