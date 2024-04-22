@@ -16,6 +16,7 @@
 		4D75832A2BC8429D009B6489 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4D7583292BC8429D009B6489 /* NukeUI */; };
 		4D75832C2BC8429D009B6489 /* NukeVideo in Frameworks */ = {isa = PBXBuildFile; productRef = 4D75832B2BC8429D009B6489 /* NukeVideo */; };
 		4D75832E2BC8465D009B6489 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D75832D2BC8465D009B6489 /* Card.swift */; };
+		4DC5035A2BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */; };
 		4DE122172BCBF53700F1FE9C /* GameRoomDetailTopView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE122162BCBF53700F1FE9C /* GameRoomDetailTopView+ViewModel.swift */; };
 		4DF375B92BD161CC008AC415 /* GamePlayAttackDefenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF375B82BD161CC008AC415 /* GamePlayAttackDefenceView.swift */; };
 		D125B9C72BC1288F00A5AE03 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9C62BC1288F00A5AE03 /* Service.swift */; };
@@ -31,6 +32,7 @@
 		D125B9DE2BC1517700A5AE03 /* GameRoom_Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9DD2BC1517700A5AE03 /* GameRoom_Functions.swift */; };
 		D125B9E12BC156CD00A5AE03 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D125B9E02BC156CD00A5AE03 /* FirebaseFirestore */; };
 		D139C5262BC6828B006A82B0 /* GameRoomDetailBottomView+PlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D139C5252BC6828B006A82B0 /* GameRoomDetailBottomView+PlayingView.swift */; };
+		D1418E142BD62FBC00421904 /* GameRoomDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1418E132BD62FBC00421904 /* GameRoomDetailView.swift */; };
 		D152E9A72BC4CABA005535F1 /* GameRoomDetailBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9A62BC4CABA005535F1 /* GameRoomDetailBottomView.swift */; };
 		D152E9AA2BC4CD72005535F1 /* GameStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9A92BC4CD72005535F1 /* GameStatus.swift */; };
 		D152E9AD2BC4D1AD005535F1 /* send.png in Resources */ = {isa = PBXBuildFile; fileRef = D152E9AC2BC4D1AD005535F1 /* send.png */; };
@@ -58,6 +60,7 @@
 		4D7583182BC588B4009B6489 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBoardView.swift; sourceTree = "<group>"; };
 		4D75832D2BC8465D009B6489 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameRoomDetailView+ViewModel.swift"; sourceTree = "<group>"; };
 		4DE122162BCBF53700F1FE9C /* GameRoomDetailTopView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameRoomDetailTopView+ViewModel.swift"; sourceTree = "<group>"; };
 		4DF375B82BD161CC008AC415 /* GamePlayAttackDefenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamePlayAttackDefenceView.swift; sourceTree = "<group>"; };
 		D125B9C62BC1288F00A5AE03 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
@@ -67,6 +70,7 @@
 		D125B9DB2BC1504300A5AE03 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D125B9DD2BC1517700A5AE03 /* GameRoom_Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoom_Functions.swift; sourceTree = "<group>"; };
 		D139C5252BC6828B006A82B0 /* GameRoomDetailBottomView+PlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameRoomDetailBottomView+PlayingView.swift"; sourceTree = "<group>"; };
+		D1418E132BD62FBC00421904 /* GameRoomDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomDetailView.swift; sourceTree = "<group>"; };
 		D152E9A62BC4CABA005535F1 /* GameRoomDetailBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomDetailBottomView.swift; sourceTree = "<group>"; };
 		D152E9A92BC4CD72005535F1 /* GameStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatus.swift; sourceTree = "<group>"; };
 		D152E9AC2BC4D1AD005535F1 /* send.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = send.png; sourceTree = "<group>"; };
@@ -160,8 +164,10 @@
 		D152E9A52BC4CAA4005535F1 /* DetailView */ = {
 			isa = PBXGroup;
 			children = (
+				D1418E132BD62FBC00421904 /* GameRoomDetailView.swift */,
 				4D7583132BC56E73009B6489 /* DetailTopView */,
 				D152E9AE2BC4D2CB005535F1 /* DetailBottomView */,
+				4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */,
 			);
 			path = DetailView;
 			sourceTree = "<group>";
@@ -430,12 +436,14 @@
 				D19AFD6D2BBF9F92008F9297 /* SigninView.swift in Sources */,
 				D19AFD742BBFA0A9008F9297 /* GameRoomView.swift in Sources */,
 				D125B9DE2BC1517700A5AE03 /* GameRoom_Functions.swift in Sources */,
+				D1418E142BD62FBC00421904 /* GameRoomDetailView.swift in Sources */,
 				D125B9CC2BC12A0400A5AE03 /* GameRoomCreateView.swift in Sources */,
 				D152E9AA2BC4CD72005535F1 /* GameStatus.swift in Sources */,
 				D19AFD792BBFA12F008F9297 /* User.swift in Sources */,
 				4D7583152BC56E86009B6489 /* GameRoomDetailTopView.swift in Sources */,
 				4DF375B92BD161CC008AC415 /* GamePlayAttackDefenceView.swift in Sources */,
 				D19AFD6F2BBF9F99008F9297 /* MainView.swift in Sources */,
+				4DC5035A2BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift in Sources */,
 				D152E9B32BC4E700005535F1 /* Bugs.swift in Sources */,
 				4D7583172BC572A0009B6489 /* CardView.swift in Sources */,
 				D125B9C72BC1288F00A5AE03 /* Service.swift in Sources */,
