@@ -15,11 +15,13 @@ struct GameRoomDetailTopView: View {
     
     var body: some View {
         GeometryReader { proxy in
-            LazyVGrid(columns: columns) {
-                ForEach(gameRoomData.usersInGame, id: \.self) { usersData in
-                    PlayerBoardView(userId: usersData.userId, userCardCnt: usersData.handCard.count, boardWidth: (proxy.size.width - 74) / 2, boardHeight: (proxy.size.height * 0.6706) / 3, cards: usersData.boardCard, userReadyOrNot: true, gameStart: true)
+            LazyVGrid(columns: columns, spacing: 14) {
+                ForEach(Array(zip(0..<gameRoomData.usersInGame.count, gameRoomData.usersInGame)), id: \.0) { index, usersData in
+                    PlayerBoardView(userId: usersData.userId, userCardCnt: usersData.handCard.count, boardWidth: (proxy.size.width - 37) / 2, boardHeight: (proxy.size.height * 0.6706) / 3, cards: usersData.boardCard, userReadyOrNot: true, gameStart: true, isOdd: index % 2 == 0 ? true : false)
+
                 }
             }
+            .frame(maxWidth: .infinity)
         }
         .onAppear(perform: {
             gameRoomData = GameRoom.listPreview[0]

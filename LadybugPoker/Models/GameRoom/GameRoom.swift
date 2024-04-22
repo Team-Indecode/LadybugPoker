@@ -56,5 +56,7 @@ struct UserInGame: Codable, Hashable {
     /// 깔린 카드
     let boardCard: [Card]
     let userId: String
+    /// 닉네임 -> 누구누구 턴입니다 할때 사용
+    let displayName: String
 }
 
