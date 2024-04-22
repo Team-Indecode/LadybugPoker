@@ -9,7 +9,7 @@ import SwiftUI
 
 /// 한 플레이어의 보드판
 struct PlayerBoardView: View {
-    @StateObject var viewModel = GameRoomDetailTopViewViewModel()
+    @StateObject var viewModel = GameRoomDetailViewViewModel()
 //    let user: User
     let userId: String
     let userCardCnt: Int
@@ -25,7 +25,7 @@ struct PlayerBoardView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            if let userProfile = viewModel.userProfiles[userId] {
+            if let userProfile = viewModel.getUserData(userId) {
                 profile(userProfile)
             }
             if gameStart {
@@ -43,13 +43,13 @@ struct PlayerBoardView: View {
     }
     
     /// 유저 프로필
-    func profile(_ userProfile: User) -> some View {
+    func profile(_ userProfile: UserInGame) -> some View {
         if isOdd {
             return AnyView(
                 HStack {
                     UserProfileView(userImageUrl: userProfile.profileUrl ?? "", userNickname: userProfile.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
                     Spacer()
-                    if viewModel.attackUser == userId {
+                    if viewModel.gameRoomData.whoseTurn == userId {
                         Image(systemName: "arrowshape.left.fill")
                             .foregroundStyle(Color.orange)
                             .frame(width: 30)
@@ -59,7 +59,7 @@ struct PlayerBoardView: View {
         } else {
             return AnyView(
                 HStack {
-                    if viewModel.attackUser == userId {
+                    if viewModel.gameRoomData.whoseTurn == userId {
                         Image(systemName: "arrowshape.right.fill")
                             .foregroundStyle(Color.orange)
                             .frame(width: 30)

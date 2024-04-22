@@ -32,4 +32,25 @@ enum Bugs: String, Identifiable, Codable, CaseIterable {
             return "FFD53E"
         }
     }
+    
+    var cardString: String {
+        switch self {
+        case .snake:
+            "Sn"
+        case .ladybug:
+            "L"
+        case .frog:
+            "F"
+        case .rat:
+            "R"
+        case .spider:
+            "Sp"
+        case .snail:
+            "SL"
+        case .worm:
+            "W"
+        case .bee:
+            "B"
+        }
+    }
 }

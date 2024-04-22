@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GameRoomDetailBottomView: View {
-    @StateObject private var viewModel = ViewModel()
+    @StateObject private var viewModel = GameRoomDetailViewViewModel()
     
     private let beforeGameText = "게임시작 전 입니다."
     private let readyText = "준비 완료"
@@ -18,26 +18,26 @@ struct GameRoomDetailBottomView: View {
     private let notAllPlayerReadiedText = "아직 모든 플레이어가 준비되지 않았습니다."
     private let startText = "게임 시작"
         
-    @Binding var gameStatus: GameStatus
+//    @Binding var gameStatus: GameStatus
     
     /// 내가 준비 했는지
     @Binding var amIReadied: Bool
     
     /// 모든 플레이어가 준비했는지 (방장용)
-    @State var allPlayerReadied: Bool
+//    @State var allPlayerReadied: Bool
     
     @State private var chat: String = ""
     
     /// 내가 방장인지
-    @State var isHost: Bool
+//    @State var isHost: Bool
     /// 누구 턴인지
-    @Binding var userInTurn: UserInGame
+//    @Binding var userInTurn: UserInGame
     /// 내 카드 목록
     @Binding var myCards: [Card]
     /// 남은 시간
-    @Binding var secondsLeft: Int
+//    @Binding var secondsLeft: Int
     /// 선택한 카드
-    @Binding var selectedCardType: Bugs?
+//    @Binding var selectedCardType: Bugs?
     /// 카드 선택 시 확인 팝업
     @Binding var showCardSelectedPopup: Bool
     
@@ -49,22 +49,22 @@ struct GameRoomDetailBottomView: View {
                 .frame(height: 2)
                 .padding(.bottom, 12)
             
-            if gameStatus == .onAir {
-                PlayingView(userInTurn: $userInTurn,
+            if viewModel.gameStatus == .onAir {
+                PlayingView(userInTurn: $viewModel.gameRoomData.whoseTurn,
                             myCards: $myCards,
-                            secondsLeft: $secondsLeft,
-                            selectedCardType: $selectedCardType,
+                            secondsLeft: $viewModel.secondsLeft,
+                            selectedCardType: $viewModel.gameRoomData.selectedCard,
                             showCardSelectedPopup: $showCardSelectedPopup
                 )
 
             } else {
-                Text(gameStatus == .notStarted || gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
+                Text(viewModel.gameStatus == .notStarted || viewModel.gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
                     .font(.sea(15))
                     .padding(.bottom, 30)
 
                 
-                if isHost {
-                    if allPlayerReadied {
+                if viewModel.gameRoomData.hostId == Service.shared.myUserModel.id {
+                    if viewModel.allPlayerReadied {
                         Text(suggestStartText)
                             .font(.sea(35))
                     } else {
@@ -84,15 +84,15 @@ struct GameRoomDetailBottomView: View {
                 }
                 
                 Button {
-                    if isHost {
+                    if viewModel.gameRoomData.hostId == Service.shared.myUserModel.id {
                         
                     } else {
                         amIReadied ? cancelReady() : ready()
                     }
                 } label: {
-                    if isHost {
+                    if viewModel.gameRoomData.hostId == Service.shared.myUserModel.id {
                         Text(startText)
-                            .opacity(allPlayerReadied ? 1 : 0.5)
+                            .opacity(viewModel.allPlayerReadied ? 1 : 0.5)
                     } else {
                         if amIReadied == false {
                             Text(readyText)
@@ -158,22 +158,21 @@ struct GameRoomDetailBottomView: View {
 
 #Preview {
     GameRoomDetailBottomView(
-        gameStatus: .constant(.onAir),
         amIReadied: .constant(false),
-        allPlayerReadied: false,
-        isHost: true, 
-        userInTurn: .constant(
-            UserInGame(readyOrNot: true,
-                       handCard: [],
-                       boardCard: [],
-                       userId: "hihi", displayName: "test")
-        ),
+//        allPlayerReadied: false,
+//        isHost: true, 
+//        userInTurn: .constant(
+//            UserInGame(readyOrNot: true,
+//                       handCard: "",
+//                       boardCard: "",
+//                       userId: "hihi", displayName: "test")
+//        ),
         myCards: .constant(
             [Card(bug: .bee, cardCnt: 3),
              Card(bug: .frog, cardCnt: 2),
              Card(bug: .ladybug, cardCnt: 3)]),
-        secondsLeft: .constant(48),
-        selectedCardType: .constant(nil),
+//        secondsLeft: .constant(48),
+//        selectedCardType: .constant(nil),
         showCardSelectedPopup: .constant(false)
     )
 }
