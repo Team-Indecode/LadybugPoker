@@ -148,7 +148,7 @@ struct SigninView: View {
     
     private func signInOnFirebase(email: String, password: String) async {
         do {
-            let result = try await Auth.auth().signIn(withEmail: email, password: password)
+            _ = try await Auth.auth().signIn(withEmail: email, password: password)
             
             if let user = Auth.auth().currentUser {
                 //TODO: 로그인 성공
