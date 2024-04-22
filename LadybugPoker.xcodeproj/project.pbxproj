@@ -42,6 +42,8 @@
 		D1418E242BD6400C00421904 /* DefaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1418E232BD6400C00421904 /* DefaultView.swift */; };
 		D1418E262BD6415200421904 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D1418E252BD6415200421904 /* FirebaseAuth */; };
 		D1418E292BD647EA00421904 /* User_Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1418E282BD647EA00421904 /* User_Functions.swift */; };
+		D1418E2C2BD64BA400421904 /* FirestoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1418E2B2BD64BA400421904 /* FirestoreError.swift */; };
+		D1418E2E2BD64BDE00421904 /* User_Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1418E2D2BD64BDE00421904 /* User_Errors.swift */; };
 		D152E9A72BC4CABA005535F1 /* GameRoomDetailBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9A62BC4CABA005535F1 /* GameRoomDetailBottomView.swift */; };
 		D152E9AA2BC4CD72005535F1 /* GameStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9A92BC4CD72005535F1 /* GameStatus.swift */; };
 		D152E9AD2BC4D1AD005535F1 /* send.png in Resources */ = {isa = PBXBuildFile; fileRef = D152E9AC2BC4D1AD005535F1 /* send.png */; };
@@ -83,6 +85,8 @@
 		D1418E212BD63BD100421904 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		D1418E232BD6400C00421904 /* DefaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultView.swift; sourceTree = "<group>"; };
 		D1418E282BD647EA00421904 /* User_Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User_Functions.swift; sourceTree = "<group>"; };
+		D1418E2B2BD64BA400421904 /* FirestoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreError.swift; sourceTree = "<group>"; };
+		D1418E2D2BD64BDE00421904 /* User_Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User_Errors.swift; sourceTree = "<group>"; };
 		D152E9A62BC4CABA005535F1 /* GameRoomDetailBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomDetailBottomView.swift; sourceTree = "<group>"; };
 		D152E9A92BC4CD72005535F1 /* GameStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatus.swift; sourceTree = "<group>"; };
 		D152E9AC2BC4D1AD005535F1 /* send.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = send.png; sourceTree = "<group>"; };
@@ -194,8 +198,17 @@
 			children = (
 				D19AFD782BBFA12F008F9297 /* User.swift */,
 				D1418E282BD647EA00421904 /* User_Functions.swift */,
+				D1418E2D2BD64BDE00421904 /* User_Errors.swift */,
 			);
 			path = User;
+			sourceTree = "<group>";
+		};
+		D1418E2A2BD64B9B00421904 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				D1418E2B2BD64BA400421904 /* FirestoreError.swift */,
+			);
+			path = Errors;
 			sourceTree = "<group>";
 		};
 		D152E9A52BC4CAA4005535F1 /* DetailView */ = {
@@ -271,6 +284,7 @@
 		D19AFD4F2BBF9B7C008F9297 /* LadybugPoker */ = {
 			isa = PBXGroup;
 			children = (
+				D1418E2A2BD64B9B00421904 /* Errors */,
 				D125B9DA2BC1503B00A5AE03 /* System */,
 				D125B9C52BC1288600A5AE03 /* Service */,
 				D19AFD662BBF9C0C008F9297 /* Info.plist */,
@@ -472,6 +486,7 @@
 				4D75831F2BC83D4A009B6489 /* PlayerBoardView.swift in Sources */,
 				D19AFD772BBFA0C4008F9297 /* GameRoom.swift in Sources */,
 				D16AFC7F2BCFAD4400AEC3B2 /* CommonPopupView.swift in Sources */,
+				D1418E2E2BD64BDE00421904 /* User_Errors.swift in Sources */,
 				D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */,
 				D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */,
 				D125B9DC2BC1504300A5AE03 /* AppDelegate.swift in Sources */,
@@ -480,6 +495,7 @@
 				D152E9A72BC4CABA005535F1 /* GameRoomDetailBottomView.swift in Sources */,
 				4DE122172BCBF53700F1FE9C /* GameRoomDetailTopView+ViewModel.swift in Sources */,
 				D19AFD6D2BBF9F92008F9297 /* SigninView.swift in Sources */,
+				D1418E2C2BD64BA400421904 /* FirestoreError.swift in Sources */,
 				D19AFD742BBFA0A9008F9297 /* GameRoomView.swift in Sources */,
 				D125B9DE2BC1517700A5AE03 /* GameRoom_Functions.swift in Sources */,
 				D1418E142BD62FBC00421904 /* GameRoomDetailView.swift in Sources */,
