@@ -16,6 +16,7 @@
 		4D75832A2BC8429D009B6489 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4D7583292BC8429D009B6489 /* NukeUI */; };
 		4D75832C2BC8429D009B6489 /* NukeVideo in Frameworks */ = {isa = PBXBuildFile; productRef = 4D75832B2BC8429D009B6489 /* NukeVideo */; };
 		4D75832E2BC8465D009B6489 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D75832D2BC8465D009B6489 /* Card.swift */; };
+		4DC5035A2BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */; };
 		4DE122172BCBF53700F1FE9C /* GameRoomDetailTopView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE122162BCBF53700F1FE9C /* GameRoomDetailTopView+ViewModel.swift */; };
 		4DF375B92BD161CC008AC415 /* GamePlayAttackDefenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF375B82BD161CC008AC415 /* GamePlayAttackDefenceView.swift */; };
 		D125B9C72BC1288F00A5AE03 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D125B9C62BC1288F00A5AE03 /* Service.swift */; };
@@ -59,6 +60,7 @@
 		4D7583182BC588B4009B6489 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBoardView.swift; sourceTree = "<group>"; };
 		4D75832D2BC8465D009B6489 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameRoomDetailView+ViewModel.swift"; sourceTree = "<group>"; };
 		4DE122162BCBF53700F1FE9C /* GameRoomDetailTopView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameRoomDetailTopView+ViewModel.swift"; sourceTree = "<group>"; };
 		4DF375B82BD161CC008AC415 /* GamePlayAttackDefenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamePlayAttackDefenceView.swift; sourceTree = "<group>"; };
 		D125B9C62BC1288F00A5AE03 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				D1418E132BD62FBC00421904 /* GameRoomDetailView.swift */,
 				4D7583132BC56E73009B6489 /* DetailTopView */,
 				D152E9AE2BC4D2CB005535F1 /* DetailBottomView */,
+				4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */,
 			);
 			path = DetailView;
 			sourceTree = "<group>";
@@ -440,6 +443,7 @@
 				4D7583152BC56E86009B6489 /* GameRoomDetailTopView.swift in Sources */,
 				4DF375B92BD161CC008AC415 /* GamePlayAttackDefenceView.swift in Sources */,
 				D19AFD6F2BBF9F99008F9297 /* MainView.swift in Sources */,
+				4DC5035A2BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift in Sources */,
 				D152E9B32BC4E700005535F1 /* Bugs.swift in Sources */,
 				4D7583172BC572A0009B6489 /* CardView.swift in Sources */,
 				D125B9C72BC1288F00A5AE03 /* Service.swift in Sources */,
