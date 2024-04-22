@@ -154,12 +154,12 @@ struct SigninView: View {
                 //TODO: 로그인 성공
                 service.path = [.main]
             } else {
-                service.path.append(.signup)
+                service.path.append(.signup(email: email, password: password))
             }
 
         } catch {
             print(error)
-            service.path.append(.signup)
+            service.path.append(.signup(email: email, password: password))
         }
     }
 }

@@ -6,9 +6,13 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct SignUpView: View {
     @State private var displayName: String = ""
+    
+    var email: String
+    var password: String
     
     var body: some View {
         VStack {
@@ -58,7 +62,11 @@ struct SignUpView: View {
             Spacer()
             
             Button {
-                
+                Task {
+                    let result = try await Auth.auth().signIn(withEmail: email, password: password)
+                    
+                    
+                }
             } label: {
                 ZStack {
                     displayName.count > 1 && displayName.count < 8 ?
@@ -81,8 +89,4 @@ struct SignUpView: View {
                 .ignoresSafeArea()
         }
     }
-}
-
-#Preview {
-    SignUpView()
 }

@@ -21,8 +21,8 @@ struct DefaultView: View {
                     GameRoomCreateView()
                         .navigationBarBackButtonHidden()
                     
-                case .signup:
-                    SignUpView()
+                case .signup(let email, let password):
+                    SignUpView(email: email, password: password)
                         .navigationBarBackButtonHidden()
                     
                 case .signin:

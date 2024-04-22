@@ -187,6 +187,14 @@
 			path = "며소";
 			sourceTree = "<group>";
 		};
+		D1418E272BD6461600421904 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				D19AFD782BBFA12F008F9297 /* User.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 		D152E9A52BC4CAA4005535F1 /* DetailView */ = {
 			isa = PBXGroup;
 			children = (
@@ -342,10 +350,10 @@
 		D19AFD752BBFA0B4008F9297 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D1418E272BD6461600421904 /* User */,
 				D152E9B12BC4E6F6005535F1 /* Bugs */,
 				D152E9A82BC4CD6C005535F1 /* GameStatus */,
 				D19AFD7A2BBFA22A008F9297 /* GameRoom */,
-				D19AFD782BBFA12F008F9297 /* User.swift */,
 				4D75832D2BC8465D009B6489 /* Card.swift */,
 			);
 			path = Models;
