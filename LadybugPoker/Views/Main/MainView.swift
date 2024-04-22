@@ -15,7 +15,11 @@ struct MainView: View {
         NavigationStack(path: $service.path) {
             VStack {
                 ForEach(gameRooms) { gameRoom in
-                    GameRoomView(gameRoom: gameRoom)
+                    Button {
+                        service.path.append(.gameRoom)
+                    } label: {
+                        GameRoomView(gameRoom: gameRoom)
+                    }
                 }
                 
                 Spacer()

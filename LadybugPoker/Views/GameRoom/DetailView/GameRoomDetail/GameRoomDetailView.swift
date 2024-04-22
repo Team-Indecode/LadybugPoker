@@ -15,14 +15,27 @@ struct GameRoomDetailView: View {
     @State private var myCards: [Card] = []
 //    @State private var turnsStartTime:
     var body: some View {
+        if #available(iOS 17, *) {
+            allContent
+                .onChange(of: viewModel.gameRoomData.usersInGame) { oldValue, newValue in
+                    myCards = viewModel.getUserCard(true)
+                }
+        } else {
+            allContent
+                .onChange(of: viewModel.gameRoomData.usersInGame) { newValue in
+                    myCards = viewModel.getUserCard(true)
+                }
+        }
+    }
+    
+    var allContent: some View {
         VStack {
             GameRoomDetailTopView()
             GameRoomDetailBottomView(amIReadied: $amIReadied, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
         }
-        .onAppear {
-            myCards = viewModel.getUserCard(true)
+        .task {
+            try? await viewModel.getGameData()
         }
-        
     }
 }
 

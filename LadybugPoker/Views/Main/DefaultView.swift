@@ -32,6 +32,9 @@ struct DefaultView: View {
                 case .main:
                     MainView()
                         .navigationBarBackButtonHidden()
+                case .gameRoom:
+                    GameRoomDetailView()
+                        .navigationBarBackButtonHidden()
                 }
             }
             .onAppear {
