@@ -8,6 +8,7 @@
 import SwiftUI
 import KakaoSDKAuth
 import KakaoSDKUser
+import FirebaseAuth
 
 
 struct SigninView: View {
@@ -103,11 +104,11 @@ struct SigninView: View {
                             return
                         } else {
                             if let user {
-                                if let id = user.id {
-
-                                    
-                                                                
-                                    
+                                if let id = user.id, 
+                                    let email = user.kakaoAccount?.email {
+                                    Task {
+                                        await signInOnFirebase(email: email, password: "\(id)")
+                                    }
                                 }
                             }
                         }
@@ -130,7 +131,12 @@ struct SigninView: View {
                             } else {
                                 if let user {
                                     if let id = user.id {
-                                        
+                                        if let id = user.id,
+                                            let email = user.kakaoAccount?.email {
+                                            Task {
+                                                await signInOnFirebase(email: email, password: "\(id)")
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -141,7 +147,20 @@ struct SigninView: View {
     }
     
     private func signInOnFirebase(email: String, password: String) async {
-        
+        do {
+            let result = try await Auth.auth().signIn(withEmail: email, password: password)
+            
+            if let user = Auth.auth().currentUser {
+                //TODO: 로그인 성공
+                service.path = [.main]
+            } else {
+                service.path.append(.signup)
+            }
+
+        } catch {
+            print(error)
+            service.path.append(.signup)
+        }
     }
 }
 

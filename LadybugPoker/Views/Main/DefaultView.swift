@@ -28,6 +28,10 @@ struct DefaultView: View {
                 case .signin:
                     SigninView()
                         .navigationBarBackButtonHidden()
+                    
+                case .main:
+                    MainView()
+                        .navigationBarBackButtonHidden()
                 }
             }
             .onAppear {

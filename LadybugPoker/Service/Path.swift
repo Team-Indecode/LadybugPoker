@@ -11,4 +11,5 @@ enum Path: Hashable {
     case createGameRoom
     case signup
     case signin
+    case main
 }
