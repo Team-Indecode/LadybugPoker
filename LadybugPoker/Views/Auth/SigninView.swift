@@ -153,7 +153,8 @@ struct SigninView: View {
             if let user = Auth.auth().currentUser {
                 //TODO: 로그인 성공
                 Task {
-//                    try await User.fetch(id: user.id)
+                    service.myUserModel = try await User.fetch(id: user.uid)
+                    print(service.myUserModel)
                     service.path = [.main]
                 }
             } else {
