@@ -25,9 +25,18 @@ class GameRoomDetailViewViewModel: ObservableObject {
                     print(#fileID, #function, #line, "- doc checking: \(doc)")
                     if let data = try? doc.data(as: GameRoom.self) {
                         print(#fileID, #function, #line, "- data checking⭐️\(data)")
+                        self.gameRoomData = data
                     }
                 }
                 
+            }
+    }
+    
+    /// 유저가 준비완료가 됬음을 보내줌
+    func sendIamReady() {
+        db.collection(GameRoom.path).document(gameRoomData.id)
+            .updateData(["" : true]) { error in
+                <#code#>
             }
     }
     

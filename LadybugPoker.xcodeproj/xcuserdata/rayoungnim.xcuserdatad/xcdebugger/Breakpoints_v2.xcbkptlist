@@ -8,48 +8,16 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "6425BECA-1870-4AFE-9784-C4B5AFF50984"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "getUserData(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "6425BECA-1870-4AFE-9784-C4B5AFF50984 - a3f9b92cd90aef39"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LadybugPoker.GameRoomDetailViewViewModel.getUserData(Swift.String) -&gt; Swift.Optional&lt;LadybugPoker.UserInGame&gt;"
-                  moduleName = "LadybugPoker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/LadybugPoker/LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "120">
-               </Location>
-               <Location
-                  uuid = "6425BECA-1870-4AFE-9784-C4B5AFF50984 - a3f9b92cd90aef39"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LadybugPoker.GameRoomDetailViewViewModel.getUserData(Swift.String) -&gt; Swift.Optional&lt;LadybugPoker.UserInGame&gt;"
-                  moduleName = "LadybugPoker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/LadybugPoker/LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "140">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

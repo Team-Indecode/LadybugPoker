@@ -29,13 +29,18 @@ struct GameRoomDetailView: View {
     }
     
     var allContent: some View {
-        VStack {
-            GameRoomDetailTopView()
-            GameRoomDetailBottomView(amIReadied: $amIReadied, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
-        }
-        .task {
-            try? await viewModel.getGameData()
-        }
+        GeometryReader(content: { proxy in
+            VStack {
+                GameRoomDetailTopView()
+                    .frame(height: proxy.size.height * 0.6706)
+                GameRoomDetailBottomView(amIReadied: $amIReadied, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
+                    .frame(height: proxy.size.height * 0.3294)
+            }
+            .task {
+                try? await viewModel.getGameData()
+            }
+        })
+        
     }
 }
 

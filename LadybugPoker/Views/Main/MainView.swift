@@ -12,32 +12,13 @@ struct MainView: View {
     @State private var gameRooms: [GameRoom] = []
     
     var body: some View {
-        NavigationStack(path: $service.path) {
-            VStack {
-                ForEach(gameRooms) { gameRoom in
-                    Button {
-                        service.path.append(.gameRoom)
-                    } label: {
-                        GameRoomView(gameRoom: gameRoom)
-                    }
-                }
-                
-                Spacer()
-                
-                
+        VStack {
+            ForEach(gameRooms) { gameRoom in
                 Button {
-                    service.path.append(.createGameRoom)
+                    service.path.append(.gameRoom)
                 } label: {
-                    Color.bugDark
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .overlay {
-                            Text("방 만들기")
-                                .font(.sea(20))
-                                .foregroundStyle(Color.white)
-                        }
+                    GameRoomView(gameRoom: gameRoom)
                 }
-                .frame(height: 50)
-                .padding(.horizontal, 20)
             }
             
             Spacer()
