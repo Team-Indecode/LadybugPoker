@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GameRoom: Codable, Identifiable {
+struct GameRoom: Codable, Identifiable, Equatable {
     static let path = "GAMEROOMS"
     
     let id: String
@@ -30,7 +30,6 @@ struct GameRoom: Codable, Identifiable {
     var selectedCard: Bugs?
     /// 턴 시작 시간
     let turnStartTime: Date?
-    var chat: String?
     
     var toJson: [String: Any] {
         [
@@ -45,12 +44,11 @@ struct GameRoom: Codable, Identifiable {
             "whoseTurn": whoseTurn,
             "whoseGetting" : whoseGetting,
             "selectedCard" : selectedCard?.rawValue,
-            "turnStartTime" : turnStartTime,
-            "chat" : chat
+            "turnStartTime" : turnStartTime
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, users: [String], usersInGame: [UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: Bugs? = nil, turnStartTime: Date?, chat: String?) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: Bugs? = nil, turnStartTime: Date?) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -63,7 +61,6 @@ struct GameRoom: Codable, Identifiable {
         self.whoseGetting = whoseGetting
         self.selectedCard = selectedCard
         self.turnStartTime = turnStartTime
-        self.chat = chat
     }
     
     init?(data: [String: Any]) {
@@ -72,7 +69,7 @@ struct GameRoom: Codable, Identifiable {
               let title = data["title"] as? String,
               let maxUserCount = data["maxUserCount"] as? Int,
               let code = data["code"] as? String,
-              let users = data["users"] as? [String] else { return nil }
+              let usersInGame = data["usersInGame"] as? [String] else { return nil }
         
         self.id = id
         self.hostId = hostId
@@ -85,7 +82,6 @@ struct GameRoom: Codable, Identifiable {
         self.usersInGame = []
         self.whoseGetting = nil
         self.turnStartTime = nil
-        self.chat = nil
     }
 }
 

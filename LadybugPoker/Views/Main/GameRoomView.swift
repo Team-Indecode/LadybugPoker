@@ -18,7 +18,7 @@ struct GameRoomView: View {
                 
                 Spacer()
                 
-                Text("\(gameRoom.users.count) / \(gameRoom.maxUserCount)")
+                Text("\(gameRoom.usersInGame.count) / \(gameRoom.maxUserCount)")
                     .font(.sea(15))
             }
             

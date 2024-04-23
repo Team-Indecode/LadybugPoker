@@ -45,6 +45,7 @@ struct MainView: View {
         .onAppear {
             Task {
                 gameRooms = try await GameRoom.fetchList()
+//                gameRooms = GameRoom.listPreview
             }
         }
     }

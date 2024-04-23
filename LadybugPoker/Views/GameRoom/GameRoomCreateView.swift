@@ -114,10 +114,11 @@ struct GameRoomCreateView: View {
                                          password: password,
                                          maxUserCount: maxCount,
                                          code: "ABCDEF",
-                                         users: [service.myUserModel.id],
+//                                         users: [service.myUserModel.id],
                                          usersInGame: [],
                                          whoseGetting: nil,
-                                         turnStartTime: nil)
+                                         turnStartTime: nil
+                                         )
                     
                     try await GameRoom.create(model: model)
                 }

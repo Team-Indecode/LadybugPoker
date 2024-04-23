@@ -146,6 +146,11 @@ struct GamePlayAttackDefenceView: View {
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())
                     .padding(.leading, 10)
+            } else {
+                Image(Bugs.ladybug.rawValue)
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+                    .clipShape(Circle())
             }
             Text(user.displayName)
                 .font(.sea(20))

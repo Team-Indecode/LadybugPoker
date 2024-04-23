@@ -29,9 +29,11 @@ extension GameRoom {
             .getDocuments()
             .documents
         var rooms = [GameRoom]()
-        
+        print(#fileID, #function, #line, "- document checking⭐️: \(documents)")
         for document in documents {
-            if let room = GameRoom(data: document.data()) {
+            print(#fileID, #function, #line, "- document: \(document)")
+//            if let room = GameRoom(data: document.data()) {
+            if let room = try? document.data(as: GameRoom.self) {
                 print(room.id)
                 rooms.append(room)
             } else {
