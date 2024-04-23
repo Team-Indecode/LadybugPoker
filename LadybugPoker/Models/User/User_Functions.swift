@@ -9,8 +9,11 @@ import FirebaseFirestore
 
 extension User {
     static func create(id: String, displayName: String) async throws {
-        try await Firestore.firestore().collection(path)
-            .addDocument(data: [
+        try await Firestore
+            .firestore()
+            .collection(path)
+            .document(id)
+            .setData([
                 "id": id,
                 "displayName": displayName,
                 "history": [],

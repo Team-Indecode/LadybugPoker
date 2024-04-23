@@ -40,15 +40,17 @@ struct DefaultView: View {
             }
             .onAppear {
                 Task {
-                    if let user = Auth.auth().currentUser {
-                        
-                        service.myUserModel = try await User.fetch(id: user.uid)
-                        
-                        service.path.append(service.myUserModel == nil ? .signin : .main)
-                        
-                    } else {
-                        service.path.append(.signin)
+                    do {
+                        if let user = Auth.auth().currentUser {
+                            service.myUserModel = try await User.fetch(id: user.uid)
+                            service.path.append(service.myUserModel == nil ? .signin : .main)
+                        } else {
+                            service.path.append(.signin)
+                        }
+                    } catch {
+                        print(error)
                     }
+
                 }
             }
         }
