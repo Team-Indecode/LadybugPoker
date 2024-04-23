@@ -39,7 +39,9 @@ struct MainView: View {
                 .ignoresSafeArea()
         }
         .onAppear {
-            gameRooms = GameRoom.listPreview
+            Task {
+                gameRooms = try await GameRoom.fetchList()
+            }
         }
     }
 }

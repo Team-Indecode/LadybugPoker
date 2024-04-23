@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GameRoomCreateView: View {
+    @EnvironmentObject private var service: Service
+    
     @State private var title: String = ""
     @State private var maxCount = 0
     @State private var password: String = ""
@@ -106,8 +108,16 @@ struct GameRoomCreateView: View {
 
             Button {
                 Task {
-                    //TODO: MyUserModel 추가하기
-                    let model = GameRoom.preview
+                    let model = GameRoom(id: UUID().uuidString,
+                                         hostId: service.myUserModel.id,
+                                         title: title,
+                                         password: password,
+                                         maxUserCount: maxCount,
+                                         code: "ABCDEF",
+                                         users: [service.myUserModel.id],
+                                         usersInGame: [],
+                                         whoseGetting: nil,
+                                         turnStartTime: nil)
                     
                     try await GameRoom.create(model: model)
                 }
