@@ -23,6 +23,7 @@ extension GameRoom {
             .setData(model.toJson)
     }
     
+    /// 게임방 리스트 불러옴
     static func fetchList() async throws -> GameRooms {
         let documents = try await Firestore.firestore().collection(path)
             .getDocuments()

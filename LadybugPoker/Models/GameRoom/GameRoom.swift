@@ -19,7 +19,7 @@ struct GameRoom: Codable, Identifiable {
     /// 방 식별자
     let code: String
     /// userId
-    let users: [String]
+//    let users: [String]
     /// 유저들의 게임 데이터
     var usersInGame: [UserInGame]
     /// 누구 턴인지
@@ -30,6 +30,7 @@ struct GameRoom: Codable, Identifiable {
     var selectedCard: Bugs?
     /// 턴 시작 시간
     let turnStartTime: Date?
+    var chat: String?
     
     var toJson: [String: Any] {
         [
@@ -39,28 +40,30 @@ struct GameRoom: Codable, Identifiable {
             "password": password,
             "maxUserCount": maxUserCount,
             "code": code,
-            "users": users,
+//            "users": users,
             "usersInGame": usersInGame.map { $0.toJson },
             "whoseTurn": whoseTurn,
             "whoseGetting" : whoseGetting,
             "selectedCard" : selectedCard?.rawValue,
-            "turnStartTime" : turnStartTime
+            "turnStartTime" : turnStartTime,
+            "chat" : chat
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, users: [String], usersInGame: [UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: Bugs? = nil, turnStartTime: Date?) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, users: [String], usersInGame: [UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: Bugs? = nil, turnStartTime: Date?, chat: String?) {
         self.id = id
         self.hostId = hostId
         self.title = title
         self.password = password
         self.maxUserCount = maxUserCount
         self.code = code
-        self.users = users
+//        self.users = users
         self.usersInGame = usersInGame
         self.whoseTurn = whoseTurn
         self.whoseGetting = whoseGetting
         self.selectedCard = selectedCard
         self.turnStartTime = turnStartTime
+        self.chat = chat
     }
     
     init?(data: [String: Any]) {
@@ -76,12 +79,13 @@ struct GameRoom: Codable, Identifiable {
         self.title = title
         self.maxUserCount = maxUserCount
         self.code = code
-        self.users = users
+//        self.users = users
         self.password = data["password"] as? String
         self.whoseTurn = nil
         self.usersInGame = []
         self.whoseGetting = nil
         self.turnStartTime = nil
+        self.chat = nil
     }
 }
 
