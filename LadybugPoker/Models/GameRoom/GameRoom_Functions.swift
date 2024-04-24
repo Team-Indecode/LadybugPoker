@@ -22,7 +22,7 @@ extension GameRoom {
             .documents
         var rooms = [GameRoom]()
         print(#fileID, #function, #line, "- document checking⭐️: \(documents)")
-        for document in documents {
+        for document in documents {do
             print(#fileID, #function, #line, "- document: \(document)")
 //            if let room = GameRoom(data: document.data()) {
             if let room = try? document.data(as: GameRoom.self) {

@@ -65,12 +65,31 @@ struct GameRoom: Codable, Identifiable, Equatable {
     }
     
     init?(data: [String: Any]) {
-        guard let id = data["id"] as? String,
-              let hostId = data["hostId"] as? String,
-              let title = data["title"] as? String,
-              let maxUserCount = data["maxUserCount"] as? Int,
-              let code = data["code"] as? String,
-              let usersInGame = data["usersInGame"] as? [String] else { return nil }
+        guard let id = data["id"] as? String else {
+            print(#function, #fileID, "wrongID")
+            return nil
+        }
+        
+        guard let hostId = data["hostId"] as? String else {
+            print(#function, #fileID, "wrong Host Id")
+            return nil
+        }
+        
+        guard let title = data["title"] as? String else {
+            print(#function, #fileID, "wrong Title")
+            return nil
+        }
+        
+        guard let maxUserCount = data["maxUserCount"] as? Int else {
+            print(#function, #fileID, "wrong max user count")
+            return nil
+        }
+        
+        guard let code = data["code"] as? String else {
+            print(#function, #fileID, "wrong code")
+            
+            return nil
+        }
         
         self.id = id
         self.hostId = hostId
@@ -79,6 +98,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.code = code
         self.password = data["password"] as? String
         self.whoseTurn = nil
+        //TODO - users in game 처리
         self.usersInGame = [:]
         self.whoseGetting = nil
         self.turnStartTime = nil
