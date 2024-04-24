@@ -21,10 +21,18 @@ struct GameRoomDetailView: View {
                 .onChange(of: viewModel.gameRoomData.usersInGame) { oldValue, newValue in
                     myCards = viewModel.getUserCard(true)
                 }
+                .onChange(of: viewModel.gameRoomData.hostId) { oldValue, newValue in
+                    isHost = Service.shared.myUserModel.id == newValue
+                    print(#fileID, #function, #line, "- userId: \(Service.shared.myUserModel.id)")
+                }
         } else {
             allContent
                 .onChange(of: viewModel.gameRoomData.usersInGame) { newValue in
                     myCards = viewModel.getUserCard(true)
+                }
+                .onChange(of: viewModel.gameRoomData.hostId) { newValue in
+                    isHost = Service.shared.myUserModel.id == newValue
+                    print(#fileID, #function, #line, "- userId: \(Service.shared.myUserModel.id)")
                 }
         }
     }
@@ -34,7 +42,7 @@ struct GameRoomDetailView: View {
             VStack(spacing: 0) {
                 GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.usersInGame, usersId: $viewModel.usersId)
                     .frame(height: proxy.size.height * 0.6706)
-                GameRoomDetailBottomView(amIReadied: $amIReadied, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
+                GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
                     .frame(height: proxy.size.height * 0.3294)
             }
             .task {

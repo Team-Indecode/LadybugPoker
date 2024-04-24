@@ -20,10 +20,11 @@ extension GameRoom {
         let documents = try await Firestore.firestore().collection(path)
             .getDocuments()
             .documents
+        print(#fileID, #function, #line, "- doccousnt: \(documents.count)")
         var rooms = [GameRoom]()
         for document in documents {
-//            if let room = GameRoom(data: document.data()) {
-            if let room = try? document.data(as: GameRoom.self) {
+            if let room = GameRoom(data: document.data()) {
+//            if let room = try? document.data(as: GameRoom.self) {
                 print(room.id)
                 rooms.append(room)
             } else {

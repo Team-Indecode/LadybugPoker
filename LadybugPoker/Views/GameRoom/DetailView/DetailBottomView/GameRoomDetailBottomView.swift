@@ -29,7 +29,7 @@ struct GameRoomDetailBottomView: View {
     @State private var chat: String = ""
     
     /// 내가 방장인지
-//    @State var isHost: Bool
+    @Binding var isHost: Bool
     /// 누구 턴인지
 //    @Binding var userInTurn: UserInGame
     /// 내 카드 목록
@@ -63,7 +63,7 @@ struct GameRoomDetailBottomView: View {
                     .padding(.bottom, 30)
 
                 
-                if viewModel.gameRoomData.hostId == Service.shared.myUserModel.id {
+                if isHost {
                     if viewModel.allPlayerReadied {
                         Text(suggestStartText)
                             .font(.sea(35))
@@ -84,7 +84,7 @@ struct GameRoomDetailBottomView: View {
                 }
                 
                 Button {
-                    if viewModel.gameRoomData.hostId == Service.shared.myUserModel.id {
+                    if isHost {
                         
                     } else {
                         amIReadied ? cancelReady() : ready()
@@ -160,7 +160,7 @@ struct GameRoomDetailBottomView: View {
     GameRoomDetailBottomView(
         amIReadied: .constant(false),
 //        allPlayerReadied: false,
-//        isHost: true, 
+        isHost: .constant(false),
 //        userInTurn: .constant(
 //            UserInGame(readyOrNot: true,
 //                       handCard: "",
