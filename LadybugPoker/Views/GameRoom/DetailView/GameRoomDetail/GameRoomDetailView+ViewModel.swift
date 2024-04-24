@@ -46,7 +46,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// userID에 해당하는 유저 데이터를 가지고 온다
     func getUserData(_ userID: String) -> UserInGame? {
-//        return gameRoomData.usersInGame.first(where: { $0.userId == userID })
+        let userDataDic = gameRoomData.usersInGame.first(where: { $0.key == userID })
+        return userDataDic?.value
     }
     
     /// 유저의 카드 가지고 오기(손에 가지고 있는 카드, 게임판에 깔려있는 카드)
@@ -54,11 +55,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
 //        guard let userId = Service.shared.myUserModel.id else { return [] }
         let userId = Service.shared.myUserModel.id
         
-        if let cardString = gameRoomData.usersInGame.first(where: { $0.userId == userId }) {
+        if let cardString = gameRoomData.usersInGame.first(where: { $0.key == userId }) {
             if isHandCard {
-                return self.stringToCards(cardString.handCard)
+                return self.stringToCards(cardString.value.handCard)
             } else {
-                return self.stringToCards(cardString.boardCard)
+                return self.stringToCards(cardString.value.boardCard)
             }
             
         } else {
