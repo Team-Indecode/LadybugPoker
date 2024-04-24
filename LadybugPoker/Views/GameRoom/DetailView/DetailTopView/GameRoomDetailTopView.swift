@@ -14,7 +14,7 @@ struct GameRoomDetailTopView: View {
     @State var userBoardCard: [Card] = []
 //    let sampleText: [String] = ["11", "22", "33", "44", "55", "66"]
 //    @StateObject var gameRoomData = GameRoomDetailTopViewViewModel()
-//    @State private var gameRoomData: GameRoom = GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [], whoseTurn: "", whoseGetting: "", selectedCard: .bee, turnStartTime: .now)
+    @State private var gameRoomData: GameRoom = GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: "", whoseGetting: "", selectedCard: .bee, turnStartTime: .now)
     
     var body: some View {
         GeometryReader { proxy in

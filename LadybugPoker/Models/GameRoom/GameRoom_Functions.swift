@@ -10,14 +10,6 @@ import Foundation
 
 extension GameRoom {
     static func create(model: GameRoom) async throws {
-        var model = model
-        model.usersInGame.append(UserInGame(readyOrNot: true,
-                                            handCard: "",
-                                            boardCard: "",
-                                            userId: Service.shared.myUserModel.id, 
-                                            displayName: Service.shared.myUserModel.displayName,
-                                            profileUrl: Service.shared.myUserModel.profileUrl))
-        
         try await Firestore.firestore().collection(path)
             .document(model.id)
             .setData(model.toJson)

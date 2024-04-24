@@ -18,10 +18,8 @@ struct GameRoom: Codable, Identifiable, Equatable {
     let maxUserCount: Int
     /// 방 식별자
     let code: String
-    /// userId
-//    let users: [String]
     /// 유저들의 게임 데이터
-    var usersInGame: [UserInGame]
+    var usersInGame: [String: UserInGame]
     /// 누구 턴인지
     var whoseTurn: String?
     /// 누구에게 카드를 건냈는지
@@ -32,15 +30,19 @@ struct GameRoom: Codable, Identifiable, Equatable {
     let turnStartTime: Date?
     
     var toJson: [String: Any] {
-        [
+        var userGameData: [String: Any] = [:]
+        for data in usersInGame {
+            userGameData[data.key] = data.value
+        }
+        
+        return [
             "id": id,
             "hostId": hostId,
             "title": title,
             "password": password,
             "maxUserCount": maxUserCount,
             "code": code,
-//            "users": users,
-            "usersInGame": usersInGame.map { $0.toJson },
+            "usersInGame": userGameData,
             "whoseTurn": whoseTurn,
             "whoseGetting" : whoseGetting,
             "selectedCard" : selectedCard?.rawValue,
@@ -48,14 +50,13 @@ struct GameRoom: Codable, Identifiable, Equatable {
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: Bugs? = nil, turnStartTime: Date?) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: Bugs? = nil, turnStartTime: Date?) {
         self.id = id
         self.hostId = hostId
         self.title = title
         self.password = password
         self.maxUserCount = maxUserCount
         self.code = code
-//        self.users = users
         self.usersInGame = usersInGame
         self.whoseTurn = whoseTurn
         self.whoseGetting = whoseGetting
@@ -76,10 +77,9 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.title = title
         self.maxUserCount = maxUserCount
         self.code = code
-//        self.users = users
         self.password = data["password"] as? String
         self.whoseTurn = nil
-        self.usersInGame = []
+        self.usersInGame = [:]
         self.whoseGetting = nil
         self.turnStartTime = nil
     }

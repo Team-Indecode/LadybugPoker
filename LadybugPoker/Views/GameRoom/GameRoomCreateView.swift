@@ -114,8 +114,13 @@ struct GameRoomCreateView: View {
                                          password: password,
                                          maxUserCount: maxCount,
                                          code: "ABCDEF",
-//                                         users: [service.myUserModel.id],
-                                         usersInGame: [],
+                                         usersInGame: [service.myUserModel.id:
+                                                        UserInGame(id: service.myUserModel.id,
+                                                                   readyOrNot: true,
+                                                                   handCard: "",
+                                                                   boardCard: "",
+                                                                   displayName: service.myUserModel.displayName,
+                                                                   profileUrl: service.myUserModel.profileUrl)],
                                          whoseGetting: nil,
                                          turnStartTime: nil
                                          )

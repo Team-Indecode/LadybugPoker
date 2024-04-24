@@ -13,7 +13,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     let db = Firestore.firestore()
     @Published var gameStatus: GameStatus = .notStarted
     
-    @Published var gameRoomData: GameRoom = GameRoom(id: "testId", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [], whoseTurn: "", whoseGetting: "", selectedCard: .bee, turnStartTime: Date())
+    @Published var gameRoomData: GameRoom = GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: "", whoseGetting: "", selectedCard: .bee, turnStartTime: Date())
     @Published var secondsLeft: Int = 60
     
     @Published var allPlayerReadied: Bool = false
@@ -46,7 +46,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// userID에 해당하는 유저 데이터를 가지고 온다
     func getUserData(_ userID: String) -> UserInGame? {
-        return gameRoomData.usersInGame.first(where: { $0.userId == userID })
+//        return gameRoomData.usersInGame.first(where: { $0.userId == userID })
     }
     
     /// 유저의 카드 가지고 오기(손에 가지고 있는 카드, 게임판에 깔려있는 카드)
