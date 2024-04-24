@@ -45,6 +45,7 @@
 		D1418E2E2BD64BDE00421904 /* User_Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1418E2D2BD64BDE00421904 /* User_Errors.swift */; };
 		D1418E362BD64D8E00421904 /* SigninView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1418E342BD64D8E00421904 /* SigninView.swift */; };
 		D1418E372BD64D8E00421904 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1418E352BD64D8E00421904 /* SignUpView.swift */; };
+		D14F34FE2BD8EB9F00ED6144 /* UserInGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14F34FD2BD8EB9F00ED6144 /* UserInGame.swift */; };
 		D152E9A72BC4CABA005535F1 /* GameRoomDetailBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9A62BC4CABA005535F1 /* GameRoomDetailBottomView.swift */; };
 		D152E9AA2BC4CD72005535F1 /* GameStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9A92BC4CD72005535F1 /* GameStatus.swift */; };
 		D152E9AD2BC4D1AD005535F1 /* send.png in Resources */ = {isa = PBXBuildFile; fileRef = D152E9AC2BC4D1AD005535F1 /* send.png */; };
@@ -88,6 +89,7 @@
 		D1418E2D2BD64BDE00421904 /* User_Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User_Errors.swift; sourceTree = "<group>"; };
 		D1418E342BD64D8E00421904 /* SigninView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; };
 		D1418E352BD64D8E00421904 /* SignUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		D14F34FD2BD8EB9F00ED6144 /* UserInGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInGame.swift; sourceTree = "<group>"; };
 		D152E9A62BC4CABA005535F1 /* GameRoomDetailBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomDetailBottomView.swift; sourceTree = "<group>"; };
 		D152E9A92BC4CD72005535F1 /* GameStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatus.swift; sourceTree = "<group>"; };
 		D152E9AC2BC4D1AD005535F1 /* send.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = send.png; sourceTree = "<group>"; };
@@ -217,6 +219,14 @@
 				D1418E352BD64D8E00421904 /* SignUpView.swift */,
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		D14F34FC2BD8EB9700ED6144 /* UserInGame */ = {
+			isa = PBXGroup;
+			children = (
+				D14F34FD2BD8EB9F00ED6144 /* UserInGame.swift */,
+			);
+			path = UserInGame;
 			sourceTree = "<group>";
 		};
 		D152E9A52BC4CAA4005535F1 /* DetailView */ = {
@@ -374,6 +384,7 @@
 		D19AFD752BBFA0B4008F9297 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D14F34FC2BD8EB9700ED6144 /* UserInGame */,
 				D1418E272BD6461600421904 /* User */,
 				D152E9B12BC4E6F6005535F1 /* Bugs */,
 				D152E9A82BC4CD6C005535F1 /* GameStatus */,
@@ -497,6 +508,7 @@
 				D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */,
 				D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */,
 				D125B9DC2BC1504300A5AE03 /* AppDelegate.swift in Sources */,
+				D14F34FE2BD8EB9F00ED6144 /* UserInGame.swift in Sources */,
 				D1418E292BD647EA00421904 /* User_Functions.swift in Sources */,
 				D139C5262BC6828B006A82B0 /* GameRoomDetailBottomView+PlayingView.swift in Sources */,
 				D152E9A72BC4CABA005535F1 /* GameRoomDetailBottomView.swift in Sources */,
