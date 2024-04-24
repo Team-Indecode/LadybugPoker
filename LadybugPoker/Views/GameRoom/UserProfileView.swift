@@ -10,16 +10,24 @@ import NukeUI
 
 /// 플레이어 프로필
 struct UserProfileView: View {
-    let userImageUrl: String
+    let userImageUrl: String?
     let userNickname: String
     let userCardCnt: Int
     let isOdd: Bool
     
     var body: some View {
         HStack(spacing: 8) {
-            LazyImage(url: URL(string: userImageUrl))
-                .frame(width: 30, height: 30)
-                .clipShape(Circle())
+            if let userImageUrl = userImageUrl {
+                LazyImage(url: URL(string: userImageUrl))
+                    .frame(width: 30, height: 30)
+                    .clipShape(Circle())
+            } else {
+                Image(Bugs.ladybug.rawValue)
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+                    .clipShape(Circle())
+            }
+            
                 
             VStack(spacing: 3) {
                 Text(userNickname)

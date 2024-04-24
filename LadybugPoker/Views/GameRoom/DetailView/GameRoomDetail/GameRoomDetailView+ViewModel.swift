@@ -17,24 +17,39 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var secondsLeft: Int = 60
     
     @Published var allPlayerReadied: Bool = false
+
     
+    /// 해당 게임방의 데이터를 가지고 온다
     func getGameData() async throws {
-       let gameData = db.collection(GameRoom.path).document(gameRoomData.id)
+        db.collection(GameRoom.path).document("testId")
             .addSnapshotListener { doc, error in
                 if let doc = doc, doc.exists {
-                    print(#fileID, #function, #line, "- doc checking: \(doc)")
                     if let data = try? doc.data(as: GameRoom.self) {
-                        print(#fileID, #function, #line, "- data checking⭐️\(data)")
+                        self.gameRoomData = data
+                        print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData)")
+                    } else {
+                        print(#fileID, #function, #line, "- wrong data")
                     }
                 }
                 
             }
     }
     
+    /// 유저가 준비완료가 됬음을 보내줌
+    func sendIamReady() {
+        db.collection(GameRoom.path).document(gameRoomData.id)
+            .updateData(["users" : true]) { error in
+                print(#fileID, #function, #line, "- error: \(error?.localizedDescription)")
+                
+            }
+    }
+    
+    /// userID에 해당하는 유저 데이터를 가지고 온다
     func getUserData(_ userID: String) -> UserInGame? {
 //        return gameRoomData.usersInGame.first(where: { $0.userId == userID })
     }
     
+    /// 유저의 카드 가지고 오기(손에 가지고 있는 카드, 게임판에 깔려있는 카드)
     func getUserCard(_ isHandCard: Bool) -> [Card] {
 //        guard let userId = Service.shared.myUserModel.id else { return [] }
         let userId = Service.shared.myUserModel.id
@@ -51,9 +66,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    /// string으로 오는 card를 Card strcut로 변경(ex. f1, l2)
     func stringToCards(_ cardString: String) -> [Card] {
-
-//        let cardString = gameRoomData.
+        if cardString == "" {
+            return []
+        }
         let cardStringArr = cardString.components(separatedBy: ",")
         var userCard: [Card] = []
         
@@ -64,11 +81,14 @@ class GameRoomDetailViewViewModel: ObservableObject {
         return userCard
     }
     
-    func stringToOneCard(_ cardString: String) -> Card{
+    /// f1을 Card(bug: .frog, cardCnt: 3)으로 변경
+    func stringToOneCard(_ cardString: String) -> Card {
         var tempCardString = cardString
-        var tempCnt = tempCardString.popLast()
+        let tempCnt = tempCardString.popLast()
+        print(#fileID, #function, #line, "- tempCnt: \(tempCnt)")
         if let tempCnt = tempCnt {
             if let cnt = Int(String(tempCnt)) {
+                print(#fileID, #function, #line, "- cnt: \(cnt)")
                 switch tempCardString {
                 case Bugs.snake.cardString: return Card(bug: .snake, cardCnt: cnt)
                 case Bugs.ladybug.cardString: return Card(bug: .ladybug, cardCnt: cnt)

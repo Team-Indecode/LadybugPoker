@@ -14,7 +14,11 @@ struct MainView: View {
     var body: some View {
         VStack {
             ForEach(gameRooms) { gameRoom in
-                GameRoomView(gameRoom: gameRoom)
+                Button {
+                    service.path.append(.gameRoom)
+                } label: {
+                    GameRoomView(gameRoom: gameRoom)
+                }
             }
             
             Spacer()
@@ -41,6 +45,7 @@ struct MainView: View {
         .onAppear {
             Task {
                 gameRooms = try await GameRoom.fetchList()
+//                gameRooms = GameRoom.listPreview
             }
         }
     }

@@ -8,15 +8,15 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "6425BECA-1870-4AFE-9784-C4B5AFF50984"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "getUserData()"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "getUserData(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

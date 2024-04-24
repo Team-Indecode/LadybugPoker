@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GameRoom: Codable, Identifiable {
+struct GameRoom: Codable, Identifiable, Equatable {
     static let path = "GAMEROOMS"
     
     let id: String
@@ -70,7 +70,7 @@ struct GameRoom: Codable, Identifiable {
               let title = data["title"] as? String,
               let maxUserCount = data["maxUserCount"] as? Int,
               let code = data["code"] as? String,
-              let users = data["users"] as? [String] else { return nil }
+              let usersInGame = data["usersInGame"] as? [String] else { return nil }
         
         self.id = id
         self.hostId = hostId

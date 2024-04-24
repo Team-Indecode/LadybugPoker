@@ -15,14 +15,17 @@ extension GameRoom {
             .setData(model.toJson)
     }
     
+    /// 게임방 리스트 불러옴
     static func fetchList() async throws -> GameRooms {
         let documents = try await Firestore.firestore().collection(path)
             .getDocuments()
             .documents
         var rooms = [GameRoom]()
-        
+        print(#fileID, #function, #line, "- document checking⭐️: \(documents)")
         for document in documents {
-            if let room = GameRoom(data: document.data()) {
+            print(#fileID, #function, #line, "- document: \(document)")
+//            if let room = GameRoom(data: document.data()) {
+            if let room = try? document.data(as: GameRoom.self) {
                 print(room.id)
                 rooms.append(room)
             } else {

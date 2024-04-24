@@ -15,13 +15,31 @@ struct GameRoomDetailView: View {
     @State private var myCards: [Card] = []
 //    @State private var turnsStartTime:
     var body: some View {
-        VStack {
-            GameRoomDetailTopView()
-            GameRoomDetailBottomView(amIReadied: $amIReadied, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
+        if #available(iOS 17, *) {
+            allContent
+                .onChange(of: viewModel.gameRoomData.usersInGame) { oldValue, newValue in
+                    myCards = viewModel.getUserCard(true)
+                }
+        } else {
+            allContent
+                .onChange(of: viewModel.gameRoomData.usersInGame) { newValue in
+                    myCards = viewModel.getUserCard(true)
+                }
         }
-        .onAppear {
-            myCards = viewModel.getUserCard(true)
-        }
+    }
+    
+    var allContent: some View {
+        GeometryReader(content: { proxy in
+            VStack(spacing: 0) {
+                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.usersInGame)
+                    .frame(height: proxy.size.height * 0.6706)
+                GameRoomDetailBottomView(amIReadied: $amIReadied, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
+                    .frame(height: proxy.size.height * 0.3294)
+            }
+            .task {
+                try? await viewModel.getGameData()
+            }
+        })
         
     }
 }
