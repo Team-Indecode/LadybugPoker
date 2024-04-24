@@ -13,7 +13,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     let db = Firestore.firestore()
     @Published var gameStatus: GameStatus = .notStarted
     
-    @Published var gameRoomData: GameRoom = GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", users: [], usersInGame: [], whoseTurn: "", whoseGetting: "", selectedCard: .bee, turnStartTime: Date())
+    @Published var gameRoomData: GameRoom = GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: "", whoseGetting: "", selectedCard: .bee, turnStartTime: Date())
     @Published var secondsLeft: Int = 60
     
     @Published var allPlayerReadied: Bool = false
@@ -32,7 +32,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     }
     
     func getUserData(_ userID: String) -> UserInGame? {
-        return gameRoomData.usersInGame.first(where: { $0.userId == userID })
+//        return gameRoomData.usersInGame.first(where: { $0.userId == userID })
     }
     
     func getUserCard(_ isHandCard: Bool) -> [Card] {
