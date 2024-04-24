@@ -21,7 +21,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// 해당 게임방의 데이터를 가지고 온다
     func getGameData() async throws {
-       db.collection("GAMEROOMS").document("testId")
+        db.collection(GameRoom.path).document("testId")
             .addSnapshotListener { doc, error in
                 if let doc = doc, doc.exists {
                     if let data = try? doc.data(as: GameRoom.self) {
