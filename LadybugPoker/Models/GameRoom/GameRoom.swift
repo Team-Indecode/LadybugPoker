@@ -32,7 +32,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
     var toJson: [String: Any] {
         var userGameData: [String: Any] = [:]
         for data in usersInGame {
-            userGameData[data.key] = data.value
+            userGameData[data.key] = data.value.toJson
         }
         
         return [
