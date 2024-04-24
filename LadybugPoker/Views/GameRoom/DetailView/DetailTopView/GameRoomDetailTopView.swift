@@ -33,11 +33,6 @@ struct GameRoomDetailTopView: View {
                         }
                     }
                 }
-//                ForEach(Array(zip(0..<usersInGame.count, usersInGame)), id: \.0) { index, userDataDic in
-//                    let userData = userDataDic.value
-//                    PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: []), userCardCnt: viewModel.stringToCards(userData.boardCard).count, boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, cards: viewModel.stringToCards(userData.boardCard), userReadyOrNot: userData.readyOrNot, gameStart: true, isOdd: index % 2 == 0 ? true : false)
-//                }
-                
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.bugLight)

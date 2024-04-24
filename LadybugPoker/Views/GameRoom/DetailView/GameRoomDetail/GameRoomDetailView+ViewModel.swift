@@ -37,6 +37,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
     }
     
+    /// 이거 순서를 단순히 그냥 순서를 가지고 오는 것이 아니라 UserInGame의 idx순서 대로 가져와야 한다
+    // 1. tuple을 만들어서(userIdx, userId)이런식으로 만들어서 userIdx를 오름차순으로 정렬한다
+    // 2. 그런다음 userId만 그 tuple에서 추출한다
     func getUsersId(_ usersInGame: [String : UserInGame]) {
         usersId = usersInGame.map({ userInGame in
             return userInGame.key

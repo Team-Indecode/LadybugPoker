@@ -120,7 +120,7 @@ struct GameRoomCreateView: View {
                                                                    handCard: "",
                                                                    boardCard: "",
                                                                    displayName: service.myUserModel.displayName,
-                                                                   profileUrl: service.myUserModel.profileUrl)],
+                                                                   profileUrl: service.myUserModel.profileUrl, idx: 0)],
                                          whoseGetting: nil,
                                          turnStartTime: nil
                                          )
