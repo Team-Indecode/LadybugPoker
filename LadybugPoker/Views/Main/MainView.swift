@@ -15,7 +15,7 @@ struct MainView: View {
         VStack {
             ForEach(gameRooms) { gameRoom in
                 Button {
-                    service.path.append(.gameRoom)
+                    service.path.append(.gameRoom(gameRoomId: gameRoom.id))
                 } label: {
                     GameRoomView(gameRoom: gameRoom)
                 }

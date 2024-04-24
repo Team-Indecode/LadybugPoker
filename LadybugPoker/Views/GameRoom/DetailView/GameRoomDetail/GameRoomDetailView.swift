@@ -13,7 +13,8 @@ struct GameRoomDetailView: View {
     @State private var amIReadied: Bool = false
     @State private var isHost: Bool = false
     @State private var myCards: [Card] = []
-//    @State private var turnsStartTime:
+    let gameRoomId: String
+    
     var body: some View {
         if #available(iOS 17, *) {
             allContent
@@ -37,7 +38,7 @@ struct GameRoomDetailView: View {
                     .frame(height: proxy.size.height * 0.3294)
             }
             .task {
-                try? await viewModel.getGameData()
+                try? await viewModel.getGameData(gameRoomId)
             }
         })
         
@@ -45,7 +46,7 @@ struct GameRoomDetailView: View {
 }
 
 #Preview {
-    GameRoomDetailView()
+    GameRoomDetailView(gameRoomId: "")
 }
 
 
