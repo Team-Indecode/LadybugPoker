@@ -32,7 +32,7 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.usersInGame)
+                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.usersInGame, usersId: $viewModel.usersId)
                     .frame(height: proxy.size.height * 0.6706)
                 GameRoomDetailBottomView(amIReadied: $amIReadied, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
                     .frame(height: proxy.size.height * 0.3294)

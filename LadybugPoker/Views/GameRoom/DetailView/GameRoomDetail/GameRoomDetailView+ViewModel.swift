@@ -14,6 +14,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var gameStatus: GameStatus = .notStarted
     
     @Published var gameRoomData: GameRoom = GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: "", whoseGetting: "", selectedCard: .bee, turnStartTime: Date())
+    @Published var usersId: [String] = []
     @Published var secondsLeft: Int = 60
     
     @Published var allPlayerReadied: Bool = false
@@ -26,6 +27,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 if let doc = doc, doc.exists {
                     if let data = try? doc.data(as: GameRoom.self) {
                         self.gameRoomData = data
+                        self.getUsersId(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData)")
                     } else {
                         print(#fileID, #function, #line, "- wrong data")
@@ -33,6 +35,12 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 }
                 
             }
+    }
+    
+    func getUsersId(_ usersInGame: [String : UserInGame]) {
+        usersId = usersInGame.map({ userInGame in
+            return userInGame.key
+        })
     }
     
     /// 유저가 준비완료가 됬음을 보내줌
