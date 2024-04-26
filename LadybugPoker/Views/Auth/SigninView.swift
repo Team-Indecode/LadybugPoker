@@ -82,6 +82,27 @@ struct SigninView: View {
                 .padding(.vertical, 20)
             }
             
+            Button {
+                
+            } label: {
+                HStack {
+                    Text("로그인 없이 시작하기")
+                        .font(.sea(20))
+                        .foregroundStyle(Color.black)
+                }
+                .frame(height: 50)
+                .background {
+                    Color.white
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.black)
+                }
+                .padding(.horizontal, 30)
+                .padding(.vertical, 20)
+            }
+            
         }
         .background {
             Color.bugLight

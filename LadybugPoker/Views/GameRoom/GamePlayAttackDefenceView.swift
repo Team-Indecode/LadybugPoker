@@ -84,7 +84,7 @@ struct GamePlayAttackDefenceView: View {
         VStack(spacing: 0) {
             HStack {
 //                makeUserView(User(id: "", displayName: "라영", profileUrl: "https://picsum.photos/200"))
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.whoseTurn ?? "") {
+                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
                     makeUserView(userData)
                 }
                 
@@ -100,7 +100,7 @@ struct GamePlayAttackDefenceView: View {
             HStack {
                 Spacer()
 //                makeUserView(User(id: "", displayName: "fkdud", profileUrl: "https://picsum.photos/200"))
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.whoseGetting ?? "") {
+                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
                     makeUserView(userData)
                 }
                 
@@ -114,7 +114,7 @@ struct GamePlayAttackDefenceView: View {
         VStack(spacing: 0) {
             HStack {
 //                makeUserView(User(id: "", displayName: "라영", profileUrl: "https://picsum.photos/200"))
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.whoseTurn ?? "") {
+                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
                     makeUserView(userData)
                 }
                 Spacer()
@@ -129,7 +129,7 @@ struct GamePlayAttackDefenceView: View {
             HStack {
                 Spacer()
 //                makeUserView(User(id: "", displayName: "fkdud", profileUrl: "https://picsum.photos/200"))
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.whoseGetting ?? "") {
+                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
                     makeUserView(userData)
                 }
             }

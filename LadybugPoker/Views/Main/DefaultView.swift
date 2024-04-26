@@ -40,6 +40,7 @@ struct DefaultView: View {
             }
             .onAppear {
                 Task {
+//                    try Auth.auth().signOut()
                     do {
                         if let user = Auth.auth().currentUser {
                             service.myUserModel = try await User.fetch(id: user.uid)

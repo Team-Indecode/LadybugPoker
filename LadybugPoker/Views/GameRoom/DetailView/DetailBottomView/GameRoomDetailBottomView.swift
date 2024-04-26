@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct GameRoomDetailBottomView: View {
-    @StateObject private var viewModel = GameRoomDetailViewViewModel()
+    @EnvironmentObject private var viewModel: GameRoomDetailViewViewModel
     
     private let beforeGameText = "게임시작 전 입니다."
+    private let allPlayerReadied = "모든 플레이어가 준비되었습니다."
+    private let hostWarningText = "시작하지 않으면 10초 뒤에 강퇴됩니다."
     private let readyText = "준비 완료"
     private let cancelText = "준비 취소"
     private let suggestReadyText = "준비 완료를 눌러주세요."
@@ -50,19 +52,46 @@ struct GameRoomDetailBottomView: View {
                 .padding(.bottom, 12)
             
             if viewModel.gameStatus == .onAir {
-                PlayingView(userInTurn: $viewModel.gameRoomData.whoseTurn,
+                PlayingView(userInTurn: $viewModel.gameRoomData.value.whoseTurn,
                             myCards: $myCards,
                             secondsLeft: $viewModel.secondsLeft,
-                            selectedCardType: $viewModel.gameRoomData.selectedCard,
+                            selectedCardType: $viewModel.gameRoomData.value.selectedCard,
                             showCardSelectedPopup: $showCardSelectedPopup
                 )
 
             } else {
-                Text(viewModel.gameStatus == .notStarted || viewModel.gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
-                    .font(.sea(15))
-                    .padding(.bottom, 30)
-
+                // 게임시작 전입니다., 게임 중입니다, 모든 플레이어가 준비되었습니다 Text
+                if isHost {
+                    if viewModel.gameStatus == .notStarted {
+                        if viewModel.allPlayerReadied {
+                            Text(allPlayerReadied)
+                                .font(.sea(15))
+                                .padding(.bottom, 10)
+                            Text(hostWarningText)
+                                .font(.sea(15))
+                                .padding(.bottom, 20)
+                        } else {
+                            Text(beforeGameText)
+                                .font(.sea(15))
+                                .padding(.bottom, 30)
+                        }
+                    } else if viewModel.gameStatus == .notEnoughUsers {
+                        Text(beforeGameText)
+                            .font(.sea(15))
+                            .padding(.bottom, 30)
+                    } else {
+                        Text("게임중 입니다.")
+                            .font(.sea(15))
+                            .padding(.bottom, 30)
+                    }
+                } else {
+                    Text(viewModel.gameStatus == .notStarted || viewModel.gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
+                        .font(.sea(15))
+                        .padding(.bottom, 30)
+                }
                 
+
+                // 게임시작을 눌러주세요, 준비완료를 눌러주세요 Text
                 if isHost {
                     if viewModel.allPlayerReadied {
                         Text(suggestStartText)
@@ -82,15 +111,15 @@ struct GameRoomDetailBottomView: View {
 
                     }
                 }
-                
+                // 게임 시작 버튼
                 Button {
                     if isHost {
-                        
+                        viewModel.cardDistribute()
                     } else {
                         amIReadied ? cancelReady() : ready()
                     }
                 } label: {
-                    if viewModel.gameRoomData.hostId == Service.shared.myUserModel.id {
+                    if viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id {
                         Text(startText)
                             .opacity(viewModel.allPlayerReadied ? 1 : 0.5)
                     } else {
@@ -144,7 +173,8 @@ struct GameRoomDetailBottomView: View {
     
     func ready() {
         withAnimation {
-            amIReadied = true
+//            amIReadied = true
+            viewModel.sendIamReady()
         }
     }
     

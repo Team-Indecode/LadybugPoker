@@ -19,10 +19,12 @@ struct UserProfileView: View {
         HStack(spacing: 8) {
             if let userImageUrl = userImageUrl {
                 LazyImage(url: URL(string: userImageUrl))
+                    .scaledToFit()
                     .frame(width: 30, height: 30)
                     .clipShape(Circle())
             } else {
                 Image(Bugs.ladybug.rawValue)
+                    .resizable()
                     .scaledToFit()
                     .frame(width: 30, height: 30)
                     .clipShape(Circle())

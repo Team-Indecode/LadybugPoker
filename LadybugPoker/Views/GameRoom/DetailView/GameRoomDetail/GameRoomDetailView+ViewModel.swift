@@ -13,8 +13,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
     let db = Firestore.firestore()
     @Published var gameStatus: GameStatus = .notStarted
     
-    @Published var gameRoomData: GameRoom = GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: "", whoseGetting: "", selectedCard: .bee, turnStartTime: Date())
-    @Published var usersId: [String] = []
+    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: "", whoseGetting: "", selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0))
+
+    /// userIdx와 userId
+    @Published var usersId: [Int : String] = [:]
     @Published var secondsLeft: Int = 60
     
     @Published var allPlayerReadied: Bool = false
@@ -26,9 +28,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
             .addSnapshotListener { doc, error in
                 if let doc = doc, doc.exists {
                     if let data = try? doc.data(as: GameRoom.self) {
-                        self.gameRoomData = data
+                        self.gameRoomData.send(data)
                         self.getUsersId(data.usersInGame)
-                        print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData)")
+                        print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
+                        self.allPlayerIsReadyChecking(data.usersInGame)
                     } else {
                         print(#fileID, #function, #line, "- wrong data")
                     }
@@ -41,23 +44,136 @@ class GameRoomDetailViewViewModel: ObservableObject {
     // 1. tuple을 만들어서(userIdx, userId)이런식으로 만들어서 userIdx를 오름차순으로 정렬한다
     // 2. 그런다음 userId만 그 tuple에서 추출한다
     func getUsersId(_ usersInGame: [String : UserInGame]) {
-        usersId = usersInGame.map({ userInGame in
-            return userInGame.key
-        })
+        usersInGame.forEach { (key: String, value: UserInGame) in
+            usersId[value.idx] = key
+        }
     }
     
+    
+    /// 모든 유저가 게임 시작 준비가 됬는지를 판단한다
+    /// - Parameter usersInGame: <#usersInGame description#>
+    func allPlayerIsReadyChecking(_ usersInGame: [String : UserInGame]) {
+        var allReadyOrNot: Bool = true
+        usersInGame.forEach { (key: String, value: UserInGame) in
+            if !value.readyOrNot {
+                allReadyOrNot = false
+            }
+        }
+        
+        self.allPlayerReadied = allReadyOrNot
+        print(#fileID, #function, #line, "- allPlayerReadied checking: \(allPlayerReadied)")
+    }
+    
+    /// 게임 시작(처음 게임 시작할 떄 카드 분배)
+    func cardDistribute() {
+        self.gameStatus = .onAir
+        var allCards: [Bugs] = []
+        Bugs.allCases.forEach { bug in
+            allCards.append(contentsOf: [Bugs](repeating: bug, count: 8))
+        }
+        allCards.shuffle()
+
+        /// 게임에 참가하는 총 유저 수
+        let userCnt = self.gameRoomData.value.usersInGame.count
+        /// 한 유저 당 가지는 카드 개수
+        let oneUserCardCount = allCards.count / self.gameRoomData.value.usersInGame.count
+        userCard(oneUserCardCount, allCards, userCnt)
+    }
+    
+    
+    /// 한 유저가 손에 가지고 있는 카드
+    /// - Parameters:
+    ///   - userCardCnt: 유저가 처음에 가질 최소 카드 수
+    ///   - allCards: 전체 벌레 카드들
+    ///   - userCnt: 게임에 참가한 총 유저 수
+    func userCard(_ userCardCnt: Int, _ allCards: [Bugs], _ userCnt: Int) {
+        var usersCard: [[Bugs]] = []
+        var usersCardString: [String] = []
+        
+        // 카드 분배
+        for i in stride(from: 0, to: userCnt * userCardCnt, by: userCardCnt) {
+            usersCard.append(Array(allCards[i..<i+userCardCnt]))
+        }
+        
+        // 유저 수가 3, 5, 6 -> 카드가 정확히 같은 개수로 분배되지 않음
+        // 그래서 남은 카드를 랜덤으로 분배해준다
+        if allCards.count % userCardCnt != 0 {
+            var restCard: [Bugs] = []
+            for i in stride(from: userCnt * userCardCnt, to: allCards.count, by: 1) {
+                restCard.append(allCards[i])
+            }
+            for i in 0..<restCard.count {
+                usersCard[i % userCnt].append(restCard[i])
+            }
+        }
+        
+        // Bugs배열을 카드String으로 만들어줌
+        usersCard.forEach { bugs in
+            var bugCnt: [Bugs : Int] = [.bee : 0, .frog : 0, .ladybug : 0, .rat : 0, .snail : 0, .snake : 0, .spider : 0, .worm : 0]
+            var bugCntString: String = ""
+            bugs.forEach { bug in
+                bugCnt[bug]! += 1
+            }
+            Array(zip(0..<bugCnt.count, bugCnt)).forEach { (index, bugDic) in
+                let (key, value) = bugDic
+                bugCntString += index == bugCnt.count - 1 ? "\(key.cardString)\(value)" : "\(key.cardString)\(value),"
+            }
+            usersCardString.append(bugCntString)
+        }
+        print(#fileID, #function, #line, "- usersCard: \(usersCard)")
+        print(#fileID, #function, #line, "- usersCardString⭐️: \(usersCardString)")
+        usersHandCardSetting(usersCardString)
+    }
+    
+    /// 유저에 랜덤으로 벌레String을 넣어줌
+    /// - Parameter bugCardString: 벌레String(ex. Sn1, L2)
+    func usersHandCardSetting(_ bugCardString: [String]) {
+        var usersCardString: [String : String] = [:]
+        
+        for index in 0..<bugCardString.count {
+            usersCardString[self.usersId[index] ?? ""] = bugCardString[index]
+        }
+        self.gameRoomData.value.usersInGame.values.forEach { userInGame in
+            var userInGame = userInGame
+            userInGame.handCard = usersCardString[userInGame.id] ?? ""
+            userInGameUpdate(userInGame, userInGame.id)
+        }
+    }
+ 
     /// 유저가 준비완료가 됬음을 보내줌
     func sendIamReady() {
-        db.collection(GameRoom.path).document(gameRoomData.id)
-            .updateData(["users" : true]) { error in
-                print(#fileID, #function, #line, "- error: \(error?.localizedDescription)")
-                
+        let userInGame = gameRoomData.value.usersInGame[Service.shared.myUserModel.id]
+
+        guard var userInGame = userInGame else { return }
+        userInGame.readyOrNot = !userInGame.readyOrNot
+        
+        userInGameUpdate(userInGame, userInGame.id)
+    }
+    
+    func userInGameUpdate(_ userInGame: UserInGame, _ userId: String) {
+        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+        
+        let oneUserData = [
+            "boardCard" : userInGame.boardCard,
+            "displayName" : userInGame.displayName,
+            "handCard" : userInGame.handCard,
+            "readyOrNot" : userInGame.readyOrNot,
+            "id" : userInGame.id,
+            "idx" : userInGame.idx,
+            "profileUrl" : userInGame.profileUrl
+        ] as [String : Any]
+        
+        gameRoomDataRef.updateData(["usersInGame.\(userId)" : oneUserData] ) { error in
+            if let error {
+                print(#fileID, #function, #line, "- sendIamReady change error: \(error.localizedDescription)")
             }
+            print(#fileID, #function, #line, "- update ready success update")
+        }
     }
     
     /// userID에 해당하는 유저 데이터를 가지고 온다
     func getUserData(_ userID: String) -> UserInGame? {
-        let userDataDic = gameRoomData.usersInGame.first(where: { $0.key == userID })
+        let userDataDic = gameRoomData.value.usersInGame.first(where: { $0.key == userID })
         return userDataDic?.value
     }
     
@@ -66,7 +182,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
 //        guard let userId = Service.shared.myUserModel.id else { return [] }
         let userId = Service.shared.myUserModel.id
         
-        if let cardString = gameRoomData.usersInGame.first(where: { $0.key == userId }) {
+        if let cardString = gameRoomData.value.usersInGame.first(where: { $0.key == userId }) {
             if isHandCard {
                 return self.stringToCards(cardString.value.handCard)
             } else {
