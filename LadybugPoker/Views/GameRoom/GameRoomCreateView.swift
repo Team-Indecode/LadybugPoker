@@ -17,18 +17,26 @@ struct GameRoomCreateView: View {
     var body: some View {
         VStack {
             HStack {
-                Image("ladybug")
-                    .resizable()
-                    .frame(width: 27, height: 27)
-                
-                Text("무당벌레 포커")
-                    .font(.sea(15))
-                
-                Spacer()
+                Button {
+                    service.path.removeLast()
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .foregroundStyle(Color.black)
             }
             .padding(.horizontal, 15)
             .padding(.vertical, 20)
             .background(Color.bugDarkMedium)
+            .overlay {
+                HStack {
+                    Image("ladybug")
+                        .resizable()
+                        .frame(width: 27, height: 27)
+                    
+                    Text("무당벌레 포커")
+                        .font(.sea(15))
+                }
+            }
             
             VStack(spacing: 0) {
                 TextField("방 제목을 입력해주세요.", text: $title)
