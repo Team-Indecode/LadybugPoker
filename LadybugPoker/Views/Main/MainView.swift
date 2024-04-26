@@ -13,6 +13,10 @@ struct MainView: View {
     
     var body: some View {
         VStack {
+            HStack {
+                
+            }
+            
             ForEach(gameRooms) { gameRoom in
                 Button {
                     service.path.append(.gameRoom)

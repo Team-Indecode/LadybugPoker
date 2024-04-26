@@ -44,6 +44,7 @@ struct GameRoomView: View {
                 .stroke(Color.bugDark)
         }
         .padding(.horizontal, 20)
+        .foregroundStyle(Color.black)
         
     }
 }
