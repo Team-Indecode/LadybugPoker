@@ -130,7 +130,11 @@ struct GameRoomCreateView: View {
                                                                    displayName: service.myUserModel.displayName,
                                                                    profileUrl: service.myUserModel.profileUrl, idx: 0)],
                                          whoseGetting: nil,
-                                         turnStartTime: nil
+                                         turnStartTime: nil,
+                                         questionCard: nil,
+                                         attackers: [],
+                                         createdAt: "",
+                                         turnTime: 0
                                          )
                     
                     try await GameRoom.create(model: model)

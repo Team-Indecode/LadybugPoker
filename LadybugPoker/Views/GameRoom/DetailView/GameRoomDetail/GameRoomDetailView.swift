@@ -18,19 +18,19 @@ struct GameRoomDetailView: View {
     var body: some View {
         if #available(iOS 17, *) {
             allContent
-                .onChange(of: viewModel.gameRoomData.usersInGame) { oldValue, newValue in
+                .onChange(of: viewModel.gameRoomData.value.usersInGame) { oldValue, newValue in
                     myCards = viewModel.getUserCard(true)
                 }
-                .onChange(of: viewModel.gameRoomData.hostId) { oldValue, newValue in
+                .onChange(of: viewModel.gameRoomData.value.hostId) { oldValue, newValue in
                     isHost = Service.shared.myUserModel.id == newValue
                     print(#fileID, #function, #line, "- userId: \(Service.shared.myUserModel.id)")
                 }
         } else {
             allContent
-                .onChange(of: viewModel.gameRoomData.usersInGame) { newValue in
+                .onChange(of: viewModel.gameRoomData.value.usersInGame) { newValue in
                     myCards = viewModel.getUserCard(true)
                 }
-                .onChange(of: viewModel.gameRoomData.hostId) { newValue in
+                .onChange(of: viewModel.gameRoomData.value.hostId) { newValue in
                     isHost = Service.shared.myUserModel.id == newValue
                     print(#fileID, #function, #line, "- userId: \(Service.shared.myUserModel.id)")
                 }
@@ -40,10 +40,12 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.usersInGame, usersId: $viewModel.usersId)
+                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame, usersId: $viewModel.usersId)
                     .frame(height: proxy.size.height * 0.6706)
+                    .environmentObject(viewModel)
                 GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
                     .frame(height: proxy.size.height * 0.3294)
+                    .environmentObject(viewModel)
             }
             .task {
                 try? await viewModel.getGameData(gameRoomId)

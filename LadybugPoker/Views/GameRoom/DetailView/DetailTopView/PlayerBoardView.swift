@@ -17,7 +17,7 @@ struct PlayerBoardView: View {
     let boardHeight: CGFloat
     var cards: [Card]
     let userReadyOrNot: Bool
-    let gameStart: Bool
+    let gameStart: GameStatus
     /// 짝수
     let isOdd: Bool
     
@@ -26,12 +26,13 @@ struct PlayerBoardView: View {
     var body: some View {
         VStack(spacing: 10) {
             profile(user)
-            if gameStart {
+            if gameStart == .onAir {
                 userIsPlayGame
             } else {
                 userIsNotPlayGame
+                    .frame(height: boardHeight - 60)
             }
-            if cards.count < 4 {
+            if gameStart == .onAir && cards.count < 4 {
                 if cards.count == 0 {
                     Spacer()
                         .frame(height: boardHeight - 60)
@@ -39,7 +40,7 @@ struct PlayerBoardView: View {
                 } else {
                     Spacer()
                         .frame(height: (boardHeight - 60) / 2)
-                }  
+                }
             }
         }
         .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)
@@ -47,9 +48,7 @@ struct PlayerBoardView: View {
         .onChange(of: self.cards) { newValue in
             print(#fileID, #function, #line, "- cards⭐️: \(cards)")
         }
-        .onAppear {
-            print(#fileID, #function, #line, "- onAppear cards: \(cards)")
-        }
+
     }
     
     /// 유저 프로필
@@ -59,7 +58,7 @@ struct PlayerBoardView: View {
                 HStack {
                     UserProfileView(userImageUrl: userProfile.profileUrl, userNickname: userProfile.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
                     Spacer()
-                    if viewModel.gameRoomData.whoseTurn == userProfile.id {
+                    if viewModel.gameRoomData.value.whoseTurn == userProfile.id {
                         Image(systemName: "arrowshape.left.fill")
                             .foregroundStyle(Color.orange)
                             .frame(width: 30)
@@ -69,7 +68,7 @@ struct PlayerBoardView: View {
         } else {
             return AnyView(
                 HStack {
-                    if viewModel.gameRoomData.whoseTurn == userProfile.id {
+                    if viewModel.gameRoomData.value.whoseTurn == userProfile.id {
                         Image(systemName: "arrowshape.right.fill")
                             .foregroundStyle(Color.orange)
                             .frame(width: 30)
@@ -94,11 +93,11 @@ struct PlayerBoardView: View {
     var userIsNotPlayGame: some View {
         Text(userReadyOrNot ? "준비 완료" : "대기중...")
             .font(.sea(35))
-            .padding(.top, 23)
+//            .padding(.top, 23)
     }
 }
 
 #Preview {
 //    PlayerBoardView(user: User(id: "", displayName: "rayoung", profileUrl: "https://picsum.photos/200"), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)])
-    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: []), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, gameStart: true, isOdd: true)
+    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: []), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, gameStart: .onAir, isOdd: true)
 }

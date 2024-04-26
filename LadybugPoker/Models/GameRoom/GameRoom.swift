@@ -24,10 +24,15 @@ struct GameRoom: Codable, Identifiable, Equatable {
     var whoseTurn: String?
     /// 누구에게 카드를 건냈는지
     let whoseGetting: String?
-    /// 어떤 카드를 줬는지
+    /// 공격자가 실제로 선택한 벌레
     var selectedCard: Bugs?
     /// 턴 시작 시간
-    let turnStartTime: Date?
+    let turnStartTime: String?
+    /// 공격자가 수비자에게 말한 벌레
+    let questionCard: Bugs?
+    let attackers: [Int]
+    let createdAt: String
+    let turnTime: Int
     
     var toJson: [String: Any] {
         var userGameData: [String: Any] = [:]
@@ -46,11 +51,15 @@ struct GameRoom: Codable, Identifiable, Equatable {
             "whoseTurn": whoseTurn,
             "whoseGetting" : whoseGetting,
             "selectedCard" : selectedCard?.rawValue,
-            "turnStartTime" : turnStartTime
+            "turnStartTime" : turnStartTime,
+            "questionCard" : questionCard,
+            "attackers" : attackers,
+            "createdAt" : createdAt,
+            "turnTime" : turnTime
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: Bugs? = nil, turnStartTime: Date?) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: Bugs? = nil, turnStartTime: String?, questionCard: Bugs? = nil, attackers: [Int], createdAt: String, turnTime: Int) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -62,6 +71,10 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.whoseGetting = whoseGetting
         self.selectedCard = selectedCard
         self.turnStartTime = turnStartTime
+        self.questionCard = questionCard
+        self.attackers = attackers
+        self.createdAt = createdAt
+        self.turnTime = turnTime
     }
     
     init?(data: [String: Any]) {
@@ -91,6 +104,18 @@ struct GameRoom: Codable, Identifiable, Equatable {
             return nil
         }
         
+        guard let attackers = data["attackers"] as? [Int] else {
+            return nil
+        }
+        
+        guard let createdAt = data["createdAt"] as? String else {
+            return nil
+        }
+        
+        guard let turnTime = data["turnTime"] as? Int else {
+            return nil
+        }
+        
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -102,5 +127,9 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.usersInGame = [:]
         self.whoseGetting = nil
         self.turnStartTime = nil
+        self.questionCard = nil
+        self.attackers = attackers
+        self.createdAt = createdAt
+        self.turnTime = turnTime
     }
 }
