@@ -11,7 +11,7 @@ class Service: ObservableObject {
     static let shared = Service()
     
     @Published var path: [Path] = []
-    @Published var myUserModel: User = User(id: "", displayName: "", profileUrl: "", history: [])
+    @Published var myUserModel: User! = User(id: "", displayName: "", profileUrl: "", history: [])
     
     private init() { }
     
