@@ -18,6 +18,8 @@ struct UserInGame: Codable, Hashable {
     /// 닉네임 -> 누구누구 턴입니다 할때 사용
     let displayName: String
     let profileUrl: String?
+    /// 무조건 인덱스가 수정되지 않기 때문에 -> 게임방의 데이터가 변경될때마다 유저들의
+    let idx: Int
     
     var toJson: [String: Any] {
         [
@@ -26,17 +28,19 @@ struct UserInGame: Codable, Hashable {
             "handCard": handCard,
             "boardCard": boardCard,
             "displayName": displayName,
-            "profileUrl": profileUrl
+            "profileUrl": profileUrl,
+            "idx": idx
         ]
     }
     
-    init(id: String, readyOrNot: Bool, handCard: String, boardCard: String, displayName: String, profileUrl: String?) {
+    init(id: String, readyOrNot: Bool, handCard: String, boardCard: String, displayName: String, profileUrl: String?, idx: Int) {
         self.id = id
         self.readyOrNot = readyOrNot
         self.handCard = handCard
         self.boardCard = boardCard
         self.displayName = displayName
         self.profileUrl = profileUrl
+        self.idx = idx
     }
     
     init?(data: [String: Any]) {
@@ -44,7 +48,8 @@ struct UserInGame: Codable, Hashable {
               let readyOrNot = data["readyOrNot"] as? Bool,
               let handCard = data["handCard"] as? String,
               let boardCard = data["boardCard"] as? String,
-              let displayName = data["displayName"] as? String else { return nil }
+              let displayName = data["displayName"] as? String,
+              let idx = data["idx"] as? Int else { return nil }
         
         self.id = id
         self.readyOrNot = readyOrNot
@@ -52,5 +57,6 @@ struct UserInGame: Codable, Hashable {
         self.boardCard = boardCard
         self.displayName = displayName
         self.profileUrl = data["profileUrl"] as? String
+        self.idx = idx
     }
 }

@@ -39,7 +39,7 @@ struct MainView: View {
             
             ForEach(gameRooms) { gameRoom in
                 Button {
-                    service.path.append(.gameRoom)
+                    service.path.append(.gameRoom(gameRoomId: gameRoom.id))
                 } label: {
                     GameRoomView(gameRoom: gameRoom)
                 }

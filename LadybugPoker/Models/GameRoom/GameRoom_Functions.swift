@@ -20,6 +20,7 @@ extension GameRoom {
         let documents = try await Firestore.firestore().collection(path)
             .getDocuments()
             .documents
+        print(#fileID, #function, #line, "- doccousnt: \(documents.count)")
         var rooms = [GameRoom]()
         print(#fileID, #function, #line, "- document checking⭐️: \(documents)")
         for document in documents {

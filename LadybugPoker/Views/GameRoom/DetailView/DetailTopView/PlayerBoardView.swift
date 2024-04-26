@@ -32,8 +32,14 @@ struct PlayerBoardView: View {
                 userIsNotPlayGame
             }
             if cards.count < 4 {
-                Spacer()
-                    .frame(height: (boardHeight - 60) / 2)
+                if cards.count == 0 {
+                    Spacer()
+                        .frame(height: boardHeight - 60)
+                        .background(Color.blue)
+                } else {
+                    Spacer()
+                        .frame(height: (boardHeight - 60) / 2)
+                }  
             }
         }
         .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)

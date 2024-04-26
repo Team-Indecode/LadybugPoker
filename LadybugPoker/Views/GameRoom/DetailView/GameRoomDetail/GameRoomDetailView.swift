@@ -13,17 +13,26 @@ struct GameRoomDetailView: View {
     @State private var amIReadied: Bool = false
     @State private var isHost: Bool = false
     @State private var myCards: [Card] = []
-//    @State private var turnsStartTime:
+    let gameRoomId: String
+    
     var body: some View {
         if #available(iOS 17, *) {
             allContent
                 .onChange(of: viewModel.gameRoomData.usersInGame) { oldValue, newValue in
                     myCards = viewModel.getUserCard(true)
                 }
+                .onChange(of: viewModel.gameRoomData.hostId) { oldValue, newValue in
+                    isHost = Service.shared.myUserModel.id == newValue
+                    print(#fileID, #function, #line, "- userId: \(Service.shared.myUserModel.id)")
+                }
         } else {
             allContent
                 .onChange(of: viewModel.gameRoomData.usersInGame) { newValue in
                     myCards = viewModel.getUserCard(true)
+                }
+                .onChange(of: viewModel.gameRoomData.hostId) { newValue in
+                    isHost = Service.shared.myUserModel.id == newValue
+                    print(#fileID, #function, #line, "- userId: \(Service.shared.myUserModel.id)")
                 }
         }
     }
@@ -31,13 +40,13 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.usersInGame)
+                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.usersInGame, usersId: $viewModel.usersId)
                     .frame(height: proxy.size.height * 0.6706)
-                GameRoomDetailBottomView(amIReadied: $amIReadied, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
+                GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
                     .frame(height: proxy.size.height * 0.3294)
             }
             .task {
-                try? await viewModel.getGameData()
+                try? await viewModel.getGameData(gameRoomId)
             }
         })
         
@@ -45,7 +54,7 @@ struct GameRoomDetailView: View {
 }
 
 #Preview {
-    GameRoomDetailView()
+    GameRoomDetailView(gameRoomId: "")
 }
 
 

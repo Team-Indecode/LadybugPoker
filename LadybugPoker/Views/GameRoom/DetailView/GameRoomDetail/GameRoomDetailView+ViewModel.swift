@@ -14,18 +14,20 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var gameStatus: GameStatus = .notStarted
     
     @Published var gameRoomData: GameRoom = GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: "", whoseGetting: "", selectedCard: .bee, turnStartTime: Date())
+    @Published var usersId: [String] = []
     @Published var secondsLeft: Int = 60
     
     @Published var allPlayerReadied: Bool = false
 
     
     /// 해당 게임방의 데이터를 가지고 온다
-    func getGameData() async throws {
-        db.collection(GameRoom.path).document("testId")
+    func getGameData(_ gameRoomId: String) async throws {
+        db.collection(GameRoom.path).document(gameRoomId)
             .addSnapshotListener { doc, error in
                 if let doc = doc, doc.exists {
                     if let data = try? doc.data(as: GameRoom.self) {
                         self.gameRoomData = data
+                        self.getUsersId(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData)")
                     } else {
                         print(#fileID, #function, #line, "- wrong data")
@@ -33,6 +35,15 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 }
                 
             }
+    }
+    
+    /// 이거 순서를 단순히 그냥 순서를 가지고 오는 것이 아니라 UserInGame의 idx순서 대로 가져와야 한다
+    // 1. tuple을 만들어서(userIdx, userId)이런식으로 만들어서 userIdx를 오름차순으로 정렬한다
+    // 2. 그런다음 userId만 그 tuple에서 추출한다
+    func getUsersId(_ usersInGame: [String : UserInGame]) {
+        usersId = usersInGame.map({ userInGame in
+            return userInGame.key
+        })
     }
     
     /// 유저가 준비완료가 됬음을 보내줌
