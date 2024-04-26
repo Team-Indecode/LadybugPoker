@@ -24,14 +24,21 @@ struct MainView: View {
                 
                 Spacer()
                 
-                if let user = service.myUserModel {
-                    Text(user.displayName)
-                        .font(.sea(15))
+                Button {
+                    if let user = service.myUserModel {
+                        service.path.append(.myPage(id: user.id))
+                    }
+                } label: {
+                    if let user = service.myUserModel {
+                        Text(user.displayName)
+                            .font(.sea(15))
+                    }
+                    
+                    if let url = service.myUserModel.profileUrl {
+                        LazyImage(url: URL(string: url))
+                    }
                 }
-                
-                if let url = service.myUserModel.profileUrl {
-                    LazyImage(url: URL(string: url))
-                }
+                .foregroundStyle(Color.black)
             }
             .padding(.horizontal, 15)
             .padding(.vertical, 20)
