@@ -25,8 +25,8 @@ extension GameRoom {
         print(#fileID, #function, #line, "- document checking⭐️: \(documents)")
         for document in documents {
             print(#fileID, #function, #line, "- document: \(document)")
-//            if let room = GameRoom(data: document.data()) {
-            if let room = try? document.data(as: GameRoom.self) {
+            if let room = GameRoom(data: document.data()) {
+//            if let room = try? document.data(as: GameRoom.self) {
                 print(room.id)
                 rooms.append(room)
             } else {
