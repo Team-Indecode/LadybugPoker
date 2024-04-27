@@ -12,5 +12,10 @@ enum Path: Hashable {
     case signup(email: String, password: String)
     case signin
     case main
+<<<<<<< HEAD
     case gameRoom(gameRoomId: String)
+=======
+    case gameRoom
+    case myPage(id: String)
+>>>>>>> Signin
 }
