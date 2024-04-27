@@ -65,6 +65,8 @@
 		D19AFD792BBFA12F008F9297 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD782BBFA12F008F9297 /* User.swift */; };
 		D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD7B2BBFA238008F9297 /* GameRoom_Preview.swift */; };
 		D1AD227D2BDB6D6B0030EC56 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD227C2BDB6D6B0030EC56 /* MyPageView.swift */; };
+		D1AD227F2BDCF3A10030EC56 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD227E2BDCF3A10030EC56 /* Date+.swift */; };
+		D1AD22812BDCF4940030EC56 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD22802BDCF4940030EC56 /* String+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +114,8 @@
 		D19AFD782BBFA12F008F9297 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D19AFD7B2BBFA238008F9297 /* GameRoom_Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoom_Preview.swift; sourceTree = "<group>"; };
 		D1AD227C2BDB6D6B0030EC56 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		D1AD227E2BDCF3A10030EC56 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		D1AD22802BDCF4940030EC56 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -349,6 +353,8 @@
 		D19AFD622BBF9BA8008F9297 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D1AD227E2BDCF3A10030EC56 /* Date+.swift */,
+				D1AD22802BDCF4940030EC56 /* String+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -536,9 +542,11 @@
 				D19AFD792BBFA12F008F9297 /* User.swift in Sources */,
 				D1418E242BD6400C00421904 /* DefaultView.swift in Sources */,
 				4D7583152BC56E86009B6489 /* GameRoomDetailTopView.swift in Sources */,
+				D1AD22812BDCF4940030EC56 /* String+.swift in Sources */,
 				4DF375B92BD161CC008AC415 /* GamePlayAttackDefenceView.swift in Sources */,
 				D19AFD6F2BBF9F99008F9297 /* MainView.swift in Sources */,
 				4DC5035A2BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift in Sources */,
+				D1AD227F2BDCF3A10030EC56 /* Date+.swift in Sources */,
 				D152E9B32BC4E700005535F1 /* Bugs.swift in Sources */,
 				4D7583172BC572A0009B6489 /* CardView.swift in Sources */,
 				D125B9C72BC1288F00A5AE03 /* Service.swift in Sources */,
