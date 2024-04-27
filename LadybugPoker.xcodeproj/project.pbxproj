@@ -64,6 +64,7 @@
 		D19AFD772BBFA0C4008F9297 /* GameRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD762BBFA0C4008F9297 /* GameRoom.swift */; };
 		D19AFD792BBFA12F008F9297 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD782BBFA12F008F9297 /* User.swift */; };
 		D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD7B2BBFA238008F9297 /* GameRoom_Preview.swift */; };
+		D1AD227D2BDB6D6B0030EC56 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD227C2BDB6D6B0030EC56 /* MyPageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +111,7 @@
 		D19AFD762BBFA0C4008F9297 /* GameRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoom.swift; sourceTree = "<group>"; };
 		D19AFD782BBFA12F008F9297 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D19AFD7B2BBFA238008F9297 /* GameRoom_Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoom_Preview.swift; sourceTree = "<group>"; };
+		D1AD227C2BDB6D6B0030EC56 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -363,6 +365,7 @@
 		D19AFD6B2BBF9F6A008F9297 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D1AD227B2BDB6D630030EC56 /* MyPage */,
 				D1418E332BD64D8E00421904 /* Auth */,
 				D16AFC7D2BCFAD3A00AEC3B2 /* Popup */,
 				D125B9CA2BC129F900A5AE03 /* GameRoom */,
@@ -402,6 +405,14 @@
 				D125B9DD2BC1517700A5AE03 /* GameRoom_Functions.swift */,
 			);
 			path = GameRoom;
+			sourceTree = "<group>";
+		};
+		D1AD227B2BDB6D630030EC56 /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				D1AD227C2BDB6D6B0030EC56 /* MyPageView.swift */,
+			);
+			path = MyPage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -506,6 +517,7 @@
 				D16AFC7F2BCFAD4400AEC3B2 /* CommonPopupView.swift in Sources */,
 				D1418E2E2BD64BDE00421904 /* User_Errors.swift in Sources */,
 				D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */,
+				D1AD227D2BDB6D6B0030EC56 /* MyPageView.swift in Sources */,
 				D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */,
 				D125B9DC2BC1504300A5AE03 /* AppDelegate.swift in Sources */,
 				D14F34FE2BD8EB9F00ED6144 /* UserInGame.swift in Sources */,
