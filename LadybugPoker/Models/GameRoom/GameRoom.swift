@@ -123,8 +123,21 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.code = code
         self.password = data["password"] as? String
         self.whoseTurn = nil
-        //TODO - users in game 처리
-        self.usersInGame = [:]
+        /// Users in game 처리
+        var tempData = [String: UserInGame]()
+        
+        let usersInGameData = data["usersInGame"] as? [String: Any] ?? [:]
+        
+        for userData in usersInGameData {
+            let userId = userData.key
+            let userInGame = UserInGame(data: userData.value as? [String: Any] ?? [:])
+            if let userInGame {
+                tempData[userId] = userInGame
+            }
+        }
+        
+        self.usersInGame = tempData
+        
         self.whoseGetting = nil
         self.turnStartTime = nil
         self.questionCard = nil
