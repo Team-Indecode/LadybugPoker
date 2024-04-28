@@ -11,7 +11,7 @@ extension GameRoom {
     typealias GameRooms = [GameRoom]
     
     static var preview: Self {
-        GameRoom(id: "testId", hostId: "test", title: "고수만 오세요", password: "123456", maxUserCount: 6, code: "A2F5E2", usersInGame: [:], whoseTurn: "", whoseGetting: "", selectedCard: .bee, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0)
+        GameRoom(id: "testId", hostId: "test", title: "고수만 오세요", password: "123456", maxUserCount: 6, code: "A2F5E2", usersInGame: [:], whoseTurn: "", whoseGetting: "", selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0)
     }
     
     static var listPreview: GameRooms {

@@ -10,17 +10,18 @@ import SwiftUI
 extension GameRoomDetailBottomView {
     
     struct PlayingView: View {
+        @EnvironmentObject private var viewModel: GameRoomDetailViewViewModel
         /// 현재 턴인 유저
 //        @Binding var userInTurn: UserInGame
         @Binding var userInTurn: String?
         /// 내 카드 목록
-//        @Binding var myCards: [Card]
         @Binding var myCards: [Card]
         /// 남은 시간...
         @Binding var secondsLeft: Int
-        @Binding var selectedCardType: Bugs?
+        @Binding var selectedCardType: String?
         
         @Binding var showCardSelectedPopup: Bool
+        @Binding var bottomGameType: GameBottomType?
         
         var body: some View {
             VStack {
@@ -31,11 +32,7 @@ extension GameRoomDetailBottomView {
                             Text("내 차례입니다 !")
                                 .font(.sea(10))
                             
-                            Text("전달할 카드를 선택하세요.")
-                                .font(.sea(12))
-                                .foregroundStyle(Color.red)
                         }
-                        
                         Spacer()
                     }
                     .padding(.horizontal, 20)
@@ -43,32 +40,53 @@ extension GameRoomDetailBottomView {
                         Text("남은 시간: \(secondsLeft)초")
                             .font(.sea(15))
                     }
-
                 } else {
                     if let userInTurn = userInTurn {
                         Text(userInTurn + " 턴 입니다.")
                             .font(.sea(15))
                     }
-                    
                 }
-
-                
-                ScrollView(.horizontal) {
-                    HStack {
-                        ForEach(myCards) { card in
-                            Button {
-                                withAnimation {
-                                    showCardSelectedPopup.toggle()
-                                }
-                            } label: {
-                                CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: false)
-                            }
-                            .padding(.leading, card == myCards.first ? 20 : 0)
-                        }
+                Spacer()
+                VStack(spacing: 0) {
+                    if bottomGameType == .selectCard {
+                        Text("전달할 카드를 선택하세요.")
+                            .font(.sea(12))
+                            .foregroundStyle(Color.red)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    } else if bottomGameType == .selectUser {
+                        Text("카드를 누구에게 전달할까요?")
+                            .font(.sea(12))
+                            .foregroundStyle(Color.red)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    } else {
+                        EmptyView()
                     }
-                    .padding(.bottom, 15)
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(myCards) { card in
+                                Button {
+//                                    if bottomGameType == .selectUser {
+//                                        withAnimation {
+//                                            showCardSelectedPopup.toggle()
+//                                        }
+//                                    }
+                                    
+                                    viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
+                                    viewModel.userCardCardChange(card.bug, myCards, true)
+                                } label: {
+                                    if card.cardCnt != 0 {
+                                        CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: true)
+                                    }
+
+                                }
+                                .padding(.leading, card == myCards.first ? 20 : 0)
+                            }
+                        }
+                        .padding(.bottom, 15)
+                    }
                 }
                 .padding(.bottom, 15)
+                .opacity(bottomGameType == .defender ? 0.7 : 1.0)
             }
         }
     }
@@ -86,6 +104,7 @@ extension GameRoomDetailBottomView {
              Card(bug: .ladybug, cardCnt: 3)]),
         secondsLeft: .constant(48),
         selectedCardType: .constant(nil),
-        showCardSelectedPopup: .constant(false)
+        showCardSelectedPopup: .constant(false),
+        bottomGameType: .constant(nil)
     )
 }

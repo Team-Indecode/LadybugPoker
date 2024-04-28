@@ -9,7 +9,7 @@ import SwiftUI
 
 /// 한 플레이어의 보드판
 struct PlayerBoardView: View {
-    @StateObject var viewModel = GameRoomDetailViewViewModel()
+    @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
     let user: User
 //    let userId: String
     let userCardCnt: Int
@@ -25,7 +25,7 @@ struct PlayerBoardView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            profile(user)
+            profile
             if gameStart == .onAir {
                 userIsPlayGame
             } else {
@@ -52,32 +52,40 @@ struct PlayerBoardView: View {
     }
     
     /// 유저 프로필
-    func profile(_ userProfile: User) -> some View {
+    var profile: some View {
         if isOdd {
-            return AnyView(
-                HStack {
-                    UserProfileView(userImageUrl: userProfile.profileUrl, userNickname: userProfile.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
-                    Spacer()
-                    if viewModel.gameRoomData.value.whoseTurn == userProfile.id {
-                        Image(systemName: "arrowshape.left.fill")
-                            .foregroundStyle(Color.orange)
-                            .frame(width: 30)
-                    }
+            return AnyView(HStack {
+                UserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
+                Spacer()
+                if viewModel.gameBottomType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id {
+                    arrowView
                 }
-            )
+                
+//                if viewModel.gameRoomData.value.whoseTurn == user.id {
+//                    arrowView
+//                }
+            })
         } else {
-            return AnyView(
-                HStack {
-                    if viewModel.gameRoomData.value.whoseTurn == userProfile.id {
-                        Image(systemName: "arrowshape.right.fill")
-                            .foregroundStyle(Color.orange)
-                            .frame(width: 30)
-                    }
-                    Spacer()
-                    UserProfileView(userImageUrl: userProfile.profileUrl, userNickname: userProfile.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
+            return AnyView(HStack {
+                if viewModel.gameBottomType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id {
+                    arrowView
                 }
-            )
+                Spacer()
+                UserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
+            })
         }
+    }
+    
+    var arrowView: some View {
+        Button {
+            viewModel.gameroomDataUpdate(.whoseGetting, user.id)
+        } label: {
+            Image(systemName: self.isOdd ? "arrowshape.left.fill" : "arrowshape.right.fill")
+                .resizable()
+                .foregroundStyle(Color.orange)
+                .frame(width: 56)
+        }
+        .disabled(viewModel.gameBottomType != .selectUser)
     }
     
     /// 유저 게임 중일때

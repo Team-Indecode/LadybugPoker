@@ -25,11 +25,11 @@ struct GameRoom: Codable, Identifiable, Equatable {
     /// 누구에게 카드를 건냈는지
     let whoseGetting: String?
     /// 공격자가 실제로 선택한 벌레
-    var selectedCard: Bugs?
+    var selectedCard: String?
     /// 턴 시작 시간
     let turnStartTime: String?
     /// 공격자가 수비자에게 말한 벌레
-    let questionCard: Bugs?
+    let questionCard: String?
     let attackers: [Int]
     let createdAt: String
     let turnTime: Int
@@ -50,7 +50,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
             "usersInGame": userGameData,
             "whoseTurn": whoseTurn,
             "whoseGetting" : whoseGetting,
-            "selectedCard" : selectedCard?.rawValue,
+            "selectedCard" : selectedCard,
             "turnStartTime" : turnStartTime,
             "questionCard" : questionCard,
             "attackers" : attackers,
@@ -59,7 +59,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: Bugs? = nil, turnStartTime: String?, questionCard: Bugs? = nil, attackers: [Int], createdAt: String, turnTime: Int) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -145,4 +145,28 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.createdAt = createdAt
         self.turnTime = turnTime
     }
+}
+
+
+enum GameUpdateType {
+    case gameStart
+    case sendUserReady
+}
+
+enum GameRoomData: String {
+    case attackers
+    case questionCard
+    case selectedCard
+    case turnStartTime
+    case whoseGetting
+    case whoseTurn
+}
+
+enum GameBottomType {
+    /// 카드를 누구에게 전달
+    case selectUser
+    /// 카드 선택
+    case selectCard
+    /// 수비자가 선택하는 뷰
+    case defender
 }

@@ -32,21 +32,15 @@ struct GameRoomDetailBottomView: View {
     
     /// 내가 방장인지
     @Binding var isHost: Bool
-    /// 누구 턴인지
-//    @Binding var userInTurn: UserInGame
+
     /// 내 카드 목록
     @Binding var myCards: [Card]
-    /// 남은 시간
-//    @Binding var secondsLeft: Int
-    /// 선택한 카드
-//    @Binding var selectedCardType: Bugs?
     /// 카드 선택 시 확인 팝업
     @Binding var showCardSelectedPopup: Bool
+    @Binding var gameBottomType: GameBottomType?
     
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
-            
             Color(hex: "d9d9d9")
                 .frame(height: 2)
                 .padding(.bottom, 12)
@@ -56,8 +50,10 @@ struct GameRoomDetailBottomView: View {
                             myCards: $myCards,
                             secondsLeft: $viewModel.secondsLeft,
                             selectedCardType: $viewModel.gameRoomData.value.selectedCard,
-                            showCardSelectedPopup: $showCardSelectedPopup
+                            showCardSelectedPopup: $showCardSelectedPopup,
+                            bottomGameType: $gameBottomType
                 )
+                .environmentObject(viewModel)
 
             } else {
                 // 게임시작 전입니다., 게임 중입니다, 모든 플레이어가 준비되었습니다 Text
@@ -148,7 +144,7 @@ struct GameRoomDetailBottomView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 15)
             }
-            
+            Spacer()
             TextField("메세지를 입력해주세요.", text: $chat)
                 .font(.sea(15))
                 .frame(height: 38)
@@ -168,6 +164,7 @@ struct GameRoomDetailBottomView: View {
                 .padding(.horizontal, 16)
 
         }
+        .frame(maxHeight: .infinity)
         .background(Color.bugLight)
     }
     
@@ -203,6 +200,7 @@ struct GameRoomDetailBottomView: View {
              Card(bug: .ladybug, cardCnt: 3)]),
 //        secondsLeft: .constant(48),
 //        selectedCardType: .constant(nil),
-        showCardSelectedPopup: .constant(false)
+        showCardSelectedPopup: .constant(false),
+        gameBottomType: .constant(.defender)
     )
 }
