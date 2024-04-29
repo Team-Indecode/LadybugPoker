@@ -67,6 +67,7 @@
 		D1AD227D2BDB6D6B0030EC56 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD227C2BDB6D6B0030EC56 /* MyPageView.swift */; };
 		D1AD227F2BDCF3A10030EC56 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD227E2BDCF3A10030EC56 /* Date+.swift */; };
 		D1AD22812BDCF4940030EC56 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD22802BDCF4940030EC56 /* String+.swift */; };
+		D1AD22842BDF6F4F0030EC56 /* GameError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD22832BDF6F4F0030EC56 /* GameError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,6 +118,7 @@
 		D1AD227E2BDCF3A10030EC56 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		D1AD22802BDCF4940030EC56 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		D1AD22822BDF55D20030EC56 /* LadybugPoker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LadybugPoker.entitlements; sourceTree = "<group>"; };
+		D1AD22832BDF6F4F0030EC56 /* GameError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				D1418E2B2BD64BA400421904 /* FirestoreError.swift */,
+				D1AD22832BDF6F4F0030EC56 /* GameError.swift */,
 			);
 			path = Errors;
 			sourceTree = "<group>";
@@ -523,6 +526,7 @@
 				4D75831F2BC83D4A009B6489 /* PlayerBoardView.swift in Sources */,
 				D19AFD772BBFA0C4008F9297 /* GameRoom.swift in Sources */,
 				D16AFC7F2BCFAD4400AEC3B2 /* CommonPopupView.swift in Sources */,
+				D1AD22842BDF6F4F0030EC56 /* GameError.swift in Sources */,
 				D1418E2E2BD64BDE00421904 /* User_Errors.swift in Sources */,
 				D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */,
 				D1AD227D2BDB6D6B0030EC56 /* MyPageView.swift in Sources */,

@@ -9,4 +9,5 @@ import Foundation
 
 enum FirestoreError: Error {
     case noData
+    case parseError
 }

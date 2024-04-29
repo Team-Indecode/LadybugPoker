@@ -44,4 +44,14 @@ extension User {
                     history: history,
                     currentUserId: currentGameId)
     }
+    
+    /// CurrentGameId 를 변경합니다.
+    static func changeCurrentGameId(id: String?) async throws {
+        guard let user = Service.shared.myUserModel else { throw GameError.noCurrentUser }
+        
+        try await Firestore.firestore().collection(path)
+            .document(user.id).updateData(["currentGameId": id])
+        
+        Service.shared.myUserModel.currentUserId = id
+    }
 }
