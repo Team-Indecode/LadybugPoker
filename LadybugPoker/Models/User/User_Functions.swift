@@ -17,7 +17,8 @@ extension User {
                 "id": id,
                 "displayName": displayName,
                 "history": [],
-                "profileUrl": nil
+                "profileUrl": nil,
+                "currentGameId": nil,
             ])
     }
     
