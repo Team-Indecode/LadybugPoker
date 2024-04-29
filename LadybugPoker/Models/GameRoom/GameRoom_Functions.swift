@@ -18,8 +18,11 @@ extension GameRoom {
     /// 게임방 리스트 불러옴
     static func fetchList() async throws -> GameRooms {
         let documents = try await Firestore.firestore().collection(path)
+            .order(by: "createdAt", descending: true)
+            .limit(to: 30)
             .getDocuments()
             .documents
+        
         print(#fileID, #function, #line, "- doccousnt: \(documents.count)")
         var rooms = [GameRoom]()
         print(#fileID, #function, #line, "- document checking⭐️: \(documents)")
