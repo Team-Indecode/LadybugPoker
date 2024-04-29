@@ -74,6 +74,12 @@ struct MainView: View {
                 .ignoresSafeArea()
         }
         .onAppear {
+            if let user = service.myUserModel {
+                if let gameId = user.currentUserId {
+                    service.path.append(.gameRoom(gameRoomId: gameId))
+                }
+            }
+            
             Task {
                 gameRooms = try await GameRoom.fetchList()
 //                gameRooms = GameRoom.listPreview

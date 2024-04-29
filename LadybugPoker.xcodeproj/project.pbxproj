@@ -118,6 +118,7 @@
 		D1AD227C2BDB6D6B0030EC56 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		D1AD227E2BDCF3A10030EC56 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		D1AD22802BDCF4940030EC56 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		D1AD22822BDF55D20030EC56 /* LadybugPoker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LadybugPoker.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -309,6 +310,7 @@
 		D19AFD4F2BBF9B7C008F9297 /* LadybugPoker */ = {
 			isa = PBXGroup;
 			children = (
+				D1AD22822BDF55D20030EC56 /* LadybugPoker.entitlements */,
 				D1418E2A2BD64B9B00421904 /* Errors */,
 				D125B9DA2BC1503B00A5AE03 /* System */,
 				D125B9C52BC1288600A5AE03 /* Service */,
@@ -690,6 +692,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LadybugPoker/LadybugPoker.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -724,6 +727,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LadybugPoker/LadybugPoker.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

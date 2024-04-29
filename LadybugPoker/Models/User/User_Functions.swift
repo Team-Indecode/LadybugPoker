@@ -17,7 +17,8 @@ extension User {
                 "id": id,
                 "displayName": displayName,
                 "history": [],
-                "profileUrl": nil
+                "profileUrl": nil,
+                "currentGameId": nil,
             ])
     }
     
@@ -35,10 +36,12 @@ extension User {
               }
         
         let profileUrl = data["profileUrl"] as? String
+        let currentGameId = data["currentGameId"] as? String
         
         return User(id: id,
                     displayName: displayName,
                     profileUrl: profileUrl,
-                    history: history)
+                    history: history,
+                    currentUserId: currentGameId)
     }
 }
