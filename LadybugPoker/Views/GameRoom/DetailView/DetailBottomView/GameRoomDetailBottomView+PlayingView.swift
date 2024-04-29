@@ -21,23 +21,35 @@ extension GameRoomDetailBottomView {
         @Binding var selectedCardType: String?
         
         @Binding var showCardSelectedPopup: Bool
-        @Binding var bottomGameType: GameBottomType?
+        @Binding var bottomGameType: GameType?
         
         var body: some View {
-            VStack {
+            VStack(spacing: 0) {
 //                if Service.shared.myUserModel.id == userInTurn.userId {
                 if Service.shared.myUserModel.id == userInTurn {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("내 차례입니다 !")
                                 .font(.sea(10))
-                            
+                            if bottomGameType == .selectCard {
+                                Text("전달할 카드를 선택하세요.")
+                                    .font(.sea(12))
+                                    .foregroundStyle(Color.red)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            } else if bottomGameType == .selectUser {
+                                Text("카드를 누구에게 전달할까요?")
+                                    .font(.sea(12))
+                                    .foregroundStyle(Color.red)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            } else {
+                                EmptyView()
+                            }
                         }
                         Spacer()
                     }
                     .padding(.horizontal, 20)
                     .overlay(alignment: .top) {
-                        Text("남은 시간: \(secondsLeft)초")
+                        Text("남은 시간: \(viewModel.secondsLeft)초")
                             .font(.sea(15))
                     }
                 } else {
@@ -47,19 +59,6 @@ extension GameRoomDetailBottomView {
                     }
                 }
                 VStack(spacing: 0) {
-                    if bottomGameType == .selectCard {
-                        Text("전달할 카드를 선택하세요.")
-                            .font(.sea(12))
-                            .foregroundStyle(Color.red)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    } else if bottomGameType == .selectUser {
-                        Text("카드를 누구에게 전달할까요?")
-                            .font(.sea(12))
-                            .foregroundStyle(Color.red)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    } else {
-                        EmptyView()
-                    }
                     Spacer()
                     ScrollView(.horizontal) {
                         HStack {
@@ -70,9 +69,9 @@ extension GameRoomDetailBottomView {
 //                                            showCardSelectedPopup.toggle()
 //                                        }
 //                                    }
-                                    
+                                    guard let whoseTurn = viewModel.gameRoomData.value.whoseTurn else { return }
                                     viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
-                                    viewModel.userCardCardChange(card.bug, myCards, true)
+                                    viewModel.userCardCardChange(card.bug, myCards, true, whoseTurn)
                                 } label: {
                                     if card.cardCnt != 0 {
                                         CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: true)

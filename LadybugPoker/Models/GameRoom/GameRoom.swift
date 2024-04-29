@@ -160,21 +160,29 @@ enum GameUpdateType {
     case sendUserReady
 }
 
-enum GameRoomData: String {
+enum GameRoomUpdateType: String {
     case attackers
     case questionCard
     case selectedCard
     case turnStartTime
     case whoseGetting
     case whoseTurn
+    case gameStatus
+    case gameAttackFinish
+    case cardSkip
 }
 
-enum GameBottomType {
+enum GameType {
     /// 카드를 누구에게 전달
     case selectUser
     /// 카드 선택
     case selectCard
+    /// 공격자가 선택
     case attacker
     /// 수비자가 선택하는 뷰
     case defender
+    /// 수비자가 카드 넘기기 선택
+    case cardSkip
+    /// 공격&수비 종료
+    case gameAttackFinish
 }

@@ -16,14 +16,16 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue))
 
     /// userIdx와 userId
-    @Published var usersId: [Int : String] = [:]
+    @Published var usersId: [String] = Array(repeating: "", count: 6)
     /// 남은 시간
     @Published var secondsLeft: Int = 60
     
     @Published var allPlayerReadied: Bool = false
     /// 유저 채팅[유저 idx : 유저 채팅]
     @Published var usersChat: [Int : String] = [:]
-    @Published var gameBottomType: GameBottomType? = nil
+    @Published var gameType: GameType? = nil
+    @Published var userType: Player? = nil
+    @Published var showAttackerAndDefenderView: Bool = false
     var timer: Timer?
     
     /// 해당 게임방의 데이터를 가지고 온다
@@ -35,14 +37,50 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         self.gameRoomData.send(data)
                         self.getUsersId(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
-                        switch data.gameStatus {
-                        case GameStatus.finished.rawValue: self.gameStatus = .finished
-                        case GameStatus.notStarted.rawValue: self.gameStatus = .notStarted
-                        case GameStatus.notEnoughUsers.rawValue: self.gameStatus = .notEnoughUsers
-                        case GameStatus.onAir.rawValue: self.gameStatus = .onAir
-                        default: self.gameStatus = .notStarted
+                        if data.gameStatus != self.gameStatus.rawValue {
+                            switch data.gameStatus {
+                            case GameStatus.finished.rawValue: self.gameStatus = .finished
+                            case GameStatus.notStarted.rawValue: self.gameStatus = .notStarted
+                            case GameStatus.notEnoughUsers.rawValue: self.gameStatus = .notEnoughUsers
+                            case GameStatus.onAir.rawValue:
+                                self.gameStatus = .onAir
+                                self.gameType = .selectCard
+                                self.secondsLeft = data.turnTime
+                                self.gameCardTimer()
+                            default: self.gameStatus = .notStarted
+                            }
                         }
+                        
                         self.allPlayerIsReadyChecking(data.usersInGame)
+                        if data.whoseTurn != nil {
+                            if data.selectedCard == nil {
+                                self.gameType = .selectCard
+                                self.gameCardTimer()
+                            } else if data.selectedCard != nil && data.whoseGetting == nil {
+                                self.gameType = .selectUser
+                            } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard == nil {
+                                self.gameType = .attacker
+                            } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard != nil {
+                                self.gameType = .defender
+                                self.gameCardTimer()
+                            }
+                        }
+                        
+                        if data.gameStatus == GameStatus.onAir.rawValue {
+
+                            if data.whoseTurn != nil && data.whoseGetting != nil {
+                                if data.whoseTurn == Service.shared.myUserModel.id {
+                                    self.userType = .attacker
+                                } else if data.whoseGetting == Service.shared.myUserModel.id {
+                                    self.userType = .defender
+                                } else {
+                                    self.userType = .others
+                                }
+                                self.showAttackerAndDefenderView = true
+                            } else {
+                                self.showAttackerAndDefenderView = false
+                            }
+                        }
                     } else {
                         print(#fileID, #function, #line, "- wrong data")
                     }
@@ -67,11 +105,14 @@ class GameRoomDetailViewViewModel: ObservableObject {
         usersInGame.forEach { (key: String, value: UserInGame) in
             if !value.readyOrNot {
                 allReadyOrNot = false
+                if self.gameRoomData.value.gameStatus == GameStatus.onAir.rawValue {
+                    self.gameroomDataUpdate(.gameStatus, GameStatus.notStarted.rawValue)
+                }
+                return
             }
         }
-        
         self.allPlayerReadied = allReadyOrNot
-        print(#fileID, #function, #line, "- allPlayerReadied checking: \(allPlayerReadied)")
+
     }
     
     /// 게임 시작(처음 게임 시작할 떄 카드 분배)
@@ -151,9 +192,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
         var usersCardString: [String : String] = [:]
         
         for index in 0..<6 {
-            if let userId = self.usersId[index] {
-                usersCardString[userId] = bugCardString.popLast()
+            if usersId[index] != "" {
+                usersCardString[usersId[index]] = bugCardString.popLast()
             }
+            
         }
         
         self.gameRoomData.value.usersInGame.values.forEach { userInGame in
@@ -173,63 +215,93 @@ class GameRoomDetailViewViewModel: ObservableObject {
         userInGameUpdate(userInGame, userInGame.id, .sendUserReady)
     }
     
-    func userInGameUpdate(_ userInGame: UserInGame, _ userId: String, _ updateType: GameUpdateType?) {
-        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+    func defenderSuccessCheck(_ text: String) {
+        let same = self.gameRoomData.value.selectedCard == self.gameRoomData.value.questionCard
         
-        let oneUserData = [
-            "boardCard" : userInGame.boardCard,
-            "displayName" : userInGame.displayName,
-            "handCard" : userInGame.handCard,
-            "readyOrNot" : userInGame.readyOrNot,
-            "id" : userInGame.id,
-            "idx" : userInGame.idx,
-            "profileUrl" : userInGame.profileUrl
-        ] as [String : Any]
+        var bugs: Bugs = .bee
         
-        gameRoomDataRef.updateData(["usersInGame.\(userId)" : oneUserData] ) { error in
-            if let error {
-                print(#fileID, #function, #line, "- sendIamReady change error: \(error.localizedDescription)")
-            }
-            print(#fileID, #function, #line, "- update ready success update user undefined checking: \(userId)")
-            print(#fileID, #function, #line, "- update ready success update user undefined checking: \(oneUserData)")
-            /// 게임 시작
-            if updateType == .gameStart {
-                if self.gameRoomData.value.hostId != "" {
-                    self.gameroomDataUpdate(.whoseTurn, self.gameRoomData.value.hostId)
+        switch self.gameRoomData.value.selectedCard {
+        case Bugs.bee.cardString: bugs = Bugs.bee
+        case Bugs.ladybug.cardString: bugs = Bugs.ladybug
+        case Bugs.snake.cardString: bugs = Bugs.snake
+        case Bugs.snail.cardString: bugs = Bugs.snail
+        case Bugs.spider.cardString: bugs = Bugs.spider
+        case Bugs.frog.cardString: bugs = Bugs.frog
+        case Bugs.worm.cardString: bugs = Bugs.worm
+        case Bugs.rat.cardString: bugs = Bugs.rat
+        default: return
+        }
+        
+        if same {
+            //수비성공 -> 공격자에 boardCard에 추가
+            if text == "맞습니다." {
+                if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
+                    let boardCards = stringToCards(userInGame.boardCard)
+                    self.userCardCardChange(bugs, boardCards, false, userInGame.id)
+                    self.gameroomDataUpdate(.gameAttackFinish, "")
                 }
             }
-        }
-    }
-
-    /// whoseTurn, whoseGetting udpate
-    func gameroomDataUpdate(_ updateDataType: GameRoomData, _ updateData: String) {
-        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
-        var updateDataDic: [String : String] = [updateDataType.rawValue : updateData]
-        
-        if updateDataType == .whoseTurn {
-            if gameStatus != .onAir {
-                updateDataDic["gameStatus"] = GameStatus.onAir.rawValue
+            // 공격성공 -> 수비자 boardCard에 추가
+            else if text == "아닙니다." {
+                if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
+                    let boardCards = stringToCards(userInGame.boardCard)
+                    self.userCardCardChange(bugs, boardCards, false, userInGame.id)
+                    self.gameroomDataUpdate(.gameAttackFinish, "")
+                }
             }
-            updateDataDic["turnStartTime"] = Date().toString()
-        } else if updateDataType == .whoseGetting {
-            updateDataDic["turnStartTime"] = Date().toString()
-        }
-        
-        gameRoomDataRef.updateData(updateDataDic) { error in
-            if let error = error {
-                print(#fileID, #function, #line, "- update \(updateDataType) error: \(error.localizedDescription)")
+            // 카드 넘기기
+            else {
+                var attackers: [Int] = self.gameRoomData.value.attackers
+                guard let whoseTurn = self.gameRoomData.value.whoseTurn,
+                      let whoseGetting = self.gameRoomData.value.whoseGetting else { return }
+                for (index, id) in usersId.enumerated() {
+                    // 카드 넘기기가 처음인 경우
+                    if attackers.isEmpty {
+                        if whoseTurn == id || whoseGetting == id {
+                            attackers.append(index)
+                        }
+                    } else {
+                        // 카드 넘기기가 처음이 아닌 경우
+                        if whoseGetting == id {
+                            attackers.append(index)
+                        }
+                    }
+                }
+                self.gameroomDataUpdate(.cardSkip, "", attackers)
             }
-            print(#fileID, #function, #line, "- update \(updateDataType) success update")
-            if updateDataType == .whoseTurn {
-                self.secondsLeft = self.gameRoomData.value.turnTime
-                self.gameBottomType = .selectCard
-                self.gameCardTimer()
-            } else if updateDataType == .selectedCard {
-                self.gameBottomType = .selectUser
-            } else if updateDataType == .whoseGetting {
-                self.gameBottomType = .attacker
-            } else if updateDataType == .questionCard {
-                self.gameBottomType = .defender
+        } else {
+            // 공격성공 -> 수비자 boardCard에 추가
+            if text == "맞습니다." {
+                if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
+                    let boardCards = stringToCards(userInGame.boardCard)
+                    self.userCardCardChange(bugs, boardCards, false, userInGame.id)
+                    self.gameroomDataUpdate(.gameAttackFinish, "")
+                }
+            }
+            else if text == "아닙니다." {
+                if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
+                    let boardCards = stringToCards(userInGame.boardCard)
+                    self.userCardCardChange(bugs, boardCards, false,  userInGame.id)
+                    self.gameroomDataUpdate(.gameAttackFinish, "")
+                }
+            } else {
+                var attackers: [Int] = self.gameRoomData.value.attackers
+                guard let whoseTurn = self.gameRoomData.value.whoseTurn,
+                      let whoseGetting = self.gameRoomData.value.whoseGetting else { return }
+                for (index, id) in usersId.enumerated() {
+                    // 카드 넘기기가 처음인 경우
+                    if attackers.isEmpty {
+                        if whoseTurn == id || whoseGetting == id {
+                            attackers.append(index)
+                        }
+                    } else {
+                        // 카드 넘기기가 처음이 아닌 경우
+                        if whoseGetting == id {
+                            attackers.append(index)
+                        }
+                    }
+                }
+                self.gameroomDataUpdate(.cardSkip, "", attackers)
             }
         }
     }
@@ -243,6 +315,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func gameCardTimer() {
         // 기존에 타이머 동작중이면 중지 처리
         if timer != nil && timer!.isValid {
+            secondsLeft = 40
             timer!.invalidate()
         }
         
@@ -274,20 +347,31 @@ class GameRoomDetailViewViewModel: ObservableObject {
     ///   - selectedCard: 선택한 카드
     ///   - cards: 기존 카드들
     ///   - isHandCard: handCard인지 boardCard인지
-    func userCardCardChange(_ selectedCard: Bugs, _ cards: [Card], _ isHandCard: Bool) {
+    func userCardCardChange(_ selectedCard: Bugs, _ cards: [Card], _ isHandCard: Bool, _ userId: String) {
         var cardString: String = ""
-        cards.forEach { card in
-            var tempString: String = ""
-            
-            if card.bug == selectedCard {
-                tempString = isHandCard ? card.bug.cardString + "\(card.cardCnt - 1)" : card.bug.cardString + "\(card.cardCnt + 1)"
-            } else {
-                tempString = card.bug.cardString + "\(card.cardCnt)"
+        if cards.isEmpty {
+            cardString += selectedCard.cardString + "1"
+        } else {
+            var selectedCardIsInCardArr: Bool = false
+            cards.forEach { card in
+                var tempString: String = ""
+                
+                if card.bug == selectedCard {
+                    selectedCardIsInCardArr = true
+                    tempString = isHandCard ? card.bug.cardString + "\(card.cardCnt - 1)" : card.bug.cardString + "\(card.cardCnt + 1)"
+                } else {
+                    tempString = card.bug.cardString + "\(card.cardCnt)"
+                }
+                cardString += card == cards.last ? tempString : tempString + ","
             }
-            cardString += card == cards.last ? tempString : tempString + ","
+            if !selectedCardIsInCardArr {
+                let tempString = selectedCard.cardString + "1"
+                cardString += cardString == "" ? tempString : "," + tempString
+            }
         }
-        guard let whoseTurn = gameRoomData.value.whoseTurn else { return }
-        let userInGame = gameRoomData.value.usersInGame[whoseTurn]
+        
+        print(#fileID, #function, #line, "- cardString Checking⭐️: \(cardString)")
+        let userInGame = gameRoomData.value.usersInGame[userId]
 
         guard var userInGame = userInGame else { return }
         if isHandCard {
@@ -296,7 +380,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             userInGame.boardCard = cardString
         }
         
-        self.userInGameUpdate(userInGame, whoseTurn, nil)
+        self.userInGameUpdate(userInGame, userId, nil)
     }
     
     /// string으로 오는 card를 Card strcut로 변경(ex. f1, l2)
@@ -340,5 +424,83 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    func userInGameUpdate(_ userInGame: UserInGame, _ userId: String, _ updateType: GameUpdateType?) {
+        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+        print(#fileID, #function, #line, "- userInGame: \(userInGame)")
+        let oneUserData = [
+            "boardCard" : userInGame.boardCard,
+            "displayName" : userInGame.displayName,
+            "handCard" : userInGame.handCard,
+            "readyOrNot" : userInGame.readyOrNot,
+            "id" : userInGame.id,
+            "idx" : userInGame.idx,
+            "profileUrl" : userInGame.profileUrl
+        ] as [String : Any]
+        
+        gameRoomDataRef.updateData(["usersInGame.\(userId)" : oneUserData] ) { error in
+            if let error {
+                print(#fileID, #function, #line, "- sendIamReady change error: \(error.localizedDescription)")
+            }
+            print(#fileID, #function, #line, "- update ready success update user undefined checking: \(userId)")
+            print(#fileID, #function, #line, "- update ready success update user undefined checking: \(oneUserData)")
+            /// 게임 시작
+            if updateType == .gameStart {
+                if self.gameRoomData.value.hostId != "" {
+                    self.gameroomDataUpdate(.whoseTurn, self.gameRoomData.value.hostId)
+                }
+            }
+        }
+    }
+
+    /// whoseTurn, whoseGetting udpate
+    func gameroomDataUpdate(_ updateDataType: GameRoomUpdateType, _ updateData: String, _ updateDatas: [Int]? = nil) {
+        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+        var updateDataDic: [String : String?] = [updateDataType.rawValue : updateData]
+        if updateDataType == .whoseTurn {
+            if gameStatus != .onAir {
+                updateDataDic["gameStatus"] = GameStatus.onAir.rawValue
+            }
+            updateDataDic["turnStartTime"] = Date().toString()
+        } else if updateDataType == .whoseGetting {
+            updateDataDic["turnStartTime"] = Date().toString()
+        } else if updateDataType == .gameAttackFinish {
+            updateDataDic = [:]
+            updateDataDic["turnStartTime"] = nil as String?
+            updateDataDic["selectedCard"] = nil as String?
+            updateDataDic["questionCard"] = nil as String?
+            updateDataDic["whoseGetting"] = nil as String?
+//            updateDataDic["attackers"] = []
+            attackersUpdate([])
+            guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
+            updateDataDic["whoseTurn"] = nextTurn
+            print(#fileID, #function, #line, "- updateDicchecking⭐️: \(updateDataDic)")
+        } else if updateDataType == .cardSkip {
+            updateDataDic = [:]
+            guard let updateDatas = updateDatas else { return }
+//            updateDataDic["attackers"] = [updateDatas]
+            attackersUpdate(updateDatas)
+            guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
+            updateDataDic["whoseTurn"] = nextTurn
+            updateDataDic["whoseGetting"] = nil as String?
+            print(#fileID, #function, #line, "- updateDicchecking⭐️: \(updateDataDic)")
+        }
+        
+        gameRoomDataRef.updateData(updateDataDic) { error in
+            if let error = error {
+                print(#fileID, #function, #line, "- update \(updateDataType) error: \(error.localizedDescription)")
+            }
+            print(#fileID, #function, #line, "- update \(updateDataType) success update")
+        }
+    }
     
+    func attackersUpdate(_ attackers: [Int]) {
+        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+        gameRoomDataRef.updateData(["attackers" : attackers]) { error in
+            if let error = error {
+                print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
+            }
+            print(#fileID, #function, #line, "- update success update")
+        }
+    }
+
 }

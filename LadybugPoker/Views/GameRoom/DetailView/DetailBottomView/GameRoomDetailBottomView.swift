@@ -19,14 +19,9 @@ struct GameRoomDetailBottomView: View {
     private let suggestStartText = "게임 시작을 눌러주세요."
     private let notAllPlayerReadiedText = "아직 모든 플레이어가 준비되지 않았습니다."
     private let startText = "게임 시작"
-        
-//    @Binding var gameStatus: GameStatus
     
     /// 내가 준비 했는지
     @Binding var amIReadied: Bool
-    
-    /// 모든 플레이어가 준비했는지 (방장용)
-//    @State var allPlayerReadied: Bool
     
     @State private var chat: String = ""
     
@@ -37,7 +32,7 @@ struct GameRoomDetailBottomView: View {
     @Binding var myCards: [Card]
     /// 카드 선택 시 확인 팝업
     @Binding var showCardSelectedPopup: Bool
-    @Binding var gameBottomType: GameBottomType?
+    @Binding var gameType: GameType?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -51,8 +46,9 @@ struct GameRoomDetailBottomView: View {
                             secondsLeft: $viewModel.secondsLeft,
                             selectedCardType: $viewModel.gameRoomData.value.selectedCard,
                             showCardSelectedPopup: $showCardSelectedPopup,
-                            bottomGameType: $gameBottomType
+                            bottomGameType: $gameType
                 )
+                .disabled(viewModel.gameRoomData.value.whoseTurn != Service.shared.myUserModel.id)
                 .environmentObject(viewModel)
 
             } else {
@@ -201,6 +197,6 @@ struct GameRoomDetailBottomView: View {
 //        secondsLeft: .constant(48),
 //        selectedCardType: .constant(nil),
         showCardSelectedPopup: .constant(false),
-        gameBottomType: .constant(.defender)
+        gameType: .constant(.defender)
     )
 }

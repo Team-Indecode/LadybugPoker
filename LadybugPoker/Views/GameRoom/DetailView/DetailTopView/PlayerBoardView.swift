@@ -11,6 +11,7 @@ import SwiftUI
 struct PlayerBoardView: View {
     @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
     let user: User
+    let userBoardIndex: Int
 //    let userId: String
     let userCardCnt: Int
     let boardWidth: CGFloat
@@ -56,7 +57,7 @@ struct PlayerBoardView: View {
             return AnyView(HStack {
                 UserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
                 Spacer()
-                if viewModel.gameBottomType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id {
+                if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
                     arrowView
                 }
                 
@@ -66,7 +67,7 @@ struct PlayerBoardView: View {
             })
         } else {
             return AnyView(HStack {
-                if viewModel.gameBottomType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id {
+                if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
                     arrowView
                 }
                 Spacer()
@@ -84,7 +85,7 @@ struct PlayerBoardView: View {
                 .foregroundStyle(Color.orange)
                 .frame(width: 56)
         }
-        .disabled(viewModel.gameBottomType != .selectUser)
+        .disabled(viewModel.gameType != .selectUser)
     }
     
     /// 유저 게임 중일때
@@ -106,5 +107,5 @@ struct PlayerBoardView: View {
 
 #Preview {
 //    PlayerBoardView(user: User(id: "", displayName: "rayoung", profileUrl: "https://picsum.photos/200"), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)])
-    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, isOdd: true)
+    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil),userBoardIndex: 1, userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, isOdd: true)
 }
