@@ -32,10 +32,10 @@ struct MainView: View {
                     if let user = service.myUserModel {
                         Text(user.displayName)
                             .font(.sea(15))
-                    }
-                    
-                    if let url = service.myUserModel.profileUrl {
-                        LazyImage(url: URL(string: url))
+                        
+                        if let url = service.myUserModel.profileUrl {
+                            LazyImage(url: URL(string: url))
+                        }
                     }
                 }
                 .foregroundStyle(Color.black)
