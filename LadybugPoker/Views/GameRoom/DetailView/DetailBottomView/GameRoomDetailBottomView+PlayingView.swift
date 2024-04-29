@@ -11,9 +11,10 @@ extension GameRoomDetailBottomView {
     
     struct PlayingView: View {
         @EnvironmentObject private var viewModel: GameRoomDetailViewViewModel
-        /// 현재 턴인 유저
-//        @Binding var userInTurn: UserInGame
+        /// 현재 턴인 유저id
         @Binding var userInTurn: String?
+        /// 현재 턴인 유저 별명
+        @Binding var userDisplayName: String?
         /// 내 카드 목록
         @Binding var myCards: [Card]
         /// 남은 시간...
@@ -53,8 +54,9 @@ extension GameRoomDetailBottomView {
                             .font(.sea(15))
                     }
                 } else {
-                    if let userInTurn = userInTurn {
-                        Text(userInTurn + " 턴 입니다.")
+                    if let userDisplayName = userDisplayName {
+//                    if let userDisplayName = userInTurn {
+                        Text(userDisplayName + " 턴 입니다.")
                             .font(.sea(15))
                     }
                 }
@@ -97,6 +99,7 @@ extension GameRoomDetailBottomView {
         userInTurn: .constant(
             "123"
         ),
+        userDisplayName: .constant("fkdud"),
         myCards: .constant(
             [Card(bug: .bee, cardCnt: 3),
              Card(bug: .frog, cardCnt: 2),

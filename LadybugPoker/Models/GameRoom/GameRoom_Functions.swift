@@ -45,9 +45,9 @@ extension GameRoom {
 //            if let room = try? document.data(as: GameRoom.self) {
                 print(room.id)
                 rooms.append(room)
+            } else {
+//                throw FirestoreError.parseError
             }
-            
-            throw FirestoreError.parseError
         }
         
         return rooms

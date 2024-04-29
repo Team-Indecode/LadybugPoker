@@ -128,7 +128,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.maxUserCount = maxUserCount
         self.code = code
         self.password = data["password"] as? String
-        self.whoseTurn = nil
+        self.whoseTurn = data["whoseTurn"] as? String
         /// Users in game 처리
         var tempData = [String: UserInGame]()
         
@@ -143,10 +143,10 @@ struct GameRoom: Codable, Identifiable, Equatable {
         }
         
         self.usersInGame = tempData
-        
-        self.whoseGetting = nil
-        self.turnStartTime = nil
-        self.questionCard = nil
+        self.selectedCard = data["selectedCard"] as? String
+        self.whoseGetting = data["whoseGetting"] as? String
+        self.turnStartTime = data["turnStartTime"] as? String
+        self.questionCard = data["questionCard"] as? String
         self.attackers = attackers
         self.createdAt = createdAt
         self.turnTime = turnTime

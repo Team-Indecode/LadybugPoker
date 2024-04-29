@@ -33,7 +33,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         db.collection(GameRoom.path).document(gameRoomId)
             .addSnapshotListener { doc, error in
                 if let doc = doc, doc.exists {
-                    if let data = try? doc.data(as: GameRoom.self) {
+                    if let data = GameRoom(data: doc.data() ?? [:]) {
+//                    if let data = try? doc.data(as: GameRoom.self) {
                         self.gameRoomData.send(data)
                         self.getUsersId(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
@@ -460,7 +461,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
             if gameStatus != .onAir {
                 updateDataDic["gameStatus"] = GameStatus.onAir.rawValue
             }
+//            updateDataDic["whoseTurn"] =
             updateDataDic["turnStartTime"] = Date().toString()
+            
         } else if updateDataType == .whoseGetting {
             updateDataDic["turnStartTime"] = Date().toString()
         } else if updateDataType == .gameAttackFinish {

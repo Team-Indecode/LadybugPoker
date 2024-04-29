@@ -22,8 +22,8 @@ struct GameRoomDetailBottomView: View {
     
     /// 내가 준비 했는지
     @Binding var amIReadied: Bool
-    
-    @State private var chat: String = ""
+    @State var chat: String = ""
+    @State private var userDisplayName: String? = ""
     
     /// 내가 방장인지
     @Binding var isHost: Bool
@@ -42,6 +42,7 @@ struct GameRoomDetailBottomView: View {
             
             if viewModel.gameStatus == .onAir {
                 PlayingView(userInTurn: $viewModel.gameRoomData.value.whoseTurn,
+                            userDisplayName: $userDisplayName,
                             myCards: $myCards,
                             secondsLeft: $viewModel.secondsLeft,
                             selectedCardType: $viewModel.gameRoomData.value.selectedCard,
@@ -50,7 +51,17 @@ struct GameRoomDetailBottomView: View {
                 )
                 .disabled(viewModel.gameRoomData.value.whoseTurn != Service.shared.myUserModel.id)
                 .environmentObject(viewModel)
-
+                .onChange(of: viewModel.gameRoomData.value.whoseTurn) { newValue in
+                    print(#fileID, #function, #line, "- whoseTurn: \(newValue)")
+                    if let userId = newValue {
+                        self.userDisplayName = viewModel.gameRoomData.value.usersInGame[userId]?.displayName
+                    }
+                }
+                .onAppear {
+                    if let userId = viewModel.gameRoomData.value.whoseTurn {
+                        self.userDisplayName = viewModel.gameRoomData.value.usersInGame[userId]?.displayName
+                    }
+                }
             } else {
                 // 게임시작 전입니다., 게임 중입니다, 모든 플레이어가 준비되었습니다 Text
                 if isHost {
