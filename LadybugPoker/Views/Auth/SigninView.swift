@@ -9,7 +9,7 @@ import SwiftUI
 import KakaoSDKAuth
 import KakaoSDKUser
 import FirebaseAuth
-
+import AuthenticationServices
 
 struct SigninView: View {
     @EnvironmentObject private var service: Service
@@ -55,32 +55,33 @@ struct SigninView: View {
 
             }
             
-            Button {
+            SignInWithAppleButton { request in
+                request.requestedScopes = [.email, .fullName]
+            } onCompletion: { result in
+                switch result {
+                case .success(let authResult):
+                    switch authResult.credential {
+                    case let appleIDCredential as ASAuthorizationAppleIDCredential:
+                        // 계정 정보 가져오기
+                        let id = appleIDCredential.user
+                        let email = appleIDCredential.email
+                        service.path.append(.signup(email: email ?? "", password: id))
+                    default:
+                        break
+                        
+                    }
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    print("error")
                 
-            } label: {
-                HStack {
-                    Image("ic_apple")
-                        .padding(.leading, 18)
-                    
-                    Spacer()
                 }
-                .frame(height: 50)
-                .background {
-                    Color.white
-                }
-                .overlay {
-                    Text("Apple 로그인")
-                        .font(.sea(20))
-                        .foregroundStyle(Color.black)
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.black)
-                }
-                .padding(.horizontal, 30)
-                .padding(.vertical, 20)
+                
             }
+            .frame(height: 50)
+            .padding(.horizontal, 30)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .signInWithAppleButtonStyle(.white)
+            .padding(.top, 10)
             
             Button {
                 
@@ -91,16 +92,8 @@ struct SigninView: View {
                         .foregroundStyle(Color.black)
                 }
                 .frame(height: 50)
-                .background {
-                    Color.white
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.black)
-                }
                 .padding(.horizontal, 30)
-                .padding(.vertical, 20)
+                .padding(.vertical, 10)
             }
             
         }
