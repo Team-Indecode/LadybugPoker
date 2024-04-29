@@ -25,14 +25,15 @@ struct GameRoom: Codable, Identifiable, Equatable {
     /// 누구에게 카드를 건냈는지
     let whoseGetting: String?
     /// 공격자가 실제로 선택한 벌레
-    var selectedCard: Bugs?
+    var selectedCard: String?
     /// 턴 시작 시간
     let turnStartTime: String?
     /// 공격자가 수비자에게 말한 벌레
-    let questionCard: Bugs?
+    let questionCard: String?
     let attackers: [Int]
     let createdAt: String
     let turnTime: Int
+    let gameStatus: String
     
     var toJson: [String: Any] {
         var userGameData: [String: Any] = [:]
@@ -50,7 +51,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
             "usersInGame": userGameData,
             "whoseTurn": whoseTurn,
             "whoseGetting" : whoseGetting,
-            "selectedCard" : selectedCard?.rawValue,
+            "selectedCard" : selectedCard,
             "turnStartTime" : turnStartTime,
             "questionCard" : questionCard,
             "attackers" : attackers,
@@ -59,7 +60,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: Bugs? = nil, turnStartTime: String?, questionCard: Bugs? = nil, attackers: [Int], createdAt: String, turnTime: Int) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -75,6 +76,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.attackers = attackers
         self.createdAt = createdAt
         self.turnTime = turnTime
+        self.gameStatus = gameStatus
     }
     
     init?(data: [String: Any]) {
@@ -116,13 +118,17 @@ struct GameRoom: Codable, Identifiable, Equatable {
             return nil
         }
         
+        guard let gameStatus = data["gameStatus"] as? String else {
+            return nil
+        }
+        
         self.id = id
         self.hostId = hostId
         self.title = title
         self.maxUserCount = maxUserCount
         self.code = code
         self.password = data["password"] as? String
-        self.whoseTurn = nil
+        self.whoseTurn = data["whoseTurn"] as? String
         /// Users in game 처리
         var tempData = [String: UserInGame]()
         
@@ -131,18 +137,55 @@ struct GameRoom: Codable, Identifiable, Equatable {
         for userData in usersInGameData {
             let userId = userData.key
             let userInGame = UserInGame(data: userData.value as? [String: Any] ?? [:])
+            print(#fileID, #function, #line, "- userData in firstParsingCheck⭐️: \(userInGame)")
+            print(#fileID, #function, #line, "- userData in firstParsingCheck⭐️: \(userData.value)")
+            print(#fileID, #function, #line, "- userData in firstParsingCheck⭐️: \(userData)")
             if let userInGame {
                 tempData[userId] = userInGame
             }
         }
         
         self.usersInGame = tempData
-        
-        self.whoseGetting = nil
-        self.turnStartTime = nil
-        self.questionCard = nil
+        self.selectedCard = data["selectedCard"] as? String
+        self.whoseGetting = data["whoseGetting"] as? String
+        self.turnStartTime = data["turnStartTime"] as? String
+        self.questionCard = data["questionCard"] as? String
         self.attackers = attackers
         self.createdAt = createdAt
         self.turnTime = turnTime
+        self.gameStatus = gameStatus
     }
+}
+
+
+enum GameUpdateType {
+    case gameStart
+    case sendUserReady
+}
+
+enum GameRoomUpdateType: String {
+    case attackers
+    case questionCard
+    case selectedCard
+    case turnStartTime
+    case whoseGetting
+    case whoseTurn
+    case gameStatus
+    case gameAttackFinish
+    case cardSkip
+}
+
+enum GameType {
+    /// 카드를 누구에게 전달
+    case selectUser
+    /// 카드 선택
+    case selectCard
+    /// 공격자가 선택
+    case attacker
+    /// 수비자가 선택하는 뷰
+    case defender
+    /// 수비자가 카드 넘기기 선택
+    case cardSkip
+    /// 공격&수비 종료
+    case gameAttackFinish
 }

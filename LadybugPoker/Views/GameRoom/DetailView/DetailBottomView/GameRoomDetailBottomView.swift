@@ -19,46 +19,48 @@ struct GameRoomDetailBottomView: View {
     private let suggestStartText = "게임 시작을 눌러주세요."
     private let notAllPlayerReadiedText = "아직 모든 플레이어가 준비되지 않았습니다."
     private let startText = "게임 시작"
-        
-//    @Binding var gameStatus: GameStatus
     
     /// 내가 준비 했는지
     @Binding var amIReadied: Bool
-    
-    /// 모든 플레이어가 준비했는지 (방장용)
-//    @State var allPlayerReadied: Bool
-    
-    @State private var chat: String = ""
+    @State var chat: String = ""
+    @State private var userDisplayName: String? = ""
     
     /// 내가 방장인지
     @Binding var isHost: Bool
-    /// 누구 턴인지
-//    @Binding var userInTurn: UserInGame
+
     /// 내 카드 목록
     @Binding var myCards: [Card]
-    /// 남은 시간
-//    @Binding var secondsLeft: Int
-    /// 선택한 카드
-//    @Binding var selectedCardType: Bugs?
     /// 카드 선택 시 확인 팝업
     @Binding var showCardSelectedPopup: Bool
+    @Binding var gameType: GameType?
     
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
-            
             Color(hex: "d9d9d9")
                 .frame(height: 2)
                 .padding(.bottom, 12)
             
             if viewModel.gameStatus == .onAir {
                 PlayingView(userInTurn: $viewModel.gameRoomData.value.whoseTurn,
+                            userDisplayName: $userDisplayName,
                             myCards: $myCards,
                             secondsLeft: $viewModel.secondsLeft,
                             selectedCardType: $viewModel.gameRoomData.value.selectedCard,
-                            showCardSelectedPopup: $showCardSelectedPopup
+                            showCardSelectedPopup: $showCardSelectedPopup,
+                            bottomGameType: $gameType
                 )
-
+                .disabled(viewModel.gameRoomData.value.whoseTurn != Service.shared.myUserModel.id)
+                .environmentObject(viewModel)
+                .onChange(of: viewModel.gameRoomData.value.whoseTurn) { newValue in
+                    if let userId = newValue {
+                        self.userDisplayName = viewModel.gameRoomData.value.usersInGame[userId]?.displayName
+                    }
+                }
+                .onAppear {
+                    if let userId = viewModel.gameRoomData.value.whoseTurn {
+                        self.userDisplayName = viewModel.gameRoomData.value.usersInGame[userId]?.displayName
+                    }
+                }
             } else {
                 // 게임시작 전입니다., 게임 중입니다, 모든 플레이어가 준비되었습니다 Text
                 if isHost {
@@ -148,7 +150,7 @@ struct GameRoomDetailBottomView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 15)
             }
-            
+            Spacer()
             TextField("메세지를 입력해주세요.", text: $chat)
                 .font(.sea(15))
                 .frame(height: 38)
@@ -168,6 +170,7 @@ struct GameRoomDetailBottomView: View {
                 .padding(.horizontal, 16)
 
         }
+        .frame(maxHeight: .infinity)
         .background(Color.bugLight)
     }
     
@@ -203,6 +206,7 @@ struct GameRoomDetailBottomView: View {
              Card(bug: .ladybug, cardCnt: 3)]),
 //        secondsLeft: .constant(48),
 //        selectedCardType: .constant(nil),
-        showCardSelectedPopup: .constant(false)
+        showCardSelectedPopup: .constant(false),
+        gameType: .constant(.defender)
     )
 }

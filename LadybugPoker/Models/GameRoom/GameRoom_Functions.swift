@@ -45,9 +45,9 @@ extension GameRoom {
 //            if let room = try? document.data(as: GameRoom.self) {
                 print(room.id)
                 rooms.append(room)
+            } else {
+//                throw FirestoreError.parseError
             }
-            
-            throw FirestoreError.parseError
         }
         
         return rooms
@@ -74,8 +74,9 @@ extension GameRoom {
                                  handCard: "",
                                  boardCard: "",
                                  displayName: myUserModel.displayName,
-                                             profileUrl: myUserModel.profileUrl,
-                                             idx: indexes.first ?? 0)
+                                 profileUrl: myUserModel.profileUrl,
+                                 idx: indexes.first ?? 0,
+                                 chat: "")
         
         try await Firestore.firestore().collection(path)
             .document(myUserModel.id)

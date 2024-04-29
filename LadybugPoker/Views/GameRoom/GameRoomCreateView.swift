@@ -123,18 +123,20 @@ struct GameRoomCreateView: View {
                                          maxUserCount: maxCount,
                                          code: "ABCDEF",
                                          usersInGame: [service.myUserModel.id:
+                                                        
                                                         UserInGame(id: service.myUserModel.id,
                                                                    readyOrNot: true,
                                                                    handCard: "",
                                                                    boardCard: "",
                                                                    displayName: service.myUserModel.displayName,
-                                                                   profileUrl: service.myUserModel.profileUrl, idx: 0)],
+                                                                   profileUrl: service.myUserModel.profileUrl, idx: 0, chat: "")],
                                          whoseGetting: nil,
                                          turnStartTime: nil,
                                          questionCard: nil,
                                          attackers: [],
                                          createdAt: "",
-                                         turnTime: 0
+                                         turnTime: 0,
+                                         gameStatus: GameStatus.notStarted.rawValue
                                          )
                     
                     try await GameRoom.create(model: model)

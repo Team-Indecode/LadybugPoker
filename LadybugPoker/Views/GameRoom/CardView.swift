@@ -49,7 +49,7 @@ struct CardView: View {
     var bugCntView: some View {
         Text("\(card.cardCnt)")
             .font(isBottomViewCard ? .sea(30) : .sea(25))
-            .foregroundStyle(card.cardCnt == 3 ? Color(hex: "FF0000") : Color.white)
+            .foregroundStyle(card.cardCnt == 3 && !isBottomViewCard ? Color(hex: "FF0000") : Color.white)
             .frame(height: 25)
     }
 }

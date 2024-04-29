@@ -9,15 +9,15 @@ import SwiftUI
 
 /// 한 플레이어의 보드판
 struct PlayerBoardView: View {
-    @StateObject var viewModel = GameRoomDetailViewViewModel()
+    @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
     let user: User
+    let userBoardIndex: Int
 //    let userId: String
     let userCardCnt: Int
     let boardWidth: CGFloat
     let boardHeight: CGFloat
     var cards: [Card]
     let userReadyOrNot: Bool
-    let gameStart: GameStatus
     /// 짝수
     let isOdd: Bool
     
@@ -25,14 +25,14 @@ struct PlayerBoardView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            profile(user)
-            if gameStart == .onAir {
+            profile
+            if viewModel.gameStatus == .onAir {
                 userIsPlayGame
             } else {
                 userIsNotPlayGame
                     .frame(height: boardHeight - 60)
             }
-            if gameStart == .onAir && cards.count < 4 {
+            if viewModel.gameStatus == .onAir && cards.count < 4 {
                 if cards.count == 0 {
                     Spacer()
                         .frame(height: boardHeight - 60)
@@ -52,32 +52,40 @@ struct PlayerBoardView: View {
     }
     
     /// 유저 프로필
-    func profile(_ userProfile: User) -> some View {
+    var profile: some View {
         if isOdd {
-            return AnyView(
-                HStack {
-                    UserProfileView(userImageUrl: userProfile.profileUrl, userNickname: userProfile.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
-                    Spacer()
-                    if viewModel.gameRoomData.value.whoseTurn == userProfile.id {
-                        Image(systemName: "arrowshape.left.fill")
-                            .foregroundStyle(Color.orange)
-                            .frame(width: 30)
-                    }
+            return AnyView(HStack {
+                UserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
+                Spacer()
+                if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
+                    arrowView
                 }
-            )
+                
+//                if viewModel.gameRoomData.value.whoseTurn == user.id {
+//                    arrowView
+//                }
+            })
         } else {
-            return AnyView(
-                HStack {
-                    if viewModel.gameRoomData.value.whoseTurn == userProfile.id {
-                        Image(systemName: "arrowshape.right.fill")
-                            .foregroundStyle(Color.orange)
-                            .frame(width: 30)
-                    }
-                    Spacer()
-                    UserProfileView(userImageUrl: userProfile.profileUrl, userNickname: userProfile.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
+            return AnyView(HStack {
+                if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
+                    arrowView
                 }
-            )
+                Spacer()
+                UserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
+            })
         }
+    }
+    
+    var arrowView: some View {
+        Button {
+            viewModel.gameroomDataUpdate(.whoseGetting, user.id)
+        } label: {
+            Image(systemName: self.isOdd ? "arrowshape.left.fill" : "arrowshape.right.fill")
+                .resizable()
+                .foregroundStyle(Color.orange)
+                .frame(width: 56)
+        }
+        .disabled(viewModel.gameType != .selectUser)
     }
     
     /// 유저 게임 중일때
@@ -99,5 +107,5 @@ struct PlayerBoardView: View {
 
 #Preview {
 //    PlayerBoardView(user: User(id: "", displayName: "rayoung", profileUrl: "https://picsum.photos/200"), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)])
-    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, gameStart: .onAir, isOdd: true)
+    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil),userBoardIndex: 1, userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, isOdd: true)
 }

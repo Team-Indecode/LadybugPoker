@@ -23,7 +23,6 @@ struct GameRoomDetailView: View {
                 }
                 .onChange(of: viewModel.gameRoomData.value.hostId) { oldValue, newValue in
                     isHost = Service.shared.myUserModel.id == newValue
-                    print(#fileID, #function, #line, "- userId: \(Service.shared.myUserModel.id)")
                 }
         } else {
             allContent
@@ -32,7 +31,6 @@ struct GameRoomDetailView: View {
                 }
                 .onChange(of: viewModel.gameRoomData.value.hostId) { newValue in
                     isHost = Service.shared.myUserModel.id == newValue
-                    print(#fileID, #function, #line, "- userId: \(Service.shared.myUserModel.id)")
                 }
         }
     }
@@ -43,10 +41,16 @@ struct GameRoomDetailView: View {
                 GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame, usersId: $viewModel.usersId)
                     .frame(height: proxy.size.height * 0.6706)
                     .environmentObject(viewModel)
-                GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup)
+                GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType)
                     .frame(height: proxy.size.height * 0.3294)
                     .environmentObject(viewModel)
             }
+            .transparentFullScreenCover(isPresented: $viewModel.showAttackerAndDefenderView, content: {
+                GamePlayAttackDefenceView(showView: $viewModel.showAttackerAndDefenderView)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .environmentObject(viewModel)
+            })
+            
             .task {
                 try? await viewModel.getGameData(gameRoomId)
             }
