@@ -14,6 +14,7 @@ struct GameRoomDetailView: View {
     @State private var isHost: Bool = false
     @State private var myCards: [Card] = []
     @State private var gameBottomType: GameBottomType? = nil
+    @State private var showAttackerAndDefenderView: Bool = false
     let gameRoomId: String
     
     var body: some View {
@@ -21,6 +22,11 @@ struct GameRoomDetailView: View {
             allContent
                 .onChange(of: viewModel.gameBottomType, { oldValue, newValue in
                     gameBottomType = newValue
+                    if gameBottomType == .defender || gameBottomType == .attacker {
+                        showAttackerAndDefenderView = true
+                    } else {
+                        showAttackerAndDefenderView = false
+                    }
                 })
                 .onChange(of: viewModel.gameRoomData.value.usersInGame) { oldValue, newValue in
                     myCards = viewModel.getUserCard(true)
@@ -51,6 +57,12 @@ struct GameRoomDetailView: View {
                     .frame(height: proxy.size.height * 0.3294)
                     .environmentObject(viewModel)
             }
+            .transparentFullScreenCover(isPresented: $showAttackerAndDefenderView, content: {
+                GamePlayAttackDefenceView(showView: $showAttackerAndDefenderView)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .environmentObject(viewModel)
+            })
+            
             .task {
                 try? await viewModel.getGameData(gameRoomId)
             }

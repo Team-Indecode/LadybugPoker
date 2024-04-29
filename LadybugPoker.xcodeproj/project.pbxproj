@@ -16,6 +16,7 @@
 		4D75832A2BC8429D009B6489 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4D7583292BC8429D009B6489 /* NukeUI */; };
 		4D75832C2BC8429D009B6489 /* NukeVideo in Frameworks */ = {isa = PBXBuildFile; productRef = 4D75832B2BC8429D009B6489 /* NukeVideo */; };
 		4D75832E2BC8465D009B6489 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D75832D2BC8465D009B6489 /* Card.swift */; };
+		4D9CB90A2BDF59AC00BBD679 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9CB9092BDF59AC00BBD679 /* View+.swift */; };
 		4DC5035A2BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */; };
 		4DE122172BCBF53700F1FE9C /* GameRoomDetailTopView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE122162BCBF53700F1FE9C /* GameRoomDetailTopView+ViewModel.swift */; };
 		4DF375B92BD161CC008AC415 /* GamePlayAttackDefenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF375B82BD161CC008AC415 /* GamePlayAttackDefenceView.swift */; };
@@ -75,6 +76,7 @@
 		4D7583182BC588B4009B6489 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBoardView.swift; sourceTree = "<group>"; };
 		4D75832D2BC8465D009B6489 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		4D9CB9092BDF59AC00BBD679 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameRoomDetailView+ViewModel.swift"; sourceTree = "<group>"; };
 		4DE122162BCBF53700F1FE9C /* GameRoomDetailTopView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameRoomDetailTopView+ViewModel.swift"; sourceTree = "<group>"; };
 		4DF375B82BD161CC008AC415 /* GamePlayAttackDefenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamePlayAttackDefenceView.swift; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 			children = (
 				D1AD227E2BDCF3A10030EC56 /* Date+.swift */,
 				D1AD22802BDCF4940030EC56 /* String+.swift */,
+				4D9CB9092BDF59AC00BBD679 /* View+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -552,6 +555,7 @@
 				D125B9C72BC1288F00A5AE03 /* Service.swift in Sources */,
 				D19AFD652BBF9BB5008F9297 /* Font.swift in Sources */,
 				4D75832E2BC8465D009B6489 /* Card.swift in Sources */,
+				4D9CB90A2BDF59AC00BBD679 /* View+.swift in Sources */,
 				D125B9C92BC128D100A5AE03 /* Path.swift in Sources */,
 				D19AFD712BBF9FB4008F9297 /* Color.swift in Sources */,
 				4D7583192BC588B4009B6489 /* UserProfileView.swift in Sources */,

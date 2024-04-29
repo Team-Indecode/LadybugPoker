@@ -13,7 +13,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     let db = Firestore.firestore()
     @Published var gameStatus: GameStatus = .notStarted
     
-    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0))
+    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue))
 
     /// userIdx와 userId
     @Published var usersId: [Int : String] = [:]
@@ -35,6 +35,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         self.gameRoomData.send(data)
                         self.getUsersId(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
+                        switch data.gameStatus {
+                        case GameStatus.finished.rawValue: self.gameStatus = .finished
+                        case GameStatus.notStarted.rawValue: self.gameStatus = .notStarted
+                        case GameStatus.notEnoughUsers.rawValue: self.gameStatus = .notEnoughUsers
+                        case GameStatus.onAir.rawValue: self.gameStatus = .onAir
+                        default: self.gameStatus = .notStarted
+                        }
                         self.allPlayerIsReadyChecking(data.usersInGame)
                     } else {
                         print(#fileID, #function, #line, "- wrong data")
@@ -197,7 +204,18 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// whoseTurn, whoseGetting udpate
     func gameroomDataUpdate(_ updateDataType: GameRoomData, _ updateData: String) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
-        gameRoomDataRef.updateData([updateDataType.rawValue : updateData]) { error in
+        var updateDataDic: [String : String] = [updateDataType.rawValue : updateData]
+        
+        if updateDataType == .whoseTurn {
+            if gameStatus != .onAir {
+                updateDataDic["gameStatus"] = GameStatus.onAir.rawValue
+            }
+            updateDataDic["turnStartTime"] = Date().toString()
+        } else if updateDataType == .whoseGetting {
+            updateDataDic["turnStartTime"] = Date().toString()
+        }
+        
+        gameRoomDataRef.updateData(updateDataDic) { error in
             if let error = error {
                 print(#fileID, #function, #line, "- update \(updateDataType) error: \(error.localizedDescription)")
             }
@@ -209,7 +227,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             } else if updateDataType == .selectedCard {
                 self.gameBottomType = .selectUser
             } else if updateDataType == .whoseGetting {
-                self.gameBottomType = .defender
+                self.gameBottomType = .attacker
             } else if updateDataType == .questionCard {
                 self.gameBottomType = .defender
             }

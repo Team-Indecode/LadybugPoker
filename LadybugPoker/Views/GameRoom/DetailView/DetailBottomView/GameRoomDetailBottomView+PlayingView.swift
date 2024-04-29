@@ -46,7 +46,6 @@ extension GameRoomDetailBottomView {
                             .font(.sea(15))
                     }
                 }
-                Spacer()
                 VStack(spacing: 0) {
                     if bottomGameType == .selectCard {
                         Text("전달할 카드를 선택하세요.")
@@ -61,6 +60,7 @@ extension GameRoomDetailBottomView {
                     } else {
                         EmptyView()
                     }
+                    Spacer()
                     ScrollView(.horizontal) {
                         HStack {
                             ForEach(myCards) { card in

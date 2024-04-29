@@ -134,7 +134,8 @@ struct GameRoomCreateView: View {
                                          questionCard: nil,
                                          attackers: [],
                                          createdAt: "",
-                                         turnTime: 0
+                                         turnTime: 0,
+                                         gameStatus: GameStatus.notStarted.rawValue
                                          )
                     
                     try await GameRoom.create(model: model)

@@ -17,7 +17,6 @@ struct PlayerBoardView: View {
     let boardHeight: CGFloat
     var cards: [Card]
     let userReadyOrNot: Bool
-    let gameStart: GameStatus
     /// 짝수
     let isOdd: Bool
     
@@ -26,13 +25,13 @@ struct PlayerBoardView: View {
     var body: some View {
         VStack(spacing: 10) {
             profile
-            if gameStart == .onAir {
+            if viewModel.gameStatus == .onAir {
                 userIsPlayGame
             } else {
                 userIsNotPlayGame
                     .frame(height: boardHeight - 60)
             }
-            if gameStart == .onAir && cards.count < 4 {
+            if viewModel.gameStatus == .onAir && cards.count < 4 {
                 if cards.count == 0 {
                     Spacer()
                         .frame(height: boardHeight - 60)
@@ -107,5 +106,5 @@ struct PlayerBoardView: View {
 
 #Preview {
 //    PlayerBoardView(user: User(id: "", displayName: "rayoung", profileUrl: "https://picsum.photos/200"), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)])
-    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: []), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, gameStart: .onAir, isOdd: true)
+    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: []), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, isOdd: true)
 }

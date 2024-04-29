@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum GameStatus {
+enum GameStatus: String {
     // 플레이어가 부족한 상태 1~2명
     case notEnoughUsers
     

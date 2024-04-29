@@ -33,6 +33,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
     let attackers: [Int]
     let createdAt: String
     let turnTime: Int
+    let gameStatus: String
     
     var toJson: [String: Any] {
         var userGameData: [String: Any] = [:]
@@ -59,7 +60,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -75,6 +76,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.attackers = attackers
         self.createdAt = createdAt
         self.turnTime = turnTime
+        self.gameStatus = gameStatus
     }
     
     init?(data: [String: Any]) {
@@ -116,6 +118,10 @@ struct GameRoom: Codable, Identifiable, Equatable {
             return nil
         }
         
+        guard let gameStatus = data["gameStatus"] as? String else {
+            return nil
+        }
+        
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -144,6 +150,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.attackers = attackers
         self.createdAt = createdAt
         self.turnTime = turnTime
+        self.gameStatus = gameStatus
     }
 }
 
@@ -167,6 +174,7 @@ enum GameBottomType {
     case selectUser
     /// 카드 선택
     case selectCard
+    case attacker
     /// 수비자가 선택하는 뷰
     case defender
 }
