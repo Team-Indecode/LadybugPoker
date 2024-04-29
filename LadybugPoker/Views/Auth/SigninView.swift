@@ -84,7 +84,7 @@ struct SigninView: View {
             .padding(.top, 10)
             
             Button {
-                
+                service.path = [.main]
             } label: {
                 HStack {
                     Text("로그인 없이 시작하기")

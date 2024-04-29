@@ -32,10 +32,10 @@ struct MainView: View {
                     if let user = service.myUserModel {
                         Text(user.displayName)
                             .font(.sea(15))
-                    }
-                    
-                    if let url = service.myUserModel.profileUrl {
-                        LazyImage(url: URL(string: url))
+                        
+                        if let url = service.myUserModel.profileUrl {
+                            LazyImage(url: URL(string: url))
+                        }
                     }
                 }
                 .foregroundStyle(Color.black)
@@ -44,16 +44,17 @@ struct MainView: View {
             .padding(.vertical, 20)
             .background(Color.bugDarkMedium)
             
-            ForEach(gameRooms) { gameRoom in
-                Button {
-                    service.path.append(.gameRoom(gameRoomId: gameRoom.id))
-                } label: {
-                    GameRoomView(gameRoom: gameRoom)
+            ScrollView {
+                ForEach(gameRooms) { gameRoom in
+                    Button {
+                        service.path.append(.gameRoom(gameRoomId: gameRoom.id))
+                    } label: {
+                        GameRoomView(gameRoom: gameRoom)
+                    }
                 }
+                .padding(.top, 1)
+                
             }
-            
-            Spacer()
-            
             
             Button {
                 service.path.append(.createGameRoom)
