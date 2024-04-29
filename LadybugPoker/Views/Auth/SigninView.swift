@@ -169,7 +169,9 @@ struct SigninView: View {
                 Task {
                     service.myUserModel = try await User.fetch(id: user.uid)
                     print(service.myUserModel)
-                    service.path = [.main]
+                    if service.myUserModel != nil {
+                        service.path = [.main]
+                    }
                 }
             } else {
                 service.path.append(.signup(email: email, password: password))
