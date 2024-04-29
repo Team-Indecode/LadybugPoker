@@ -53,6 +53,7 @@ extension GameRoom {
         return rooms
     }
     
+    /// GameRoom DB 의 UsersInGame 에 내 정보를 추가합니다.
     private static func addMySelfInGame(gameId: String, currentData: [String: UserInGame]) async throws {
         guard let myUserModel = Service.shared.myUserModel else {
             throw GameError.noCurrentUser
@@ -81,6 +82,21 @@ extension GameRoom {
             .updateData(["usersInGame": newData])
     }
     
+    /// GameRoom DB 의 UsersInGame 에서 내 정보를 삭제합니다.
+    private static func removeMySelfInGame(gameId: String, currentData: [String: UserInGame]) async throws {
+        guard let myUserModel = Service.shared.myUserModel else {
+            throw GameError.noCurrentUser
+        }
+        
+        var newData = currentData
+        newData[myUserModel.id] = nil
+        
+        try await Firestore.firestore().collection(path)
+            .document(myUserModel.id)
+            .updateData(["usersInGame": newData])
+    }
+    
+    /// 새로운 게임방에 입장합니다.
     static func join(id: String) async throws {
         guard let myUserModel = Service.shared.myUserModel else {
             throw GameError.noCurrentUser
@@ -90,8 +106,20 @@ extension GameRoom {
         
         /// User 현재 가득찼는지 판단
         if gameRoom.maxUserCount >= gameRoom.usersInGame.count { throw GameError.tooManyUsers }
+        try await addMySelfInGame(gameId: id, currentData: gameRoom.usersInGame)
         
         try await User.changeCurrentGameId(id: id)
+    }
+    
+    /// 게임방에서 퇴장합니다.
+    static func leave(id: String) async throws {
+        guard let myUserModel = Service.shared.myUserModel else {
+            throw GameError.noCurrentUser
+        }
         
+        let gameRoom = try await fetch(id: id) //Refresh
+        try await removeMySelfInGame(gameId: id, currentData: gameRoom.usersInGame)
+        
+        try await User.changeCurrentGameId(id: nil)
     }
 }
