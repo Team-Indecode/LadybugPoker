@@ -23,7 +23,7 @@ struct GameRoomDetailTopView: View {
                 ForEach(0..<6, id: \.self) { index in
                     if let userId = usersId[index] {
                         if let userData = usersInGame[userId] {
-                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: []), userCardCnt: viewModel.stringToCards(userData.boardCard).count, boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, cards: viewModel.stringToCards(userData.boardCard), userReadyOrNot: userData.readyOrNot, gameStart: viewModel.gameStatus, isOdd: index % 2 == 0 ? true : false)
+                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], currentUserId: nil), userCardCnt: viewModel.stringToCards(userData.boardCard).count, boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, cards: viewModel.stringToCards(userData.boardCard), userReadyOrNot: userData.readyOrNot, gameStart: viewModel.gameStatus, isOdd: index % 2 == 0 ? true : false)
                         }
                     } else {
                         Rectangle()
