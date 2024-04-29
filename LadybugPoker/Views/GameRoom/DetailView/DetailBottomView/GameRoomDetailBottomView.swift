@@ -52,7 +52,6 @@ struct GameRoomDetailBottomView: View {
                 .disabled(viewModel.gameRoomData.value.whoseTurn != Service.shared.myUserModel.id)
                 .environmentObject(viewModel)
                 .onChange(of: viewModel.gameRoomData.value.whoseTurn) { newValue in
-                    print(#fileID, #function, #line, "- whoseTurn: \(newValue)")
                     if let userId = newValue {
                         self.userDisplayName = viewModel.gameRoomData.value.usersInGame[userId]?.displayName
                     }

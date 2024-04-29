@@ -74,8 +74,9 @@ extension GameRoom {
                                  handCard: "",
                                  boardCard: "",
                                  displayName: myUserModel.displayName,
-                                             profileUrl: myUserModel.profileUrl,
-                                             idx: indexes.first ?? 0)
+                                 profileUrl: myUserModel.profileUrl,
+                                 idx: indexes.first ?? 0,
+                                 chat: "")
         
         try await Firestore.firestore().collection(path)
             .document(myUserModel.id)
