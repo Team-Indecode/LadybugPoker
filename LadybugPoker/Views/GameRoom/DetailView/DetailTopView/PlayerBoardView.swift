@@ -32,7 +32,7 @@ struct PlayerBoardView: View {
                 userIsNotPlayGame
                     .frame(height: boardHeight - 60)
             }
-            if viewModel.gameStatus == .onAir && cards.count < 4 {
+            if viewModel.gameStatus == .onAir && cards.count <= 4 {
                 if cards.count == 0 {
                     Spacer()
                         .frame(height: boardHeight - 60)
@@ -92,7 +92,9 @@ struct PlayerBoardView: View {
     var userIsPlayGame: some View {
         LazyVGrid(columns: columns) {
             ForEach(self.cards, id: \.self) { card in
-                CardView(card: card, cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
+                if card.cardCnt != 0 {
+                    CardView(card: card, cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
+                }
             }
         }
     }
