@@ -32,7 +32,7 @@ struct PlayerBoardView: View {
                 userIsNotPlayGame
                     .frame(height: boardHeight - 60)
             }
-            if viewModel.gameStatus == .onAir && cards.count < 4 {
+            if viewModel.gameStatus == .onAir && cards.count <= 4 {
                 if cards.count == 0 {
                     Spacer()
                         .frame(height: boardHeight - 60)

@@ -340,6 +340,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         if let cardString = gameRoomData.value.usersInGame.first(where: { $0.key == userId }) {
             if isHandCard {
+                print(#fileID, #function, #line, "- handCard⭐️: \(self.stringToCards(cardString.value.handCard ?? ""))")
                 return self.stringToCards(cardString.value.handCard ?? "")
             } else {
                 return self.stringToCards(cardString.value.boardCard ?? "")
@@ -398,11 +399,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
         let cardStringArr = cardString.components(separatedBy: ",")
         var userCard: [Card] = []
         
+        
         userCard = cardStringArr.map({ cardString in
             return stringToOneCard(cardString)
         })
         
-        return userCard
+        return userCard.filter{ $0.cardCnt != 0 }
+//        return userCard
     }
     
     /// f1을 Card(bug: .frog, cardCnt: 3)으로 변경

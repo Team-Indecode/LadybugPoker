@@ -20,6 +20,7 @@ struct GameRoomDetailView: View {
             allContent
                 .onChange(of: viewModel.gameRoomData.value.usersInGame) { oldValue, newValue in
                     myCards = viewModel.getUserCard(true)
+                    print(#fileID, #function, #line, "- myCards⭐️: \(myCards)")
                 }
                 .onChange(of: viewModel.gameRoomData.value.hostId) { oldValue, newValue in
                     isHost = Service.shared.myUserModel.id == newValue
