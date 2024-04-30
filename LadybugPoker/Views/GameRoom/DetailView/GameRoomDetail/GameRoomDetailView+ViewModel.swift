@@ -235,19 +235,21 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         if same {
             //수비성공 -> 공격자에 boardCard에 추가
+            //whoseTurn -> 계속 공격자(즉, whoseTurn유지)
             if text == "맞습니다." {
                 if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
-                    let boardCards = stringToCards(userInGame.boardCard)
+                    let boardCards = stringToCards(userInGame.boardCard ?? "")
                     self.userCardCardChange(bugs, boardCards, false, userInGame.id)
-                    self.gameroomDataUpdate(.gameAttackFinish, "")
+                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
                 }
             }
-            // 공격성공 -> 수비자 boardCard에 추가
+            // 공격성공(수비실패) -> 수비자 boardCard에 추가
+            // whoseTurn -> whoseGetting
             else if text == "아닙니다." {
                 if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
-                    let boardCards = stringToCards(userInGame.boardCard)
+                    let boardCards = stringToCards(userInGame.boardCard ?? "")
                     self.userCardCardChange(bugs, boardCards, false, userInGame.id)
-                    self.gameroomDataUpdate(.gameAttackFinish, "")
+                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
                 }
             }
             // 카드 넘기기
@@ -270,20 +272,24 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 }
                 self.gameroomDataUpdate(.cardSkip, "", attackers)
             }
-        } else {
+        }
+        // 둘이 다른 카드일떄
+        else {
+            
             // 공격성공 -> 수비자 boardCard에 추가
+            // whoseTurn: whoseGetting
             if text == "맞습니다." {
                 if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
-                    let boardCards = stringToCards(userInGame.boardCard)
+                    let boardCards = stringToCards(userInGame.boardCard ?? "")
                     self.userCardCardChange(bugs, boardCards, false, userInGame.id)
-                    self.gameroomDataUpdate(.gameAttackFinish, "")
+                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
                 }
             }
             else if text == "아닙니다." {
                 if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
-                    let boardCards = stringToCards(userInGame.boardCard)
+                    let boardCards = stringToCards(userInGame.boardCard ?? "")
                     self.userCardCardChange(bugs, boardCards, false,  userInGame.id)
-                    self.gameroomDataUpdate(.gameAttackFinish, "")
+                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
                 }
             } else {
                 var attackers: [Int] = self.gameRoomData.value.attackers
@@ -334,9 +340,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         if let cardString = gameRoomData.value.usersInGame.first(where: { $0.key == userId }) {
             if isHandCard {
-                return self.stringToCards(cardString.value.handCard)
+                return self.stringToCards(cardString.value.handCard ?? "")
             } else {
-                return self.stringToCards(cardString.value.boardCard)
+                return self.stringToCards(cardString.value.boardCard ?? "")
             }
         } else {
             return []
@@ -462,20 +468,20 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 updateDataDic["gameStatus"] = GameStatus.onAir.rawValue
             }
 //            updateDataDic["whoseTurn"] =
-            updateDataDic["turnStartTime"] = Date().toString()
+            updateDataDic["turnStartTime"] = Date().toString
             
         } else if updateDataType == .whoseGetting {
-            updateDataDic["turnStartTime"] = Date().toString()
+            updateDataDic["turnStartTime"] = Date().toString
         } else if updateDataType == .gameAttackFinish {
-            updateDataDic = [:]
-            updateDataDic["turnStartTime"] = nil as String?
+//            updateDataDic = [:]
+            updateDataDic["turnStartTime"] = Date().toString
             updateDataDic["selectedCard"] = nil as String?
             updateDataDic["questionCard"] = nil as String?
             updateDataDic["whoseGetting"] = nil as String?
 //            updateDataDic["attackers"] = []
             attackersUpdate([])
-            guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
-            updateDataDic["whoseTurn"] = nextTurn
+//            guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
+            updateDataDic["whoseTurn"] = updateData
             print(#fileID, #function, #line, "- updateDicchecking⭐️: \(updateDataDic)")
         } else if updateDataType == .cardSkip {
             updateDataDic = [:]
@@ -485,6 +491,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
             updateDataDic["whoseTurn"] = nextTurn
             updateDataDic["whoseGetting"] = nil as String?
+            updateDataDic["turnStartTime"] = Date().toString
             print(#fileID, #function, #line, "- updateDicchecking⭐️: \(updateDataDic)")
         }
         

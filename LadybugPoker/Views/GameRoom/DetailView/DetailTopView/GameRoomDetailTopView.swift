@@ -21,7 +21,7 @@ struct GameRoomDetailTopView: View {
                     if usersId[index] != ""{
                         let userId = usersId[index]
                         if let userData = usersInGame[userId] {
-                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], currentUserId: nil), userBoardIndex: index, userCardCnt: viewModel.stringToCards(userData.boardCard).count, boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, cards: viewModel.stringToCards(userData.boardCard), userReadyOrNot: userData.readyOrNot, isOdd: index % 2 == 0 ? true : false)
+                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], currentUserId: nil), userBoardIndex: index, userCardCnt: viewModel.stringToCards(userData.boardCard ?? "").count, boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, cards: viewModel.stringToCards(userData.boardCard ?? ""), userReadyOrNot: userData.readyOrNot, isOdd: index % 2 == 0 ? true : false)
                                 .environmentObject(viewModel)
                         }
                     } else {
