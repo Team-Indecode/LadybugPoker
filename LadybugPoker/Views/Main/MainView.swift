@@ -47,7 +47,15 @@ struct MainView: View {
             ScrollView {
                 ForEach(gameRooms) { gameRoom in
                     Button {
-                        service.path.append(.gameRoom(gameRoomId: gameRoom.id))
+                        Task {
+                            do {
+                                try await GameRoom.join(id: gameRoom.id)
+                                service.path.append(.gameRoom(gameRoomId: gameRoom.id))
+                            } catch {
+                                print("JOINING ERROR")
+                                print(error)
+                            }
+                        }
                     } label: {
                         GameRoomView(gameRoom: gameRoom)
                     }
