@@ -77,6 +77,7 @@ extension GameRoom {
                                  profileUrl: myUserModel.profileUrl,
                                  idx: indexes.first ?? 0,
                                  chat: nil)
+        print(#fileID, #function, #line, "- newData: \(newData)")
         
         try await Firestore.firestore().collection(path)
             .document(myUserModel.id)
@@ -102,11 +103,14 @@ extension GameRoom {
         guard let myUserModel = Service.shared.myUserModel else {
             throw GameError.noCurrentUser
         }
-        
+        print(#fileID, #function, #line, "- id")
         let gameRoom = try await fetch(id: id)
-        
+        print(#fileID, #function, #line, "- gameRoom: \(gameRoom)")
         /// User 현재 가득찼는지 판단
-        if gameRoom.maxUserCount >= gameRoom.usersInGame.count { throw GameError.tooManyUsers }
+        if gameRoom.maxUserCount <= gameRoom.usersInGame.count {
+            print(#fileID, #function, #line, "- 여기?")
+            throw GameError.tooManyUsers
+        }
         try await addMySelfInGame(gameId: id, currentData: gameRoom.usersInGame)
         
         try await User.changeCurrentGameId(id: id)

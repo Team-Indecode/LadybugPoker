@@ -155,6 +155,7 @@
 			children = (
 				D1418E132BD62FBC00421904 /* GameRoomDetailView.swift */,
 				4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */,
+				4D7583182BC588B4009B6489 /* BoardUserProfileView.swift */,
 			);
 			path = GameRoomDetail;
 			sourceTree = "<group>";
@@ -183,7 +184,6 @@
 				D152E9A52BC4CAA4005535F1 /* DetailView */,
 				D125B9CB2BC12A0400A5AE03 /* GameRoomCreateView.swift */,
 				4D7583162BC572A0009B6489 /* CardView.swift */,
-				4D7583182BC588B4009B6489 /* BoardUserProfileView.swift */,
 				4DF375B82BD161CC008AC415 /* GamePlayAttackDefenceView.swift */,
 				4D02FA0B2BE6056E00E743F3 /* GameFinishView.swift */,
 				4D02FA0D2BE6070000E743F3 /* UserProfileView.swift */,

@@ -20,9 +20,10 @@ struct UserProfileView: View {
                     .padding(.leading, 10)
             } else {
                 Image(Bugs.ladybug.rawValue)
-                    .scaledToFit()
+                    .resizable()
                     .frame(width: 30, height: 30)
                     .clipShape(Circle())
+                    .padding(.leading, 10)
             }
             Text(user.displayName)
                 .font(.sea(20))

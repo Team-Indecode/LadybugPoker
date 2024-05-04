@@ -48,6 +48,9 @@ struct MainView: View {
                 ForEach(gameRooms) { gameRoom in
                     Button {
                         service.path.append(.gameRoom(gameRoomId: gameRoom.id))
+                        Task {
+                            try await GameRoom.join(id: gameRoom.id)
+                        }
                     } label: {
                         GameRoomView(gameRoom: gameRoom)
                     }

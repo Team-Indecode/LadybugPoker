@@ -23,7 +23,6 @@ struct GameFinishView: View {
                     .frame(height: proxy.size.height * 0.6706)
                     .frame(maxWidth: .infinity)
                     .background(Color.black.opacity(0.5))
-//                bottomView
                 Spacer()
                     .frame(height: proxy.size.height * 0.3294)
                     .background(Color.black.opacity(0.0))
@@ -61,6 +60,7 @@ struct GameFinishView: View {
             Spacer()
         }
     }
+    
     @ViewBuilder
     var outRoomOrNewGame: some View {
         if isHost {
@@ -111,12 +111,6 @@ struct GameFinishView: View {
                     Capsule()
                         .stroke(.white, lineWidth: 1)
                 }
-        }
-    }
-    
-    var bottomView: some View {
-        VStack {
-            Text("게임이 종료되었습니다")
         }
     }
 }
