@@ -83,17 +83,20 @@ struct MainView: View {
                 .ignoresSafeArea()
         }
         .onAppear {
-            if let user = service.myUserModel {
-                if let gameId = user.currentUserId {
-                    service.path.append(.gameRoom(gameRoomId: gameId))
-                }
-            }
-            
             Task {
                 gameRooms = try await GameRoom.fetchList()
 //                gameRooms = GameRoom.listPreview
             }
+            if let user = service.myUserModel {
+                if let gameId = user.currentUserId {
+                    print(#fileID, #function, #line, "- gameId: \(gameId)")
+//                    service.path.append(.gameRoom(gameRoomId: gameId))
+                    service.path.append(.myPage(id: user.id))
+                    print(#fileID, #function, #line, "- service.path: \(service.path)")
+                }
+            }
         }
+        
     }
 }
 
