@@ -142,9 +142,8 @@ struct GamePlayAttackDefenceView: View {
     var playerNotAttackerTopView: some View {
         VStack(spacing: 0) {
             HStack {
-//                makeUserView(User(id: "", displayName: "라영", profileUrl: "https://picsum.photos/200"))
                 if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
-                    makeUserView(userData)
+                    UserProfileView(user: userData)
                 }
                 Spacer()
             }
@@ -157,9 +156,9 @@ struct GamePlayAttackDefenceView: View {
                 .foregroundStyle(Color.white)
             HStack {
                 Spacer()
-//                makeUserView(User(id: "", displayName: "fkdud", profileUrl: "https://picsum.photos/200"))
                 if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
-                    makeUserView(userData)
+//                    makeUserView(userData)
+                    UserProfileView(user: userData)
                 }
             }
         }

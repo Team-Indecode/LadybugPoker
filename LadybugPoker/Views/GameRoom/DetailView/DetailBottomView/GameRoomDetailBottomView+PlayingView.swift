@@ -52,13 +52,19 @@ extension GameRoomDetailBottomView {
                     .overlay(alignment: .top) {
                         Text("남은 시간: \(viewModel.secondsLeft)초")
                             .font(.sea(15))
+                            .padding(.trailing)
                     }
                 } else {
                     if let userDisplayName = userDisplayName {
-//                    if let userDisplayName = userInTurn {
                         Text(userDisplayName + " 턴 입니다.")
                             .font(.sea(15))
+                            .frame(maxWidth: .infinity)
+                            .overlay(alignment: .trailing) {
+                                Text("남은 시간: \(viewModel.secondsLeft)초")
+                                    .font(.sea(15))
+                            }
                     }
+                        
                 }
                 VStack(spacing: 0) {
                     Spacer()

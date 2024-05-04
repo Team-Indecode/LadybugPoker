@@ -53,14 +53,16 @@ struct PlayerBoardView: View {
         .onChange(of: self.cards) { newValue in
             self.userCardCnt = newValue.count
         }
-
+        .onAppear {
+            self.cards = viewModel.stringToCards(self.cardsString)
+        }
     }
     
     /// 유저 프로필
     var profile: some View {
         if isOdd {
             return AnyView(HStack {
-                UserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
+                BoardUserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
                 Spacer()
                 if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
                     arrowView
@@ -72,7 +74,7 @@ struct PlayerBoardView: View {
                     arrowView
                 }
                 Spacer()
-                UserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
+                BoardUserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
             })
         }
     }

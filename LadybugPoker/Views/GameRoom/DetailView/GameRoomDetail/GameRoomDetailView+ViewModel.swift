@@ -19,13 +19,18 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var usersId: [String] = Array(repeating: "", count: 6)
     /// 남은 시간
     @Published var secondsLeft: Int = 60
-    
+    /// 모든 플레이어가 준비 되었는지
     @Published var allPlayerReadied: Bool = false
     /// 유저 채팅[유저 idx : 유저 채팅]
     @Published var usersChat: [Int : String] = [:]
+    /// 게임 타입(ex. 카드 선택, whoseGetting 선택 등)
     @Published var gameType: GameType? = nil
+    /// 플레이어가 어떤 타입인지(공격자, 수비자, 둘다 아님)
     @Published var userType: Player? = nil
+    /// 공격 & 수비 뷰 보여줄지
     @Published var showAttackerAndDefenderView: Bool = false
+    /// 패배한 유저가 누구인지 보여줌(게임 끝날때)
+    @Published var showLoserView: Bool = false
     var timer: Timer?
     
     /// 해당 게임방의 데이터를 가지고 온다
@@ -82,6 +87,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
                             }
                         } else if data.gameStatus == GameStatus.finished.rawValue {
                             self.showAttackerAndDefenderView = false
+                            self.timer?.invalidate()
+                            self.showLoserView = true
                         }
                     } else {
                         print(#fileID, #function, #line, "- wrong data")

@@ -81,8 +81,12 @@ struct GameRoomDetailBottomView: View {
                         Text(beforeGameText)
                             .font(.sea(15))
                             .padding(.bottom, 30)
-                    } else {
+                    } else if viewModel.gameStatus == .onAir {
                         Text("게임중 입니다.")
+                            .font(.sea(15))
+                            .padding(.bottom, 30)
+                    } else {
+                        Text("게임이 종료되었습니다")
                             .font(.sea(15))
                             .padding(.bottom, 30)
                     }
@@ -199,20 +203,11 @@ struct GameRoomDetailBottomView: View {
 #Preview {
     GameRoomDetailBottomView(
         amIReadied: .constant(false),
-//        allPlayerReadied: false,
         isHost: .constant(false),
-//        userInTurn: .constant(
-//            UserInGame(readyOrNot: true,
-//                       handCard: "",
-//                       boardCard: "",
-//                       userId: "hihi", displayName: "test")
-//        ),
         myCards: .constant(
             [Card(bug: .bee, cardCnt: 3),
              Card(bug: .frog, cardCnt: 2),
              Card(bug: .ladybug, cardCnt: 3)]),
-//        secondsLeft: .constant(48),
-//        selectedCardType: .constant(nil),
         showCardSelectedPopup: .constant(false),
         gameType: .constant(.defender)
     )
