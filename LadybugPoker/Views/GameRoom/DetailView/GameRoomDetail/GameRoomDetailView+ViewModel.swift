@@ -13,7 +13,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     let db = Firestore.firestore()
     @Published var gameStatus: GameStatus = .notStarted
     
-    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue))
+    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil))
 
     /// userIdx와 userId
     @Published var usersId: [String] = Array(repeating: "", count: 6)
@@ -68,7 +68,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         }
                         
                         if data.gameStatus == GameStatus.onAir.rawValue {
-
                             if data.whoseTurn != nil && data.whoseGetting != nil {
                                 if data.whoseTurn == Service.shared.myUserModel.id {
                                     self.userType = .attacker
@@ -81,6 +80,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
                             } else {
                                 self.showAttackerAndDefenderView = false
                             }
+                        } else if data.gameStatus == GameStatus.finished.rawValue {
+                            self.showAttackerAndDefenderView = false
                         }
                     } else {
                         print(#fileID, #function, #line, "- wrong data")
@@ -219,6 +220,31 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func defenderSuccessCheck(_ text: String) {
         let same = self.gameRoomData.value.selectedCard == self.gameRoomData.value.questionCard
         
+        if same {
+            if text == "맞습니다." {
+                //수비성공 -> 공격자에 boardCard에 추가, whoseTurn -> 계속 공격자(즉, whoseTurn유지)
+                cardIsSame(false)
+            } else if text == "아닙니다." {
+                // 공격성공(수비실패) -> 수비자 boardCard에 추가, whoseTurn -> whoseGetting
+                cardIsSame(true)
+            } else {
+                // 카드 넘기기
+                cardSkip()
+            }
+        } else {
+            // 둘이 다른 카드일떄
+            if text == "맞습니다." {
+                // 공격성공 -> 수비자 boardCard에 추가, whoseTurn: whoseGetting
+                cardIsSame(true)
+            } else if text == "아닙니다." {
+                cardIsSame(false)
+            } else {
+                cardSkip()
+            }
+        }
+    }
+    
+    func cardIsSame(_ defenderLose: Bool) {
         var bugs: Bugs = .bee
         
         switch self.gameRoomData.value.selectedCard {
@@ -233,84 +259,43 @@ class GameRoomDetailViewViewModel: ObservableObject {
         default: return
         }
         
-        if same {
-            //수비성공 -> 공격자에 boardCard에 추가
-            //whoseTurn -> 계속 공격자(즉, whoseTurn유지)
-            if text == "맞습니다." {
-                if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
-                    let boardCards = stringToCards(userInGame.boardCard ?? "")
-                    self.userCardCardChange(bugs, boardCards, false, userInGame.id)
-                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
-                }
-            }
-            // 공격성공(수비실패) -> 수비자 boardCard에 추가
-            // whoseTurn -> whoseGetting
-            else if text == "아닙니다." {
-                if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
-                    let boardCards = stringToCards(userInGame.boardCard ?? "")
-                    self.userCardCardChange(bugs, boardCards, false, userInGame.id)
-                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
-                }
-            }
-            // 카드 넘기기
-            else {
-                var attackers: [Int] = self.gameRoomData.value.attackers
-                guard let whoseTurn = self.gameRoomData.value.whoseTurn,
-                      let whoseGetting = self.gameRoomData.value.whoseGetting else { return }
-                for (index, id) in usersId.enumerated() {
-                    // 카드 넘기기가 처음인 경우
-                    if attackers.isEmpty {
-                        if whoseTurn == id || whoseGetting == id {
-                            attackers.append(index)
-                        }
-                    } else {
-                        // 카드 넘기기가 처음이 아닌 경우
-                        if whoseGetting == id {
-                            attackers.append(index)
-                        }
-                    }
-                }
-                self.gameroomDataUpdate(.cardSkip, "", attackers)
+        // 공격성공, 수비실패 -> 수비자의 boardCard에 추가 / whoseTurn -> whoseGetting으로 변경
+        if defenderLose {
+            if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
+                let boardCards = stringToCards(userInGame.boardCard ?? "")
+                self.userCardChange(bugs, boardCards, false, userInGame.id)
+                self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
             }
         }
-        // 둘이 다른 카드일떄
+        // 공격실패, 수비성공 -> 공격자의 boardCard에 추가 / whoseTurn -> 계속 공격지
         else {
-            
-            // 공격성공 -> 수비자 boardCard에 추가
-            // whoseTurn: whoseGetting
-            if text == "맞습니다." {
-                if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
-                    let boardCards = stringToCards(userInGame.boardCard ?? "")
-                    self.userCardCardChange(bugs, boardCards, false, userInGame.id)
-                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
-                }
+            if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
+                let boardCards = stringToCards(userInGame.boardCard ?? "")
+                self.userCardChange(bugs, boardCards, false, userInGame.id)
+                self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
             }
-            else if text == "아닙니다." {
-                if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
-                    let boardCards = stringToCards(userInGame.boardCard ?? "")
-                    self.userCardCardChange(bugs, boardCards, false,  userInGame.id)
-                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
+        }
+    }
+    
+    /// 카드 넘기기 일때
+    func cardSkip() {
+        var attackers: [Int] = self.gameRoomData.value.attackers
+        guard let whoseTurn = self.gameRoomData.value.whoseTurn,
+              let whoseGetting = self.gameRoomData.value.whoseGetting else { return }
+        for (index, id) in usersId.enumerated() {
+            // 카드 넘기기가 처음인 경우
+            if attackers.isEmpty {
+                if whoseTurn == id || whoseGetting == id {
+                    attackers.append(index)
                 }
             } else {
-                var attackers: [Int] = self.gameRoomData.value.attackers
-                guard let whoseTurn = self.gameRoomData.value.whoseTurn,
-                      let whoseGetting = self.gameRoomData.value.whoseGetting else { return }
-                for (index, id) in usersId.enumerated() {
-                    // 카드 넘기기가 처음인 경우
-                    if attackers.isEmpty {
-                        if whoseTurn == id || whoseGetting == id {
-                            attackers.append(index)
-                        }
-                    } else {
-                        // 카드 넘기기가 처음이 아닌 경우
-                        if whoseGetting == id {
-                            attackers.append(index)
-                        }
-                    }
+                // 카드 넘기기가 처음이 아닌 경우
+                if whoseGetting == id {
+                    attackers.append(index)
                 }
-                self.gameroomDataUpdate(.cardSkip, "", attackers)
             }
         }
+        self.gameroomDataUpdate(.cardSkip, "", attackers)
     }
     
     /// userID에 해당하는 유저 데이터를 가지고 온다
@@ -350,22 +335,24 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
-    /// 유저가 손에 쥐고 있는 카드 or 게임판에 있는 카드 데이터 업데이트
+    /// 유저가 손에 쥐고 있는 카드 or 게임판에 있는 카드 데이터 업데이트 -> 여기서 게임 졌는지/ 이겼는지 판단 가능
     /// - Parameters:
     ///   - selectedCard: 선택한 카드
     ///   - cards: 기존 카드들
     ///   - isHandCard: handCard인지 boardCard인지
-    func userCardCardChange(_ selectedCard: Bugs, _ cards: [Card], _ isHandCard: Bool, _ userId: String) {
+    func userCardChange(_ selectedCard: Bugs, _ cards: [Card], _ isHandCard: Bool, _ userId: String) {
         var cardString: String = ""
-        if cards.isEmpty {
+        var updateCardArr: [Card] = cards
+        
+        if updateCardArr.isEmpty {
             cardString += selectedCard.cardString + "1"
         } else {
             var selectedCardIsInCardArr: Bool = false
-            cards.forEach { card in
+            for (index, card) in updateCardArr.enumerated() {
                 var tempString: String = ""
-                
                 if card.bug == selectedCard {
                     selectedCardIsInCardArr = true
+                    updateCardArr[index].cardCnt += 1
                     tempString = isHandCard ? card.bug.cardString + "\(card.cardCnt - 1)" : card.bug.cardString + "\(card.cardCnt + 1)"
                 } else {
                     tempString = card.bug.cardString + "\(card.cardCnt)"
@@ -378,7 +365,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
         }
         
-        print(#fileID, #function, #line, "- cardString Checking⭐️: \(cardString)")
+        print(#fileID, #function, #line, "- updateCard checking⭐️ cardString: \(cardString)")
+        print(#fileID, #function, #line, "- updateCard checking⭐️ cardArray: \(updateCardArr)")
         let userInGame = gameRoomData.value.usersInGame[userId]
 
         guard var userInGame = userInGame else { return }
@@ -389,8 +377,32 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         
         self.userInGameUpdate(userInGame, userId, nil)
+        if !isHandCard {
+            userIsLoserChecking(userInGame.idx, updateCardArr)
+        }
     }
     
+    /// 유저가 졌는지 체크
+    /// - Parameters:
+    ///   - userIndex: <#userIndex description#>
+    ///   - cards: <#cards description#>
+    func userIsLoserChecking(_ userIndex: Int, _ cards: [Card]) {
+        var userIsLoser: Bool = false
+        if cards.count == Bugs.allCases.count {
+            userIsLoser = true
+        }
+        cards.forEach { card in
+            if card.cardCnt == 4 {
+                userIsLoser = true
+            }
+        }
+        if userIsLoser {
+//            self.gameRoomData.value.loser = userIndex
+            loserUpdate(userIndex)
+            gameroomDataUpdate(.gameStatus, "finished")
+        }
+    }
+
     /// string으로 오는 card를 Card strcut로 변경(ex. f1, l2)
     func stringToCards(_ cardString: String) -> [Card] {
         if cardString == "" {
@@ -463,29 +475,26 @@ class GameRoomDetailViewViewModel: ObservableObject {
     }
 
     /// whoseTurn, whoseGetting udpate
-    func gameroomDataUpdate(_ updateDataType: GameRoomUpdateType, _ updateData: String, _ updateDatas: [Int]? = nil) {
+    func gameroomDataUpdate(_ updateDataType: GameRoomUpdateType, _ updateStringData: String, _ updateDatas: [Int]? = nil, _ updateInt: Int? = nil) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
-        var updateDataDic: [String : String?] = [updateDataType.rawValue : updateData]
+        var updateDataDic: [String : String?] = [updateDataType.rawValue : updateStringData]
         if updateDataType == .whoseTurn {
             if gameStatus != .onAir {
                 updateDataDic["gameStatus"] = GameStatus.onAir.rawValue
             }
-//            updateDataDic["whoseTurn"] =
             updateDataDic["turnStartTime"] = Date().toString
             
         } else if updateDataType == .whoseGetting {
             updateDataDic["turnStartTime"] = Date().toString
         } else if updateDataType == .gameAttackFinish {
-//            updateDataDic = [:]
+            updateDataDic = [:]
             updateDataDic["turnStartTime"] = Date().toString
             updateDataDic["selectedCard"] = nil as String?
             updateDataDic["questionCard"] = nil as String?
             updateDataDic["whoseGetting"] = nil as String?
-//            updateDataDic["attackers"] = []
+            // 다음턴은 공격/수비에서 진 사람이 정해진다
+            updateDataDic["whoseTurn"] = updateStringData
             attackersUpdate([])
-//            guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
-            updateDataDic["whoseTurn"] = updateData
-            print(#fileID, #function, #line, "- updateDicchecking⭐️: \(updateDataDic)")
         } else if updateDataType == .cardSkip {
             updateDataDic = [:]
             guard let updateDatas = updateDatas else { return }
@@ -506,6 +515,22 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    func loserUpdate(_ loser: Int) {
+        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+        
+        var updateDataDic: [String : Int?] = ["loser" : loser]
+        
+        gameRoomDataRef.updateData(updateDataDic) { error in
+            if let error = error {
+                print(#fileID, #function, #line, "- update loser error: \(error.localizedDescription)")
+            }
+            print(#fileID, #function, #line, "- update loser success update")
+        }
+    }
+    
+    
+    /// attackers 데이터 업데이트
+    /// - Parameter attackers: attackers목록 업데이트
     func attackersUpdate(_ attackers: [Int]) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         gameRoomDataRef.updateData(["attackers" : attackers]) { error in

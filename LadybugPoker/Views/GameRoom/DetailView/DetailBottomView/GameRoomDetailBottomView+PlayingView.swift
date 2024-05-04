@@ -73,7 +73,7 @@ extension GameRoomDetailBottomView {
 //                                    }
                                     guard let whoseTurn = viewModel.gameRoomData.value.whoseTurn else { return }
                                     viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
-                                    viewModel.userCardCardChange(card.bug, myCards, true, whoseTurn)
+                                    viewModel.userCardChange(card.bug, myCards, true, whoseTurn)
                                 } label: {
                                     if card.cardCnt != 0 {
                                         CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: true)

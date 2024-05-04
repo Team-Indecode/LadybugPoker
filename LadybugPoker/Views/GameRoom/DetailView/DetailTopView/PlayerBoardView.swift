@@ -13,10 +13,11 @@ struct PlayerBoardView: View {
     let user: User
     let userBoardIndex: Int
 //    let userId: String
-    let userCardCnt: Int
+    @State private var userCardCnt: Int = 0
     let boardWidth: CGFloat
     let boardHeight: CGFloat
-    var cards: [Card]
+    @State private var cards: [Card] = []
+    var cardsString: String
     let userReadyOrNot: Bool
     /// 짝수
     let isOdd: Bool
@@ -26,13 +27,13 @@ struct PlayerBoardView: View {
     var body: some View {
         VStack(spacing: 10) {
             profile
-            if viewModel.gameStatus == .onAir {
+            if viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished {
                 userIsPlayGame
             } else {
                 userIsNotPlayGame
                     .frame(height: boardHeight - 60)
             }
-            if viewModel.gameStatus == .onAir && cards.count <= 4 {
+            if (viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished) && cards.count <= 4 {
                 if cards.count == 0 {
                     Spacer()
                         .frame(height: boardHeight - 60)
@@ -45,8 +46,12 @@ struct PlayerBoardView: View {
         }
         .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)
         .frame(width: boardWidth, height: boardHeight)
+        .onChange(of: self.cardsString) { newValue in
+            print(#fileID, #function, #line, "- cardsString Change⭐️")
+            self.cards = viewModel.stringToCards(newValue)
+        }
         .onChange(of: self.cards) { newValue in
-            print(#fileID, #function, #line, "- cards⭐️: \(cards)")
+            self.userCardCnt = newValue.count
         }
 
     }
@@ -60,10 +65,6 @@ struct PlayerBoardView: View {
                 if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
                     arrowView
                 }
-                
-//                if viewModel.gameRoomData.value.whoseTurn == user.id {
-//                    arrowView
-//                }
             })
         } else {
             return AnyView(HStack {
@@ -83,7 +84,7 @@ struct PlayerBoardView: View {
             Image(systemName: self.isOdd ? "arrowshape.left.fill" : "arrowshape.right.fill")
                 .resizable()
                 .foregroundStyle(Color.orange)
-                .frame(width: 56)
+                .frame(width: 56, height: 60)
         }
         .disabled(viewModel.gameType != .selectUser)
     }
@@ -109,5 +110,5 @@ struct PlayerBoardView: View {
 
 #Preview {
 //    PlayerBoardView(user: User(id: "", displayName: "rayoung", profileUrl: "https://picsum.photos/200"), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)])
-    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil),userBoardIndex: 1, userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)], userReadyOrNot: true, isOdd: true)
+    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil),userBoardIndex: 1, boardWidth: 250, boardHeight: 250, cardsString: "", userReadyOrNot: true, isOdd: true)
 }

@@ -71,12 +71,12 @@ extension GameRoom {
         var newData = currentData
         newData[myUserModel.id] = UserInGame(id: myUserModel.id,
                                  readyOrNot: false,
-                                 handCard: "",
-                                 boardCard: "",
+                                 handCard: nil,
+                                 boardCard: nil,
                                  displayName: myUserModel.displayName,
                                  profileUrl: myUserModel.profileUrl,
                                  idx: indexes.first ?? 0,
-                                 chat: "")
+                                 chat: nil)
         
         try await Firestore.firestore().collection(path)
             .document(myUserModel.id)

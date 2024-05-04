@@ -40,7 +40,7 @@ struct GameRoomDetailBottomView: View {
                 .frame(height: 2)
                 .padding(.bottom, 12)
             
-            if viewModel.gameStatus == .onAir {
+            if viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished {
                 PlayingView(userInTurn: $viewModel.gameRoomData.value.whoseTurn,
                             userDisplayName: $userDisplayName,
                             myCards: $myCards,
@@ -87,12 +87,11 @@ struct GameRoomDetailBottomView: View {
                             .padding(.bottom, 30)
                     }
                 } else {
-                    Text(viewModel.gameStatus == .notStarted || viewModel.gameStatus == .notEnoughUsers ? beforeGameText : "게임중 입니다.")
+                    gameString(viewModel.gameStatus)
                         .font(.sea(15))
                         .padding(.bottom, 30)
                 }
                 
-
                 // 게임시작을 눌러주세요, 준비완료를 눌러주세요 Text
                 if isHost {
                     if viewModel.allPlayerReadied {
@@ -184,6 +183,14 @@ struct GameRoomDetailBottomView: View {
     func cancelReady() {
         withAnimation {
             amIReadied = false
+        }
+    }
+    
+    func gameString(_ gameStatus: GameStatus) -> some View {
+        switch gameStatus {
+        case .finished: return Text("게임이 종료되었습니다")
+        case .notEnoughUsers, .notStarted: return Text(beforeGameText)
+        case .onAir: return Text("게임중 입니다.")
         }
     }
     
