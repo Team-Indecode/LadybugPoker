@@ -61,6 +61,7 @@ extension GameRoom {
         
         var indexes = [0, 1, 2, 3, 4, 5]
         for data in currentData.values {
+            print("indexes: \(data.idx)")
             indexes.removeAll(where: { $0 == data.idx })
         }
         
@@ -79,9 +80,15 @@ extension GameRoom {
                                  chat: nil)
         print(#fileID, #function, #line, "- newData: \(newData)")
         
+        var newJsonData = [String: Any]()
+        
+        for data in newData {
+            newJsonData[data.key] = data.value.toJson
+        }
+        
         try await Firestore.firestore().collection(path)
-            .document(myUserModel.id)
-            .updateData(["usersInGame": newData])
+            .document(gameId)
+            .updateData(["usersInGame": newJsonData])
     }
     
     /// GameRoom DB 의 UsersInGame 에서 내 정보를 삭제합니다.
@@ -111,6 +118,7 @@ extension GameRoom {
         try await addMySelfInGame(gameId: id, currentData: gameRoom.usersInGame)
         
         try await User.changeCurrentGameId(id: id)
+        print("JOININING : \(id)")
     }
     
     /// 게임방에서 퇴장합니다.
