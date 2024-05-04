@@ -20,7 +20,6 @@ struct GameRoomDetailView: View {
             allContent
                 .onChange(of: viewModel.gameRoomData.value.usersInGame) { oldValue, newValue in
                     myCards = viewModel.getUserCard(true)
-                    print(#fileID, #function, #line, "- myCards⭐️: \(myCards)")
                 }
                 .onChange(of: viewModel.gameRoomData.value.hostId) { oldValue, newValue in
                     isHost = Service.shared.myUserModel.id == newValue
@@ -51,7 +50,13 @@ struct GameRoomDetailView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .environmentObject(viewModel)
             })
-            
+            .transparentFullScreenCover(isPresented: $viewModel.showLoserView, content: {
+                GameFinishView(isHost: viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id, userIndex: viewModel.gameRoomData.value.loser)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .environmentObject(viewModel)
+                    .environmentObject(Service.shared)
+                
+            })
             .task {
                 try? await viewModel.getGameData(gameRoomId)
             }

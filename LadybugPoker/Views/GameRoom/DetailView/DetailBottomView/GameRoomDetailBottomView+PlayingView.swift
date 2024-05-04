@@ -52,13 +52,19 @@ extension GameRoomDetailBottomView {
                     .overlay(alignment: .top) {
                         Text("남은 시간: \(viewModel.secondsLeft)초")
                             .font(.sea(15))
+                            .padding(.trailing)
                     }
                 } else {
                     if let userDisplayName = userDisplayName {
-//                    if let userDisplayName = userInTurn {
                         Text(userDisplayName + " 턴 입니다.")
                             .font(.sea(15))
+                            .frame(maxWidth: .infinity)
+                            .overlay(alignment: .trailing) {
+                                Text("남은 시간: \(viewModel.secondsLeft)초")
+                                    .font(.sea(15))
+                            }
                     }
+                        
                 }
                 VStack(spacing: 0) {
                     Spacer()
@@ -73,7 +79,7 @@ extension GameRoomDetailBottomView {
 //                                    }
                                     guard let whoseTurn = viewModel.gameRoomData.value.whoseTurn else { return }
                                     viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
-                                    viewModel.userCardCardChange(card.bug, myCards, true, whoseTurn)
+                                    viewModel.userCardChange(card.bug, myCards, true, whoseTurn)
                                 } label: {
                                     if card.cardCnt != 0 {
                                         CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: true)

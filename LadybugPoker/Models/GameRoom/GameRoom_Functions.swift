@@ -72,12 +72,13 @@ extension GameRoom {
         var newData = currentData
         newData[myUserModel.id] = UserInGame(id: myUserModel.id,
                                  readyOrNot: false,
-                                 handCard: "",
-                                 boardCard: "",
+                                 handCard: nil,
+                                 boardCard: nil,
                                  displayName: myUserModel.displayName,
                                  profileUrl: myUserModel.profileUrl,
                                  idx: indexes.first ?? 0,
-                                 chat: "")
+                                 chat: nil)
+        print(#fileID, #function, #line, "- newData: \(newData)")
         
         var newJsonData = [String: Any]()
         
@@ -109,9 +110,9 @@ extension GameRoom {
         guard let myUserModel = Service.shared.myUserModel else {
             throw GameError.noCurrentUser
         }
-        
+        print(#fileID, #function, #line, "- id")
         let gameRoom = try await fetch(id: id)
-        
+        print(#fileID, #function, #line, "- gameRoom: \(gameRoom)")
         /// User 현재 가득찼는지 판단
         if gameRoom.maxUserCount <= gameRoom.usersInGame.count { throw GameError.tooManyUsers }
         try await addMySelfInGame(gameId: id, currentData: gameRoom.usersInGame)
