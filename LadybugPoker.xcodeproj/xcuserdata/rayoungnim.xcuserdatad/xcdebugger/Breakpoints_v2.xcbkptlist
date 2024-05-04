@@ -161,6 +161,38 @@
             endingLineNumber = "111"
             landmarkName = "join(id:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9B671BAF-9CB8-471F-AC18-E00C92D6A8B2 - 396991aea72c9b6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for static LadybugPoker.GameRoom.join(id: Swift.String) async throws -&gt; ()"
+                  moduleName = "LadybugPoker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/LadybugPoker/LadybugPoker/Models/GameRoom/GameRoom_Functions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "111"
+                  endingLineNumber = "111"
+                  offsetFromSymbolStart = "748">
+               </Location>
+               <Location
+                  uuid = "9B671BAF-9CB8-471F-AC18-E00C92D6A8B2 - 7b44acb7e39b35b4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for static LadybugPoker.GameRoom.join(id: Swift.String) async throws -&gt; ()"
+                  moduleName = "LadybugPoker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/LadybugPoker/LadybugPoker/Models/GameRoom/GameRoom_Functions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "111"
+                  endingLineNumber = "111"
+                  offsetFromSymbolStart = "608">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -175,7 +207,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "104"
             endingLineNumber = "104"
-            landmarkName = "join(id:)"
+            landmarkName = "removeMySelfInGame(gameId:currentData:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -285,6 +317,114 @@
                   startingLineNumber = "52"
                   endingLineNumber = "52"
                   offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9C32B479-2E34-40FB-8179-95018046F310"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LadybugPoker/Models/GameRoom/GameRoom_Functions.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "removeMySelfInGame(gameId:currentData:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9C32B479-2E34-40FB-8179-95018046F310 - 6a92b7daf1884d1e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for static LadybugPoker.GameRoom.removeMySelfInGame(gameId: Swift.String, currentData: Swift.Dictionary&lt;Swift.String, LadybugPoker.UserInGame&gt;) async throws -&gt; ()"
+                  moduleName = "LadybugPoker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/LadybugPoker/LadybugPoker/Models/GameRoom/GameRoom_Functions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "98"
+                  endingLineNumber = "98"
+                  offsetFromSymbolStart = "672">
+               </Location>
+               <Location
+                  uuid = "9C32B479-2E34-40FB-8179-95018046F310 - 61304c55fffeb34c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for static LadybugPoker.GameRoom.removeMySelfInGame(gameId: Swift.String, currentData: Swift.Dictionary&lt;Swift.String, LadybugPoker.UserInGame&gt;) async throws -&gt; ()"
+                  moduleName = "LadybugPoker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/LadybugPoker/LadybugPoker/Models/GameRoom/GameRoom_Functions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "98"
+                  endingLineNumber = "98"
+                  offsetFromSymbolStart = "60">
+               </Location>
+               <Location
+                  uuid = "9C32B479-2E34-40FB-8179-95018046F310 - 2c1ab2dc9db589bd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for static LadybugPoker.GameRoom.removeMySelfInGame(gameId: Swift.String, currentData: Swift.Dictionary&lt;Swift.String, LadybugPoker.UserInGame&gt;) async throws -&gt; ()"
+                  moduleName = "LadybugPoker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/LadybugPoker/LadybugPoker/Models/GameRoom/GameRoom_Functions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  uuid = "9C32B479-2E34-40FB-8179-95018046F310 - 2c1ab2dc9db5899c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for static LadybugPoker.GameRoom.removeMySelfInGame(gameId: Swift.String, currentData: Swift.Dictionary&lt;Swift.String, LadybugPoker.UserInGame&gt;) async throws -&gt; ()"
+                  moduleName = "LadybugPoker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/LadybugPoker/LadybugPoker/Models/GameRoom/GameRoom_Functions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "98"
+                  endingLineNumber = "98"
+                  offsetFromSymbolStart = "60">
+               </Location>
+               <Location
+                  uuid = "9C32B479-2E34-40FB-8179-95018046F310 - 35ebf538fc8abfc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for static LadybugPoker.GameRoom.removeMySelfInGame(gameId: Swift.String, currentData: Swift.Dictionary&lt;Swift.String, LadybugPoker.UserInGame&gt;) async throws -&gt; ()"
+                  moduleName = "LadybugPoker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/LadybugPoker/LadybugPoker/Models/GameRoom/GameRoom_Functions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  uuid = "9C32B479-2E34-40FB-8179-95018046F310 - 35ebf538fc8abdd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for static LadybugPoker.GameRoom.removeMySelfInGame(gameId: Swift.String, currentData: Swift.Dictionary&lt;Swift.String, LadybugPoker.UserInGame&gt;) async throws -&gt; ()"
+                  moduleName = "LadybugPoker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rayoungnim/Documents/programming/ios/project/LadybugPoker/LadybugPoker/Models/GameRoom/GameRoom_Functions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "98"
+                  endingLineNumber = "98"
+                  offsetFromSymbolStart = "68">
                </Location>
             </Locations>
          </BreakpointContent>
