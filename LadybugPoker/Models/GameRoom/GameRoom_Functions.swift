@@ -107,10 +107,7 @@ extension GameRoom {
         let gameRoom = try await fetch(id: id)
         print(#fileID, #function, #line, "- gameRoom: \(gameRoom)")
         /// User 현재 가득찼는지 판단
-        if gameRoom.maxUserCount <= gameRoom.usersInGame.count {
-            print(#fileID, #function, #line, "- 여기?")
-            throw GameError.tooManyUsers
-        }
+        if gameRoom.maxUserCount <= gameRoom.usersInGame.count { throw GameError.tooManyUsers }
         try await addMySelfInGame(gameId: id, currentData: gameRoom.usersInGame)
         
         try await User.changeCurrentGameId(id: id)
