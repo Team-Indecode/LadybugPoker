@@ -83,15 +83,19 @@ struct MainView: View {
                 .ignoresSafeArea()
         }
         .onAppear {
-            if let user = service.myUserModel {
-                if let gameId = user.currentUserId {
-                    service.path.append(.gameRoom(gameRoomId: gameId))
-                }
-            }
-            
             Task {
                 gameRooms = try await GameRoom.fetchList()
 //                gameRooms = GameRoom.listPreview
+                
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+                
+                if let user = service.myUserModel {
+                    print("user exists")
+                    if let gameId = user.currentUserId {
+                        print("gameId")
+                        service.path.append(.gameRoom(gameRoomId: gameId))
+                    }
+                }
             }
         }
     }
