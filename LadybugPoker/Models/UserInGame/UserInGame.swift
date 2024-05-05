@@ -20,7 +20,7 @@ struct UserInGame: Codable, Hashable {
     let profileUrl: String?
     /// 무조건 인덱스가 수정되지 않기 때문에 -> 게임방의 데이터가 변경될때마다 유저들의
     let idx: Int
-    let chat: String?
+    var chat: String?
     
     var toJson: [String: Any] {
         [

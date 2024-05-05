@@ -14,8 +14,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "479"
-            endingLineNumber = "479"
+            startingLineNumber = "485"
+            endingLineNumber = "485"
             landmarkName = "userInGameUpdate(_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "522"
-            endingLineNumber = "522"
+            startingLineNumber = "528"
+            endingLineNumber = "528"
             landmarkName = "gameroomDataUpdate(_:_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>

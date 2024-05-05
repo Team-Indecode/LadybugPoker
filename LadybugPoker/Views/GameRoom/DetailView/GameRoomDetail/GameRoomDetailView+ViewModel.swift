@@ -454,6 +454,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    /// GameRoom의 한 user의 데이터 업데이트
+    /// - Parameters:
+    ///   - userInGame: 업데이트한 유저 데이터
+    ///   - userId: 업데이트 할 유저 데이터
+    ///   - updateType: 유저 업데이트 타입
     func userInGameUpdate(_ userInGame: UserInGame, _ userId: String, _ updateType: GameUpdateType?) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         print(#fileID, #function, #line, "- userInGame: \(userInGame)")
@@ -464,7 +469,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             "readyOrNot" : userInGame.readyOrNot,
             "id" : userInGame.id,
             "idx" : userInGame.idx,
-            "profileUrl" : userInGame.profileUrl
+            "profileUrl" : userInGame.profileUrl,
+            "chat" : userInGame.chat
         ] as [String : Any]
         
         gameRoomDataRef.updateData(["usersInGame.\(userId)" : oneUserData] ) { error in
@@ -482,7 +488,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
 
-    /// whoseTurn, whoseGetting udpate
+    /// gameRoomData업데이트(ex. whoseTurn, whoseGetting, turnStartTime, gameStatus)
     func gameroomDataUpdate(_ updateDataType: GameRoomUpdateType, _ updateStringData: String, _ updateDatas: [Int]? = nil, _ updateInt: Int? = nil) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         var updateDataDic: [String : String?] = [updateDataType.rawValue : updateStringData]
@@ -523,6 +529,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    /// 게임 종료 시 진 사람이 누구인지 판별
     func loserUpdate(_ loser: Int) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         
