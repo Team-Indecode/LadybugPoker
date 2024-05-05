@@ -154,27 +154,43 @@ struct GameRoomDetailBottomView: View {
                 .padding(.bottom, 15)
             }
             Spacer()
-            TextField("메세지를 입력해주세요.", text: $chat)
-                .font(.sea(15))
-                .frame(height: 38)
-                .padding(.leading, 17)
-                .background {
-                    RoundedRectangle(cornerRadius: .infinity)
-                        .stroke(Color.bugDarkMedium)
-                }
-                .overlay(alignment: .trailing) {
-                    Button {
-                        
-                    } label: {
-                        Image("send")
-                    }
-                    .padding(.trailing, 6)
-                }
-                .padding(.horizontal, 16)
-
+            chatTextField
         }
         .frame(maxHeight: .infinity)
         .background(Color.bugLight)
+    }
+    
+    var chatTextField: some View {
+        TextField("메세지를 입력해주세요.", text: $chat)
+            .font(.sea(15))
+            .frame(height: 38)
+            .padding(.leading, 17)
+            .background {
+                RoundedRectangle(cornerRadius: .infinity)
+                    .stroke(Color.bugDarkMedium)
+            }
+            .onSubmit {
+                chatLogic()
+            }
+            .overlay(alignment: .trailing) {
+                Button {
+                    chatLogic()
+                } label: {
+                    Image("send")
+                }
+                .padding(.trailing, 6)
+            }
+            .padding(.horizontal, 16)
+    }
+    
+    /// 채팅 보내기 로직
+    func chatLogic() {
+        let userId = Service.shared.myUserModel.id
+        if var userInGame = viewModel.gameRoomData.value.usersInGame[userId] {
+            userInGame.chat = chat
+            viewModel.userInGameUpdate(userInGame, userId, nil)
+        }
+        chat = ""
     }
     
     func ready() {
