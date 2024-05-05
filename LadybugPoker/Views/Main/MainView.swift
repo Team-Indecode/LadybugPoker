@@ -86,7 +86,6 @@ struct MainView: View {
             Task {
                 gameRooms = try await GameRoom.fetchList()
 //                gameRooms = GameRoom.listPreview
-                
                 try await Task.sleep(nanoseconds: 1_000_000_000)
                 
                 if let user = service.myUserModel {
@@ -95,14 +94,6 @@ struct MainView: View {
                         print("gameId")
                         service.path.append(.gameRoom(gameRoomId: gameId))
                     }
-                }
-            }
-            if let user = service.myUserModel {
-                if let gameId = user.currentUserId {
-                    print(#fileID, #function, #line, "- gameId: \(gameId)")
-//                    service.path.append(.gameRoom(gameRoomId: gameId))
-                    service.path.append(.myPage(id: user.id))
-                    print(#fileID, #function, #line, "- service.path: \(service.path)")
                 }
             }
         }

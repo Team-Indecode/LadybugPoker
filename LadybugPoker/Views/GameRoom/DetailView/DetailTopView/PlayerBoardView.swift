@@ -25,6 +25,27 @@ struct PlayerBoardView: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
+        ZStack {
+            playerBoard
+            if let userChat = viewModel.usersChat[userBoardIndex] {
+                chatView(userChat)
+            }
+        }
+        .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)
+        .frame(width: boardWidth, height: boardHeight)
+        .onChange(of: self.cardsString) { newValue in
+            print(#fileID, #function, #line, "- cardsString Change⭐️")
+            self.cards = viewModel.stringToCards(newValue)
+        }
+        .onChange(of: self.cards) { newValue in
+            self.userCardCnt = newValue.count
+        }
+        .onAppear {
+            self.cards = viewModel.stringToCards(self.cardsString)
+        }
+    }
+    
+    var playerBoard: some View {
         VStack(spacing: 10) {
             profile
             if viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished {
@@ -44,18 +65,32 @@ struct PlayerBoardView: View {
                 }
             }
         }
-        .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)
-        .frame(width: boardWidth, height: boardHeight)
-        .onChange(of: self.cardsString) { newValue in
-            print(#fileID, #function, #line, "- cardsString Change⭐️")
-            self.cards = viewModel.stringToCards(newValue)
+    }
+    
+    //MARK: - 채팅 뷰
+    func chatView(_ chat: String) -> some View {
+        VStack(spacing: 0) {
+            Spacer()
+                .frame(height: 37)
+            HStack(spacing: 0) {
+                Spacer()
+                    .frame(width: isOdd ? 20 : boardWidth - 40)
+                Image("triangle")
+                    .resizable()
+                    .frame(width: 12, height: 12)
+                    .rotationEffect(.degrees(-180))
+            }
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            Text(chat)
+                .multilineTextAlignment(.leading)
+                .font(.sea(10))
+                .frame(maxWidth: 124)
+                .background(Color(hex: "EAD8C0"))
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+                .frame(maxWidth: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
         }
-        .onChange(of: self.cards) { newValue in
-            self.userCardCnt = newValue.count
-        }
-        .onAppear {
-            self.cards = viewModel.stringToCards(self.cardsString)
-        }
+        .padding(.leading, 5)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
     }
     
     /// 유저 프로필

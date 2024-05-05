@@ -104,6 +104,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func getUsersId(_ usersInGame: [String : UserInGame]) {
         usersInGame.forEach { (key: String, value: UserInGame) in
             usersId[value.idx] = key
+            usersChat[value.idx] = value.chat
         }
     }
     
