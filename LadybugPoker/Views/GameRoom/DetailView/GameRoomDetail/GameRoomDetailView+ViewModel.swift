@@ -105,6 +105,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         usersInGame.forEach { (key: String, value: UserInGame) in
             usersId[value.idx] = key
             usersChat[value.idx] = value.chat
+            print(#fileID, #function, #line, "- value.chat⭐️: \(value)")
         }
     }
     
@@ -290,15 +291,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
         var attackers: [Int] = self.gameRoomData.value.attackers
         guard let whoseTurn = self.gameRoomData.value.whoseTurn,
               let whoseGetting = self.gameRoomData.value.whoseGetting else { return }
+        
         for (index, id) in usersId.enumerated() {
             // 카드 넘기기가 처음인 경우
-            if attackers.isEmpty {
+            if !attackers.contains(index) {
                 if whoseTurn == id || whoseGetting == id {
-                    attackers.append(index)
-                }
-            } else {
-                // 카드 넘기기가 처음이 아닌 경우
-                if whoseGetting == id {
                     attackers.append(index)
                 }
             }

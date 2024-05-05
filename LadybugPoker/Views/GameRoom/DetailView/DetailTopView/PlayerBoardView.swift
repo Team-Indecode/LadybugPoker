@@ -43,18 +43,14 @@ struct PlayerBoardView: View {
             self.userCardCnt = newValue.count
         }
         .onChange(of: viewModel.usersChat[userBoardIndex]) { newValue in
-            print(#fileID, #function, #line, "- chat⭐️: \(newValue)")
             if let userChat = newValue {
                 self.userChat = userChat
                 self.userChatShow = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
-                    viewModel.usersChat[userBoardIndex] = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: {
+                    self.userChatShow = false
                 })
             }
-            else {
-                self.userChatShow = false
-                
-            }
+            
         }
         .onAppear {
             self.cards = viewModel.stringToCards(self.cardsString)
@@ -139,7 +135,7 @@ struct PlayerBoardView: View {
             Image(systemName: self.isOdd ? "arrowshape.left.fill" : "arrowshape.right.fill")
                 .resizable()
                 .foregroundStyle(Color.orange)
-                .frame(width: 56, height: 60)
+                .frame(width: 56, height: 40)
         }
         .disabled(viewModel.gameType != .selectUser)
     }

@@ -49,7 +49,6 @@ struct GameRoomDetailBottomView: View {
                             showCardSelectedPopup: $showCardSelectedPopup,
                             bottomGameType: $gameType
                 )
-                .disabled(viewModel.gameRoomData.value.whoseTurn != Service.shared.myUserModel.id)
                 .environmentObject(viewModel)
                 .onChange(of: viewModel.gameRoomData.value.whoseTurn) { newValue in
                     if let userId = newValue {
@@ -195,7 +194,6 @@ struct GameRoomDetailBottomView: View {
     
     func ready() {
         withAnimation {
-//            amIReadied = true
             viewModel.sendIamReady()
         }
     }
