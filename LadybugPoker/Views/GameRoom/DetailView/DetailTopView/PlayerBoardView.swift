@@ -21,24 +21,40 @@ struct PlayerBoardView: View {
     let userReadyOrNot: Bool
     /// 짝수
     let isOdd: Bool
+    @State private var userChat: String = ""
+    @State private var userChatShow: Bool = false
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
         ZStack {
             playerBoard
-            if let userChat = viewModel.usersChat[userBoardIndex] {
-                chatView(userChat)
+            if userChatShow {
+                chatView()
             }
+            
         }
         .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)
         .frame(width: boardWidth, height: boardHeight)
         .onChange(of: self.cardsString) { newValue in
-            print(#fileID, #function, #line, "- cardsString Change⭐️")
             self.cards = viewModel.stringToCards(newValue)
         }
         .onChange(of: self.cards) { newValue in
             self.userCardCnt = newValue.count
+        }
+        .onChange(of: viewModel.usersChat[userBoardIndex]) { newValue in
+            print(#fileID, #function, #line, "- chat⭐️: \(newValue)")
+            if let userChat = newValue {
+                self.userChat = userChat
+                self.userChatShow = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
+                    viewModel.usersChat[userBoardIndex] = nil
+                })
+            }
+            else {
+                self.userChatShow = false
+                
+            }
         }
         .onAppear {
             self.cards = viewModel.stringToCards(self.cardsString)
@@ -68,7 +84,7 @@ struct PlayerBoardView: View {
     }
     
     //MARK: - 채팅 뷰
-    func chatView(_ chat: String) -> some View {
+    func chatView() -> some View {
         VStack(spacing: 0) {
             Spacer()
                 .frame(height: 37)
@@ -81,7 +97,7 @@ struct PlayerBoardView: View {
                     .rotationEffect(.degrees(-180))
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)
-            Text(chat)
+            Text(self.userChat)
                 .multilineTextAlignment(.leading)
                 .font(.sea(10))
                 .frame(maxWidth: 124)
@@ -89,8 +105,10 @@ struct PlayerBoardView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 5))
                 .frame(maxWidth: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
         }
+        
         .padding(.leading, 5)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
+        
     }
     
     /// 유저 프로필
