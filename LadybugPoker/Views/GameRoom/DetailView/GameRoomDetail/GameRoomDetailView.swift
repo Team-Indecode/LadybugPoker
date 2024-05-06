@@ -12,7 +12,7 @@ struct GameRoomDetailView: View {
     @State private var showCardSelectedPopup: Bool = false
     @State private var amIReadied: Bool = false
     @State private var isHost: Bool = false
-    @State private var myCards: [Card] = []
+    @State private var myCards: [Card] = [] 
     let gameRoomId: String
     
     var body: some View {

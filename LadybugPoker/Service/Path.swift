@@ -14,4 +14,5 @@ enum Path: Hashable {
     case main
     case gameRoom(gameRoomId: String)
     case myPage(id: String)
+    case guide
 }

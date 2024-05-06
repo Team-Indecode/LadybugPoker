@@ -1,5 +1,5 @@
 //
-//  GuideView.swift
+//  GuideView+PlayerBoardView.swift
 //  LadybugPoker
 //
 //  Created by 박진서 on 5/6/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GuideView: View {
+struct GuideView_PlayerBoardView: View {
     var body: some View {
         VStack {
             
@@ -16,6 +16,5 @@ struct GuideView: View {
 }
 
 #Preview {
-    GuideView()
-
+    GuideView_PlayerBoardView()
 }

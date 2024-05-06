@@ -40,6 +40,10 @@ struct DefaultView: View {
                 case .myPage(let id):
                     MyPageView(id: id)
                         .navigationBarBackButtonHidden()
+                    
+                case .guide:
+                    GuideView()
+                        .navigationBarBackButtonHidden()
                 }
             }
             .onAppear {
