@@ -14,8 +14,8 @@ struct GameRoomDetailView: View {
     @State private var isHost: Bool = false
     @State private var myCards: [Card] = [] 
     @State var showExistAlert: Bool = false
-//    @State var existUserId: String = ""
-//    @State var existUserDisplay
+    @State var existUserId: String = ""
+    @State var existUserDisplayName: String = ""
     let gameRoomId: String
     
     var body: some View {
@@ -54,7 +54,7 @@ struct GameRoomDetailView: View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
 
-                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame, usersId: $viewModel.usersId, showExistAlert: $showExistAlert)
+                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame, usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                     .frame(height: proxy.size.height * 0.6706)
                     .environmentObject(viewModel)
                 GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType)
@@ -73,8 +73,8 @@ struct GameRoomDetailView: View {
                     .environmentObject(Service.shared)
                 
             })
-            .customAlert(title: "를 퇴장 시키시겠습니까?", subTitle: "이 행동은 되돌릴 수 없습니다.", isPresented: $showExistAlert, yesButtonHandler: {
-//                viewModel.deleteUserInGameRoom(<#T##userId: String##String#>)
+            .customAlert(title: "\(existUserDisplayName)를 퇴장 시키시겠습니까?", subTitle: "이 행동은 되돌릴 수 없습니다.", isPresented: $showExistAlert, yesButtonHandler: {
+                viewModel.deleteUserInGameRoom(existUserId)
             })
             .task {
                 print(#fileID, #function, #line, "- gameId gameRoomId: \(gameRoomId)")

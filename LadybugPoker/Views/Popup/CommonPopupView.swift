@@ -48,6 +48,7 @@ struct CommonPopupView: View {
             
             HStack(spacing: 0) {
                 Button {
+                    isPresented = false
                     yesButtonHandler()
                 } label: {
                     ZStack {
