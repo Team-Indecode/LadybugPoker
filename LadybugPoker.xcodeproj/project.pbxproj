@@ -67,6 +67,7 @@
 		D19AFD772BBFA0C4008F9297 /* GameRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD762BBFA0C4008F9297 /* GameRoom.swift */; };
 		D19AFD792BBFA12F008F9297 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD782BBFA12F008F9297 /* User.swift */; };
 		D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD7B2BBFA238008F9297 /* GameRoom_Preview.swift */; };
+		D1A7D8D82BE9B86C002197AE /* GuideCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A7D8D72BE9B86C002197AE /* GuideCardView.swift */; };
 		D1AD227D2BDB6D6B0030EC56 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD227C2BDB6D6B0030EC56 /* MyPageView.swift */; };
 		D1AD227F2BDCF3A10030EC56 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD227E2BDCF3A10030EC56 /* Date+.swift */; };
 		D1AD22812BDCF4940030EC56 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD22802BDCF4940030EC56 /* String+.swift */; };
@@ -120,6 +121,7 @@
 		D19AFD762BBFA0C4008F9297 /* GameRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoom.swift; sourceTree = "<group>"; };
 		D19AFD782BBFA12F008F9297 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D19AFD7B2BBFA238008F9297 /* GameRoom_Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoom_Preview.swift; sourceTree = "<group>"; };
+		D1A7D8D72BE9B86C002197AE /* GuideCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideCardView.swift; sourceTree = "<group>"; };
 		D1AD227C2BDB6D6B0030EC56 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		D1AD227E2BDCF3A10030EC56 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		D1AD22802BDCF4940030EC56 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				D12685A82BE8D34D005FDF84 /* GuideView+PlayerBoardView.swift */,
+				D1A7D8D72BE9B86C002197AE /* GuideCardView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -576,6 +579,7 @@
 				D1418E242BD6400C00421904 /* DefaultView.swift in Sources */,
 				D1AD22812BDCF4940030EC56 /* String+.swift in Sources */,
 				4D02FA0C2BE6056E00E743F3 /* GameFinishView.swift in Sources */,
+				D1A7D8D82BE9B86C002197AE /* GuideCardView.swift in Sources */,
 				4DF375B92BD161CC008AC415 /* GamePlayAttackDefenceView.swift in Sources */,
 				D19AFD6F2BBF9F99008F9297 /* MainView.swift in Sources */,
 				4DC5035A2BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift in Sources */,
