@@ -13,7 +13,7 @@ struct UserProfileView: View {
     var body: some View {
         HStack {
             if let profileUrl = user.profileUrl {
-                LazyImage(url: URL(string: profileUrl))
+                LazyImage(source: URL(string: profileUrl))
                     .scaledToFit()
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())

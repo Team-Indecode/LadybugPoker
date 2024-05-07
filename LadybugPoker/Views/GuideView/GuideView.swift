@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct GuideView: View {
     @EnvironmentObject private var service: Service
     
     @State private var users: [User] = []
     
-    @State private var level = 2
+    @State private var level = 9
     
-    @State private var gameStatus: GameStatus = .notStarted
+    @State private var gameStatus: GameStatus = .onAir
     
     @State private var backgroundOpacity = 0.8
     
@@ -113,7 +114,9 @@ struct GuideView: View {
                                 Spacer()
                                 
                                 Button {
-                                    
+                                    withAnimation {
+                                        level += 1
+                                    }
                                 } label: {
                                     GuideView_PlayerBoardView(isLeft: true,
                                                               user: users[1],
@@ -124,7 +127,7 @@ struct GuideView: View {
                                 .overlay(alignment: .topLeading) {
                                     Image(systemName: "arrowshape.right.fill")
                                         .foregroundStyle(Color.orange)
-                                        .padding(.leading, -50)
+                                        .padding(.leading, -40)
                                 }
                             }
                             
@@ -197,6 +200,19 @@ struct GuideView: View {
                         Text("\(users[1].displayName)를")
                         
                         Text("선택하세요 !")
+                    }
+                    
+                case 9:
+                    VStack {
+                        if let user = service.myUserModel {
+                            HStack {
+                                LazyImage(source: user.profileUrl, resizingMode: .aspectFill)
+                                    .scaledToFit()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                            }
+                        }
+  
                     }
                 default:
                     VStack {

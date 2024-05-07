@@ -19,7 +19,7 @@ extension GuideView {
         var body: some View {
             VStack(alignment: .leading) {
                 HStack(spacing: 8) {
-                    LazyImage(url: URL(string: user.profileUrl ?? ""))
+                    LazyImage(source: URL(string: user.profileUrl ?? ""))
                         .scaledToFill()
                         .frame(width: 30, height: 30)
                         .clipShape(Circle())

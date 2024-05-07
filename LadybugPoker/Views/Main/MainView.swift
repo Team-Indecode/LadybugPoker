@@ -34,7 +34,7 @@ struct MainView: View {
                             .font(.sea(15))
                         
                         if let url = service.myUserModel.profileUrl {
-                            LazyImage(url: URL(string: url))
+                            LazyImage(source: URL(string: url))
                         }
                     }
                 }

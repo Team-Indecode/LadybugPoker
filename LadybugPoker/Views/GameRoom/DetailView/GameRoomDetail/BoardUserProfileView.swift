@@ -18,7 +18,7 @@ struct BoardUserProfileView: View {
     var body: some View {
         HStack(spacing: 8) {
             if let userImageUrl = userImageUrl {
-                LazyImage(url: URL(string: userImageUrl))
+                LazyImage(source: userImageUrl)
                     .scaledToFit()
                     .frame(width: 30, height: 30)
                     .clipShape(Circle())
