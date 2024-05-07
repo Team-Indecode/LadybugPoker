@@ -20,7 +20,12 @@ struct CardView: View {
         ZStack {
             VStack(spacing: 2) {
                 bugView
-                bugCntView
+                if card.cardCnt != 0 {
+                    bugCntView
+                } else {
+                    Spacer()
+                        .frame(height: 25)
+                }
             }
             .zIndex(1)
             .frame(width: cardWidthSize, height: cardHeightSize)

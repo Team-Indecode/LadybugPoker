@@ -16,55 +16,68 @@ struct GamePlayAttackDefenceView: View {
     @State private var player: Player = .attacker
     /// 남은 타이머
     @State private var timer: Int = 48
-    /// 공격자가 선택한 벌레
+    /// 공격자가 공격한 벌레
     @State private var attackBug: Bugs? = nil
+    @State private var selectBug: Bugs? = nil
     @State private var screenHeight: CGFloat = 700
     @Binding var showView: Bool
     
     var body: some View {
         if #available(iOS 17, *) {
-            GeometryReader(content: { geometry in
-                VStack {
-                    switch player {
-                    case .attacker:
-                        attackerView
-                    case .defender:
-                        defenderView
-                    case .others:
-                        othersView
-                    }
-                }
+            allContent
                 .onChange(of: viewModel.userType, { oldValue, userType in
                     if let userType = userType {
                         player = userType
                     }
                 })
-                .onAppear(perform: {
-                    screenHeight = geometry.size.height
-                    if let userType = viewModel.userType {
-                        player = userType
+                .onChange(of: viewModel.gameRoomData.value.selectedCard, { oldValue, newValue in
+                    switch newValue {
+                    case Bugs.bee.cardString: selectBug = .bee
+                    case Bugs.frog.cardString: selectBug = .frog
+                    case Bugs.ladybug.cardString: selectBug = .ladybug
+                    case Bugs.rat.cardString: selectBug = .rat
+                    case Bugs.snail.cardString: selectBug = .snail
+                    case Bugs.snake.cardString: selectBug = .snake
+                    case Bugs.spider.cardString: selectBug = .spider
+                    case Bugs.worm.cardString: selectBug = .worm
+                    default: selectBug = nil
                     }
-                    
                 })
-                .background(Color.black.opacity(0.5))
-            })
         } else {
-            GeometryReader(content: { geometry in
-                VStack {
-                    switch player {
-                    case .attacker:
-                        attackerView
-                    case .defender:
-                        defenderView
-                    case .others:
-                        othersView
-                    }
+            allContent
+        }
+    }
+    
+    var allContent: some View {
+        GeometryReader { proxy in
+            VStack {
+                switch player {
+                case .attacker:
+                    attackerView
+                case .defender:
+                    defenderView
+                case .others:
+                    othersView
                 }
-                .onAppear(perform: {
-                    screenHeight = geometry.size.height
-                })
-                .background(Color.black.opacity(0.5))
+            }
+            .onAppear(perform: {
+                screenHeight = proxy.size.height
+                if let userType = viewModel.userType {
+                    player = userType
+                }
+                switch viewModel.gameRoomData.value.selectedCard {
+                case Bugs.bee.cardString: selectBug = .bee
+                case Bugs.frog.cardString: selectBug = .frog
+                case Bugs.ladybug.cardString: selectBug = .ladybug
+                case Bugs.rat.cardString: selectBug = .rat
+                case Bugs.snail.cardString: selectBug = .snail
+                case Bugs.snake.cardString: selectBug = .snake
+                case Bugs.spider.cardString: selectBug = .spider
+                case Bugs.worm.cardString: selectBug = .worm
+                default: selectBug = nil
+                }
             })
+            .background(Color.black.opacity(0.5))
         }
         
     }
@@ -112,8 +125,18 @@ struct GamePlayAttackDefenceView: View {
                 if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
                     makeUserView(userData)
                 }
-                
                 Spacer()
+                if let selectBug = selectBug {
+                    VStack(spacing: 2) {
+                        Text("고른 카드")
+                            .font(.sea(10))
+                            .foregroundStyle(Color.white)
+                        CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
+                            
+                    }
+                    .padding(.trailing, 20)
+                    
+                }
             }
             Text("이 카드는....")
                 .font(.sea(50))
