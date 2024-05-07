@@ -16,55 +16,68 @@ struct GamePlayAttackDefenceView: View {
     @State private var player: Player = .attacker
     /// 남은 타이머
     @State private var timer: Int = 48
-    /// 공격자가 선택한 벌레
+    /// 공격자가 공격한 벌레
     @State private var attackBug: Bugs? = nil
+    @State private var selectBug: Bugs? = nil
     @State private var screenHeight: CGFloat = 700
     @Binding var showView: Bool
     
     var body: some View {
         if #available(iOS 17, *) {
-            GeometryReader(content: { geometry in
-                VStack {
-                    switch player {
-                    case .attacker:
-                        attackerView
-                    case .defender:
-                        defenderView
-                    case .others:
-                        othersView
-                    }
-                }
+            allContent
                 .onChange(of: viewModel.userType, { oldValue, userType in
                     if let userType = userType {
                         player = userType
                     }
                 })
-                .onAppear(perform: {
-                    screenHeight = geometry.size.height
-                    if let userType = viewModel.userType {
-                        player = userType
+                .onChange(of: viewModel.gameRoomData.value.selectedCard, { oldValue, newValue in
+                    switch newValue {
+                    case Bugs.bee.cardString: selectBug = .bee
+                    case Bugs.frog.cardString: selectBug = .frog
+                    case Bugs.ladybug.cardString: selectBug = .ladybug
+                    case Bugs.rat.cardString: selectBug = .rat
+                    case Bugs.snail.cardString: selectBug = .snail
+                    case Bugs.snake.cardString: selectBug = .snake
+                    case Bugs.spider.cardString: selectBug = .spider
+                    case Bugs.worm.cardString: selectBug = .worm
+                    default: selectBug = nil
                     }
-                    
                 })
-                .background(Color.black.opacity(0.5))
-            })
         } else {
-            GeometryReader(content: { geometry in
-                VStack {
-                    switch player {
-                    case .attacker:
-                        attackerView
-                    case .defender:
-                        defenderView
-                    case .others:
-                        othersView
-                    }
+            allContent
+        }
+    }
+    
+    var allContent: some View {
+        GeometryReader { proxy in
+            VStack {
+                switch player {
+                case .attacker:
+                    attackerView
+                case .defender:
+                    defenderView
+                case .others:
+                    othersView
                 }
-                .onAppear(perform: {
-                    screenHeight = geometry.size.height
-                })
-                .background(Color.black.opacity(0.5))
+            }
+            .onAppear(perform: {
+                screenHeight = proxy.size.height
+                if let userType = viewModel.userType {
+                    player = userType
+                }
+                switch viewModel.gameRoomData.value.selectedCard {
+                case Bugs.bee.cardString: selectBug = .bee
+                case Bugs.frog.cardString: selectBug = .frog
+                case Bugs.ladybug.cardString: selectBug = .ladybug
+                case Bugs.rat.cardString: selectBug = .rat
+                case Bugs.snail.cardString: selectBug = .snail
+                case Bugs.snake.cardString: selectBug = .snake
+                case Bugs.spider.cardString: selectBug = .spider
+                case Bugs.worm.cardString: selectBug = .worm
+                default: selectBug = nil
+                }
             })
+            .background(Color.black.opacity(0.5))
         }
         
     }
@@ -112,8 +125,17 @@ struct GamePlayAttackDefenceView: View {
                 if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
                     makeUserView(userData)
                 }
-                
                 Spacer()
+                if let selectBug = selectBug {
+                    VStack(spacing: 2) {
+                        Text("고른 카드")
+                            .font(.sea(10))
+                            .foregroundStyle(Color.white)
+                        CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
+                            
+                    }
+                    .padding(.trailing, 20)
+                }
             }
             Text("이 카드는....")
                 .font(.sea(50))
@@ -127,13 +149,7 @@ struct GamePlayAttackDefenceView: View {
             Text("입니다.")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
-            HStack {
-                Spacer()
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
-                    makeUserView(userData)
-                }
-                
-            }
+            defenderProfileView
         }
     }
     
@@ -141,12 +157,7 @@ struct GamePlayAttackDefenceView: View {
     /// 플레이어가 수비자 or 그 외 일때 topView
     var playerNotAttackerTopView: some View {
         VStack(spacing: 0) {
-            HStack {
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
-                    UserProfileView(user: userData)
-                }
-                Spacer()
-            }
+            attackerProfileView
             Text("이 카드는....")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
@@ -154,13 +165,7 @@ struct GamePlayAttackDefenceView: View {
             Text("입니다.")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
-            HStack {
-                Spacer()
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
-//                    makeUserView(userData)
-                    UserProfileView(user: userData)
-                }
-            }
+            defenderProfileView
         }
     }
     
@@ -270,12 +275,50 @@ struct GamePlayAttackDefenceView: View {
         .clipShape(RoundedRectangle(cornerRadius: 6))
     }
     
+
+    var attackFinishView: some View {
+        VStack(spacing: 0) {
+            attackerProfileView
+            if let selectBug = selectBug {
+                CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
+            }
+           defenderProfileView
+            Text("공격 성공")
+                .font(.sea(50))
+        }
+    }
+    
+    var attackerProfileView: some View {
+        HStack {
+            if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
+                UserProfileView(user: userData)
+            }
+            Spacer()
+        }
+    }
+    
+    var defenderProfileView: some View {
+        HStack {
+            Spacer()
+            if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
+//                    makeUserView(userData)
+                UserProfileView(user: userData)
+            }
+        }
+    }
+    
     //MARK: - 바텀
     func playerBottomView(_ isDefender: Bool) -> some View {
         return VStack(spacing: 0) {
             timerView
             if isDefender && viewModel.gameRoomData.value.questionCard != nil {
                 cardGuessChooseView
+            } else if viewModel.gameRoomData.value.decision != nil && viewModel.gameRoomData.value.questionCard != nil && !isDefender {
+                if let decision = viewModel.gameRoomData.value.decision {
+                    Spacer()
+                    guessText(decision ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
+                    
+                }
             }
             Spacer()
         }
@@ -300,14 +343,14 @@ struct GamePlayAttackDefenceView: View {
     var cardGuessChooseView: some View {
         VStack {
             HStack {
-                guessText("맞습니다.")
+                guessText(DefenderAnswer.same.rawValue)
                 Spacer()
                     .frame(width: 70)
-                guessText("아닙니다.")
+                guessText(DefenderAnswer.different.rawValue)
             }
             .padding(.bottom, 26)
             if viewModel.gameRoomData.value.attackers.count != viewModel.gameRoomData.value.usersInGame.count - 1 {
-                guessText("카드를 넘깁니다.")
+                guessText(DefenderAnswer.cardSkip.rawValue)
             }
             
         }
@@ -317,7 +360,8 @@ struct GamePlayAttackDefenceView: View {
     /// 수비자가 선택할 text
     func guessText(_ text: String) -> some View {
         return Button(action: {
-            viewModel.defenderSuccessCheck(text)
+//            viewModel.defenderSuccessCheck(text)
+            viewModel.decisionUpdate(text)
         }, label: {
             Text(text)
                 .font(.sea(20))

@@ -86,6 +86,7 @@ extension GameRoomDetailBottomView {
                                     }
 
                                 }
+                                .disabled(viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id ? false : true)
                                 .padding(.leading, card == myCards.first ? 20 : 0)
                             }
                         }

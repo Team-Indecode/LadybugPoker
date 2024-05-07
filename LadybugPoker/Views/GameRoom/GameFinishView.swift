@@ -11,10 +11,13 @@ struct GameFinishView: View {
     @EnvironmentObject private var service: Service
     @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
     
-    @State private var user: UserInGame = UserInGame(id: "", readyOrNot: false, handCard: nil, boardCard: nil, displayName: "", profileUrl: nil, idx: 0, chat: nil)
+    @State private var loserProfile: UserInGame = UserInGame(id: "", readyOrNot: false, handCard: nil, boardCard: nil, displayName: "", profileUrl: nil, idx: 0, chat: nil)
+    @State private var winnersProfile: [UserInGame] = []
     
     let isHost: Bool
-    let userIndex: Int?
+    let loserIndex: Int?
+    
+    let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
         GeometryReader { proxy in
@@ -30,35 +33,75 @@ struct GameFinishView: View {
             
         }
         .onAppear {
-            guard let userIndex = userIndex else { return }
-            let userId = viewModel.usersId[userIndex]
-            if userId != "" {
-                guard let userData =  viewModel.gameRoomData.value.usersInGame[userId] else {
-                    return
+            guard let loserIndex = loserIndex else { return }
+            self.winnersProfile = []
+            for idx in 0..<6 {
+                var userId = viewModel.usersId[idx]
+                if userId != "" {
+                    guard let userData =  viewModel.gameRoomData.value.usersInGame[userId] else {
+                        return
+                    }
+                    if idx == loserIndex {
+                        self.loserProfile = userData
+                    } else {
+                        self.winnersProfile.append(userData)
+                    }
                 }
-                self.user = userData
             }
+            
         }
     }
     
     var topView: some View {
         VStack(spacing: 0) {
             Spacer()
-            UserProfileView(user: user)
-            Text(user.idx == viewModel.gameRoomData.value.loser ? "😭" : "😀")
-//            Text("😭")
-                .font(.sea(50))
-                .padding(.top, 15)
-            Text(user.idx == viewModel.gameRoomData.value.loser ? "패배" : "승리")
-                .font(.sea(50))
-                .padding(.top, 10)
+            loserView
+            winnersView
             Text("새로운 게임을 기다리고 있습니다.")
                 .font(.sea(25))
-                .padding(.top, 15)
+//                .padding(.top, 15)
             outRoomOrNewGame
                 .padding(.top, 15)
             Spacer()
         }
+    }
+    
+    var loserView: some View {
+        HStack(spacing: 0) {
+            VStack(spacing: 5) {
+                Text("😭")
+                    .font(.sea(30))
+                Text("패배")
+                    .font(.sea(40))
+                    .foregroundStyle(Color.white)
+            }
+            Spacer()
+            UserProfileView(user: loserProfile)
+        }
+        .padding(.horizontal, 20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+    }
+    
+    var winnersView: some View {
+        HStack(spacing: 0) {
+            VStack(spacing: 0) {
+                Text("😆")
+                    .font(.sea(30))
+                Text("승리")
+                    .font(.sea(40))
+                    .foregroundStyle(Color.white)
+            }
+            Spacer()
+                .frame(width: 40)
+            LazyVGrid(columns: columns, spacing: 4) {
+                ForEach(self.winnersProfile, id: \.self) { profile in
+                    UserProfileView(user: profile, profileWidth: 118, profileHeight: 33)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        }
+        .padding(.horizontal, 20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
     
     @ViewBuilder
@@ -116,5 +159,5 @@ struct GameFinishView: View {
 }
 
 #Preview {
-    GameFinishView(isHost: false, userIndex: 0)
+    GameFinishView(isHost: false, loserIndex: 0)
 }

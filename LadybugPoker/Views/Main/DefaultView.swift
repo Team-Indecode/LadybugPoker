@@ -35,7 +35,6 @@ struct DefaultView: View {
                         .navigationBarBackButtonHidden()
                 case .gameRoom(let gameRoomId):
                     GameRoomDetailView(gameRoomId: gameRoomId)
-                        .navigationBarBackButtonHidden()
                     
                 case .myPage(let id):
                     MyPageView(id: id)

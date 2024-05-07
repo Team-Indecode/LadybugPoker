@@ -12,9 +12,27 @@ struct CommonPopupView: View {
     
     @State var title: String
     @State var subTitle: String = "설명이 들어갑니다."
-    var buttonHandler: (() -> Void)
+    var yesButtonHandler: (() -> Void)
+    
+    init(_ isPresented: Binding<Bool>, title: String, subTitle: String, yesButtonHandler: @escaping () -> Void) {
+        _isPresented = isPresented
+        self.title = title
+        self.subTitle = subTitle
+        self.yesButtonHandler = yesButtonHandler
+    }
     
     var body: some View {
+        ZStack {
+            Color.black
+                .ignoresSafeArea()
+                .opacity(isPresented ? 0.5 : 0)
+            alertView
+        }
+        .ignoresSafeArea()
+        .zIndex(.greatestFiniteMagnitude)
+    }
+    
+    var alertView: some View {
         VStack(spacing: 0) {
             Text(title)
                 .font(.sea(23))
@@ -30,7 +48,8 @@ struct CommonPopupView: View {
             
             HStack(spacing: 0) {
                 Button {
-                    
+                    isPresented = false
+                    yesButtonHandler()
                 } label: {
                     ZStack {
                         Color.bugLightMedium
@@ -44,7 +63,7 @@ struct CommonPopupView: View {
                     .frame(width: 1)
                 
                 Button {
-                    
+                    isPresented = false
                 } label: {
                     ZStack {
                         Color.bugLightMedium
@@ -70,8 +89,3 @@ struct CommonPopupView: View {
     }
 }
 
-#Preview {
-    CommonPopupView(isPresented: .constant(true),
-                    title: "test",
-                    buttonHandler: {})
-}

@@ -35,6 +35,8 @@ struct GameRoom: Codable, Identifiable, Equatable {
     let turnTime: Int
     let gameStatus: String
     var loser: Int?
+    /// 수비자의 맞,틀 선택(true -> 맞습니다, false -> 아닙니다)
+    let decision: Bool?
     
     var toJson: [String: Any] {
         var userGameData: [String: Any] = [:]
@@ -58,11 +60,12 @@ struct GameRoom: Codable, Identifiable, Equatable {
             "attackers" : attackers,
             "createdAt" : createdAt,
             "turnTime" : turnTime,
-            "loser" : loser
+            "loser" : loser,
+            "decision" : decision
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: Int?) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: Int?, decision: Bool?) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -80,6 +83,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.turnTime = turnTime
         self.gameStatus = gameStatus
         self.loser = loser
+        self.decision = decision
     }
     
     init?(data: [String: Any]) {
@@ -158,7 +162,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.turnTime = turnTime
         self.gameStatus = gameStatus
         self.loser = data["loser"] as? Int
-        
+        self.decision = data["decision"] as? Bool
     }
 }
 
@@ -189,8 +193,16 @@ enum GameType {
     case attacker
     /// 수비자가 선택하는 뷰
     case defender
+    /// 게임 한판의 결과를 보여줌
+    case showGameResult
     /// 수비자가 카드 넘기기 선택
     case cardSkip
     /// 공격&수비 종료
     case gameAttackFinish
+}
+
+enum DefenderAnswer: String {
+    case same = "맞습니다."
+    case different = "아닙니다."
+    case cardSkip = "카드를 넘깁니다."
 }
