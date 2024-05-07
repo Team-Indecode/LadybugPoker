@@ -135,7 +135,6 @@ struct GamePlayAttackDefenceView: View {
                             
                     }
                     .padding(.trailing, 20)
-                    
                 }
             }
             Text("이 카드는....")
@@ -150,13 +149,7 @@ struct GamePlayAttackDefenceView: View {
             Text("입니다.")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
-            HStack {
-                Spacer()
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
-                    makeUserView(userData)
-                }
-                
-            }
+            defenderProfileView
         }
     }
     
@@ -164,12 +157,7 @@ struct GamePlayAttackDefenceView: View {
     /// 플레이어가 수비자 or 그 외 일때 topView
     var playerNotAttackerTopView: some View {
         VStack(spacing: 0) {
-            HStack {
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
-                    UserProfileView(user: userData)
-                }
-                Spacer()
-            }
+            attackerProfileView
             Text("이 카드는....")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
@@ -177,13 +165,7 @@ struct GamePlayAttackDefenceView: View {
             Text("입니다.")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
-            HStack {
-                Spacer()
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
-//                    makeUserView(userData)
-                    UserProfileView(user: userData)
-                }
-            }
+            defenderProfileView
         }
     }
     
@@ -291,6 +273,38 @@ struct GamePlayAttackDefenceView: View {
         .frame(width: 86, height: 129)
         .background(Color(hex: "B99C00"))
         .clipShape(RoundedRectangle(cornerRadius: 6))
+    }
+    
+
+    var attackFinishView: some View {
+        VStack(spacing: 0) {
+            attackerProfileView
+            if let selectBug = selectBug {
+                CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
+            }
+           defenderProfileView
+            Text("공격 성공")
+                .font(.sea(50))
+        }
+    }
+    
+    var attackerProfileView: some View {
+        HStack {
+            if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
+                UserProfileView(user: userData)
+            }
+            Spacer()
+        }
+    }
+    
+    var defenderProfileView: some View {
+        HStack {
+            Spacer()
+            if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
+//                    makeUserView(userData)
+                UserProfileView(user: userData)
+            }
+        }
     }
     
     //MARK: - 바텀

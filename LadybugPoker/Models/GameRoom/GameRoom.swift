@@ -193,6 +193,8 @@ enum GameType {
     case attacker
     /// 수비자가 선택하는 뷰
     case defender
+    /// 게임 한판의 결과를 보여줌
+    case showGameResult
     /// 수비자가 카드 넘기기 선택
     case cardSkip
     /// 공격&수비 종료

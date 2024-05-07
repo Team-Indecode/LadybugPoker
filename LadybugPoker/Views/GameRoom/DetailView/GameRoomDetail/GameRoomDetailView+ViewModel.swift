@@ -83,7 +83,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
                                 }
                                 self.showAttackerAndDefenderView = true
                             } else {
-                                self.showAttackerAndDefenderView = false
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+                                    self.showAttackerAndDefenderView = false
+                                })
+                                
                             }
                         } else if data.gameStatus == GameStatus.finished.rawValue {
                             self.showAttackerAndDefenderView = false
@@ -271,6 +274,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         
         // 공격성공, 수비실패 -> 수비자의 boardCard에 추가 / whoseTurn -> whoseGetting으로 변경
+        #warning("여기서 한턴이 끝났음을 알려주면 될듯, viewModel에 새로운 변수를 하나두고 진행")
         if defenderLose {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
                 let boardCards = stringToCards(userInGame.boardCard ?? "")
@@ -557,6 +561,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    /// 수비자의 선택 업데이트
+    /// - Parameter decision: 수비자가 선택한 text
     func decisionUpdate(_ decision: String) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         var decisionBool: Bool?
@@ -582,13 +588,26 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    /// 게임룸에서 유저 삭제
+    /// - Parameter userId: 삭제할 유저의 아이디
     func deleteUserInGameRoom(_ userId: String) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         gameRoomDataRef.updateData(["usersInGame.\(userId)" : FieldValue.delete()] ) { error in
             if let error = error {
-                print(#fileID, #function, #line, "- delete user error: \(userId)")
+                print(#fileID, #function, #line, "- delete \(userId) error: \(error.localizedDescription)")
             }
             print(#fileID, #function, #line, "- delete UserSuccess⭐️: \(userId)")
+        }
+    }
+    
+    /// 게임룸 삭제
+    func deleteGameRoom()  {
+        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+        gameRoomDataRef.delete { error in
+            if let error = error {
+                print(#fileID, #function, #line, "- delete해당 게임방 에러: \(error)")
+            }
+            print(#fileID, #function, #line, "- 게임 룸 삭제 success")
         }
     }
 
