@@ -13,6 +13,9 @@ struct GameRoomDetailView: View {
     @State private var amIReadied: Bool = false
     @State private var isHost: Bool = false
     @State private var myCards: [Card] = [] 
+    @State var showExistAlert: Bool = false
+//    @State var existUserId: String = ""
+//    @State var existUserDisplay
     let gameRoomId: String
     
     var body: some View {
@@ -50,7 +53,8 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame, usersId: $viewModel.usersId)
+
+                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame, usersId: $viewModel.usersId, showExistAlert: $showExistAlert)
                     .frame(height: proxy.size.height * 0.6706)
                     .environmentObject(viewModel)
                 GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType)
@@ -69,6 +73,9 @@ struct GameRoomDetailView: View {
                     .environmentObject(Service.shared)
                 
             })
+            .customAlert(title: "를 퇴장 시키시겠습니까?", subTitle: "이 행동은 되돌릴 수 없습니다.", isPresented: $showExistAlert, yesButtonHandler: {
+//                viewModel.deleteUserInGameRoom(<#T##userId: String##String#>)
+            })
             .task {
                 print(#fileID, #function, #line, "- gameId gameRoomId: \(gameRoomId)")
                 try? await viewModel.getGameData(gameRoomId)
@@ -82,4 +89,11 @@ struct GameRoomDetailView: View {
     GameRoomDetailView(gameRoomId: "")
 }
 
-
+//if showExistAlert {
+//    CommonPopupView(isPresented: $showExistAlert, title: "를 퇴장시키겠습니까?", subTitle: "이 행동은 되돌릴 수 없습니다.") {
+////                    viewModel.deleteUserInGameRoom(user.id)
+//    } noButtonHandler: {
+//        showExistAlert.toggle()
+//    }
+//    .zIndex(1)
+//}
