@@ -63,8 +63,15 @@ struct PlayerBoardView: View {
             if viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished {
                 userIsPlayGame
             } else {
-                userIsNotPlayGame
-                    .frame(height: boardHeight - 60)
+                if viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id {
+                    hostUserIsNotPlayGame
+                        .frame(height: boardHeight - 80)
+                        .background(Color.red)
+                } else {
+                    userIsNotPlayGame
+                        .frame(height: boardHeight - 80)
+                        .background(Color.red)
+                }
             }
             if (viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished) && cards.count <= 4 {
                 if cards.count == 0 {
@@ -77,6 +84,7 @@ struct PlayerBoardView: View {
                 }
             }
         }
+        .background(Color.blue)
     }
     
     //MARK: - 채팅 뷰
@@ -138,6 +146,7 @@ struct PlayerBoardView: View {
                 .frame(width: 56, height: 40)
         }
         .disabled(viewModel.gameType != .selectUser)
+        .disabled(viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id ? false : true)
     }
     
     /// 유저 게임 중일때
@@ -156,6 +165,32 @@ struct PlayerBoardView: View {
         Text(userReadyOrNot ? "준비 완료" : "대기중...")
             .font(.sea(35))
 //            .padding(.top, 23)
+    }
+    
+    /// 게임 방의 유저가 호스트가 게임 준비 중일 때
+    var hostUserIsNotPlayGame: some View {
+        VStack(spacing: 5) {
+            Text(userReadyOrNot ? "준비 완료" : "대기중...")
+                .font(.sea(35))
+            if viewModel.gameRoomData.value.hostId != user.id {
+                Button {
+                    print(#fileID, #function, #line, "- 퇴장 버튼 클릭⭐️")
+                    viewModel.deleteUserInGameRoom(user.id)
+                } label: {
+                    Text("퇴장")
+                        .font(.sea(12))
+                        .foregroundStyle(Color.white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(Color.black)
+                        .clipShape(.capsule)
+                        .overlay {
+                            Capsule()
+                                .stroke(.white, lineWidth: 1)
+                        }
+                }
+            }
+        }
     }
 }
 

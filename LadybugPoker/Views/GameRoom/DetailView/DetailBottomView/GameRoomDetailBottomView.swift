@@ -67,7 +67,7 @@ struct GameRoomDetailBottomView: View {
                         if viewModel.allPlayerReadied {
                             Text(allPlayerReadied)
                                 .font(.sea(15))
-                                .padding(.bottom, 10)
+                                .padding(.bottom, 20)
                             Text(hostWarningText)
                                 .font(.sea(15))
                                 .padding(.bottom, 20)
@@ -103,6 +103,7 @@ struct GameRoomDetailBottomView: View {
                     } else {
                         Text(notAllPlayerReadiedText)
                             .font(.sea(20))
+                            .padding(.bottom)
                     }
                 } else {
                     if amIReadied == false {
@@ -136,7 +137,7 @@ struct GameRoomDetailBottomView: View {
                 }
                 .foregroundStyle(.black)
                 .font(.sea(15))
-                .padding(.top, 30)
+                .padding(.top, 20)
                 
                 HStack(spacing: 5) {
                     Spacer()
@@ -149,8 +150,8 @@ struct GameRoomDetailBottomView: View {
                         .font(.sea(15))
                 }
                 .padding(.trailing, 16)
-                .padding(.top, 20)
-                .padding(.bottom, 15)
+                .padding(.top, 5)
+                .padding(.bottom, 5)
             }
             Spacer()
             chatTextField
@@ -179,7 +180,7 @@ struct GameRoomDetailBottomView: View {
                 }
                 .padding(.trailing, 6)
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 6)
     }
     
     /// 채팅 보내기 로직
@@ -194,13 +195,14 @@ struct GameRoomDetailBottomView: View {
     
     func ready() {
         withAnimation {
-            viewModel.sendIamReady()
+            viewModel.sendIamReady(true)
         }
     }
     
     func cancelReady() {
         withAnimation {
-            amIReadied = false
+//            amIReadied = false
+            viewModel.sendIamReady(false)
         }
     }
     

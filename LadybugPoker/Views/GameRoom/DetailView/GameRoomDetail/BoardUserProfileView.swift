@@ -22,7 +22,7 @@ struct BoardUserProfileView: View {
                     .scaledToFit()
                     .frame(width: 30, height: 30)
                     .clipShape(Circle())
-                    .padding(.leading)
+//                    .padding(.leading)
             } else {
                 Image(Bugs.ladybug.rawValue)
                     .resizable()
@@ -45,7 +45,7 @@ struct BoardUserProfileView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .frame(width: 80)
+        .frame(width: 100)
         .frame(maxWidth: .infinity, alignment: isOdd ? .leading : .trailing)
         
     }

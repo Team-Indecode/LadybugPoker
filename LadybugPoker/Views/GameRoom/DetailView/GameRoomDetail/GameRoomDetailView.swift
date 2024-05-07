@@ -20,7 +20,17 @@ struct GameRoomDetailView: View {
             allContent
                 .onChange(of: viewModel.gameRoomData.value.usersInGame) { oldValue, newValue in
                     myCards = viewModel.getUserCard(true)
+                    
                     print(#fileID, #function, #line, "- myCards: \(myCards)")
+                    let myId = Service.shared.myUserModel.id
+                    if newValue[myId] == nil {
+                        Service.shared.path.removeLast()
+                    }
+                    if viewModel.gameStatus == .notEnoughUsers || viewModel.gameStatus == .notStarted {
+                        if let user = newValue[myId] {
+                            amIReadied = user.readyOrNot
+                        }
+                    }
                     
                 }
                 .onChange(of: viewModel.gameRoomData.value.hostId) { oldValue, newValue in

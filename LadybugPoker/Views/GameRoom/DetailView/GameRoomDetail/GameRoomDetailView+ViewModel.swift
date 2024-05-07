@@ -102,6 +102,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     // 1. tuple을 만들어서(userIdx, userId)이런식으로 만들어서 userIdx를 오름차순으로 정렬한다
     // 2. 그런다음 userId만 그 tuple에서 추출한다
     func getUsersId(_ usersInGame: [String : UserInGame]) {
+        
         usersInGame.forEach { (key: String, value: UserInGame) in
             usersId[value.idx] = key
             usersChat[value.idx] = value.chat
@@ -215,13 +216,14 @@ class GameRoomDetailViewViewModel: ObservableObject {
             userInGameUpdate(userInGame, userInGame.id, .gameStart)
         }
     }
- 
-    /// 유저가 준비완료가 됬음을 보내줌
-    func sendIamReady() {
+    
+    /// 유저의 준비완료 여부
+    /// - Parameter readyOrNot: true -> 준비완료, fasle -> 준비완료 취소
+    func sendIamReady(_ readyOrNot: Bool) {
         let userInGame = gameRoomData.value.usersInGame[Service.shared.myUserModel.id]
 
         guard var userInGame = userInGame else { return }
-        userInGame.readyOrNot = !userInGame.readyOrNot
+        userInGame.readyOrNot = readyOrNot
         
         userInGameUpdate(userInGame, userInGame.id, .sendUserReady)
     }
@@ -451,6 +453,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    //MARK: - firebase 데이터 업데이트
+    
     /// GameRoom의 한 user의 데이터 업데이트
     /// - Parameters:
     ///   - userInGame: 업데이트한 유저 데이터
@@ -550,6 +554,16 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
             }
             print(#fileID, #function, #line, "- update success update")
+        }
+    }
+    
+    func deleteUserInGameRoom(_ userId: String) {
+        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+        gameRoomDataRef.updateData(["usersInGame.\(userId)" : FieldValue.delete()] ) { error in
+            if let error = error {
+                print(#fileID, #function, #line, "- delete user error: \(userId)")
+            }
+            print(#fileID, #function, #line, "- delete UserSuccess⭐️: \(userId)")
         }
     }
 

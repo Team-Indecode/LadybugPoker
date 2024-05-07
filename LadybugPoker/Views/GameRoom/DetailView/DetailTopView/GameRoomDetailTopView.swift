@@ -16,13 +16,18 @@ struct GameRoomDetailTopView: View {
     
     var body: some View {
         GeometryReader { proxy in
-            LazyVGrid(columns: columns, spacing: 14) {
-                ForEach(0..<6, id: \.self) { index in
-                    if usersId[index] != "" {
-                        let userId = usersId[index]
+            LazyVGrid(columns: columns, spacing: 0) {
+                
+                ForEach(usersId, id: \.self) { userId in
+                    if userId != "" {
                         if let userData = usersInGame[userId] {
-                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], currentUserId: nil), userBoardIndex: index, boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, cardsString: userData.boardCard ?? "", userReadyOrNot: userData.readyOrNot, isOdd: index % 2 == 0 ? true : false)
+                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], currentUserId: nil), userBoardIndex: userData.idx, boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, cardsString: userData.boardCard ?? "", userReadyOrNot: userData.readyOrNot, isOdd: userData.idx % 2 == 0 ? true : false)
                                 .environmentObject(viewModel)
+                        } else {
+                            Rectangle()
+                                .fill(Color.bugLight)
+    //                            .fill(Color.red)
+                                .frame(width: (proxy.size.width) / 2, height: proxy.size.height / 3 - 60)
                         }
                     } else {
                         Rectangle()
