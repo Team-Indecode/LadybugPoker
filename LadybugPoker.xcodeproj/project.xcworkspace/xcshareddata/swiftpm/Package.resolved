@@ -37,6 +37,15 @@
       }
     },
     {
+      "identity" : "gifu",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kaishin/Gifu",
+      "state" : {
+        "revision" : "82da0086dea14ca9afc9801234ad8dc4cd9e2738",
+        "version" : "3.4.1"
+      }
+    },
+    {
       "identity" : "googleappmeasurement",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
@@ -122,8 +131,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kean/Nuke.git",
       "state" : {
-        "revision" : "4625c73ea00a9fb4b4f3e28d95d0021a44af7e59",
-        "version" : "12.5.0"
+        "revision" : "a002b7fd786f2df2ed4333fe73a9727499fd9d97",
+        "version" : "10.11.2"
+      }
+    },
+    {
+      "identity" : "nukeui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/NukeUI",
+      "state" : {
+        "revision" : "db55022a8e483774ebbf3568727071477546d9ea",
+        "version" : "0.8.3"
       }
     },
     {

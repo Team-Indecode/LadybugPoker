@@ -34,7 +34,7 @@ struct MainView: View {
                             .font(.sea(15))
                         
                         if let url = service.myUserModel.profileUrl {
-                            LazyImage(url: URL(string: url))
+                            LazyImage(source: URL(string: url))
                         }
                     }
                 }
@@ -89,10 +89,10 @@ struct MainView: View {
                 try await Task.sleep(nanoseconds: 1_000_000_000)
                 
                 if let user = service.myUserModel {
-                    print("user exists")
                     if let gameId = user.currentUserId {
-                        print("gameId")
                         service.path.append(.gameRoom(gameRoomId: gameId))
+                    } else {
+                        service.path.append(.guide)
                     }
                 }
             }
