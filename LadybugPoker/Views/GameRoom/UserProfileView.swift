@@ -10,6 +10,15 @@ import NukeUI
 
 struct UserProfileView: View {
     let user: UserInGame
+    let profileWidth: CGFloat
+    let profileHeight: CGFloat
+    
+    init(user: UserInGame, profileWidth: CGFloat = 171, profileHeight: CGFloat = 69) {
+        self.user = user
+        self.profileWidth = profileWidth
+        self.profileHeight = profileHeight
+    }
+    
     var body: some View {
         HStack {
             if let profileUrl = user.profileUrl {
@@ -28,7 +37,7 @@ struct UserProfileView: View {
             Text(user.displayName)
                 .font(.sea(20))
         }
-        .frame(width: 171, height: 69, alignment: .leading)
+        .frame(width: profileWidth, height: profileHeight, alignment: .leading)
         .background(Color.white)
         .clipShape(Capsule())
         .padding(.horizontal, 10)
@@ -36,5 +45,5 @@ struct UserProfileView: View {
 }
 
 #Preview {
-    UserProfileView(user: UserInGame(id: "", readyOrNot: false, handCard: "", boardCard: "", displayName: "", profileUrl: "", idx: 0, chat: ""))
+    UserProfileView(user: UserInGame(id: "", readyOrNot: false, handCard: "", boardCard: "", displayName: "", profileUrl: "", idx: 0, chat: ""), profileWidth: 171, profileHeight: 69)
 }

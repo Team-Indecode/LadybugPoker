@@ -67,7 +67,7 @@ struct GameRoomDetailView: View {
                     .environmentObject(viewModel)
             })
             .transparentFullScreenCover(isPresented: $viewModel.showLoserView, content: {
-                GameFinishView(isHost: viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id, userIndex: viewModel.gameRoomData.value.loser)
+                GameFinishView(isHost: viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id, loserIndex: viewModel.gameRoomData.value.loser)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .environmentObject(viewModel)
                     .environmentObject(Service.shared)

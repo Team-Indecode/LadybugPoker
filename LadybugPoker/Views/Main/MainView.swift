@@ -88,13 +88,13 @@ struct MainView: View {
 //                gameRooms = GameRoom.listPreview
                 try await Task.sleep(nanoseconds: 1_000_000_000)
                 
-//                if let user = service.myUserModel {
-//                    if let gameId = user.currentUserId {
-//                        service.path.append(.gameRoom(gameRoomId: gameId))
-//                    } else {
-//                        service.path.append(.guide)
-//                    }
-//                }
+                if let user = service.myUserModel {
+                    if let gameId = user.currentUserId {
+                        service.path.append(.gameRoom(gameRoomId: gameId))
+                    } else {
+                        service.path.append(.guide)
+                    }
+                }
             }
         }
         

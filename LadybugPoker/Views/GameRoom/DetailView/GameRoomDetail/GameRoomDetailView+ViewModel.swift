@@ -13,7 +13,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     let db = Firestore.firestore()
     @Published var gameStatus: GameStatus = .notStarted
     
-    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil))
+    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil))
 
     /// userIdx와 userId
     @Published var usersId: [String] = Array(repeating: "", count: 6)
@@ -509,11 +509,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
             updateDataDic["whoseGetting"] = nil as String?
             // 다음턴은 공격/수비에서 진 사람이 정해진다
             updateDataDic["whoseTurn"] = updateStringData
+            decisionUpdate("")
             attackersUpdate([])
         } else if updateDataType == .cardSkip {
             updateDataDic = [:]
             guard let updateDatas = updateDatas else { return }
-//            updateDataDic["attackers"] = [updateDatas]
             attackersUpdate(updateDatas)
             guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
             updateDataDic["whoseTurn"] = nextTurn
@@ -554,6 +554,31 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
             }
             print(#fileID, #function, #line, "- update success update")
+        }
+    }
+    
+    func decisionUpdate(_ decision: String) {
+        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+        var decisionBool: Bool?
+        if decision == DefenderAnswer.same.rawValue {
+            decisionBool = true
+        } else if decision == DefenderAnswer.different.rawValue {
+            decisionBool = false
+        } else if decision == "" {
+            decisionBool = nil
+        } else {
+            defenderSuccessCheck(decision)
+            return
+        }
+        
+        gameRoomDataRef.updateData(["decision" : decisionBool]) { error in
+            if let error = error {
+                print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
+            }
+            print(#fileID, #function, #line, "- update success update")
+            if decision == DefenderAnswer.same.rawValue || decision == DefenderAnswer.different.rawValue {
+                self.defenderSuccessCheck(decision)
+            }
         }
     }
     

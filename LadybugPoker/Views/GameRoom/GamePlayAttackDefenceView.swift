@@ -299,6 +299,12 @@ struct GamePlayAttackDefenceView: View {
             timerView
             if isDefender && viewModel.gameRoomData.value.questionCard != nil {
                 cardGuessChooseView
+            } else if viewModel.gameRoomData.value.decision != nil && viewModel.gameRoomData.value.questionCard != nil && !isDefender {
+                if let decision = viewModel.gameRoomData.value.decision {
+                    Spacer()
+                    guessText(decision ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
+                    
+                }
             }
             Spacer()
         }
@@ -323,14 +329,14 @@ struct GamePlayAttackDefenceView: View {
     var cardGuessChooseView: some View {
         VStack {
             HStack {
-                guessText("맞습니다.")
+                guessText(DefenderAnswer.same.rawValue)
                 Spacer()
                     .frame(width: 70)
-                guessText("아닙니다.")
+                guessText(DefenderAnswer.different.rawValue)
             }
             .padding(.bottom, 26)
             if viewModel.gameRoomData.value.attackers.count != viewModel.gameRoomData.value.usersInGame.count - 1 {
-                guessText("카드를 넘깁니다.")
+                guessText(DefenderAnswer.cardSkip.rawValue)
             }
             
         }
@@ -340,7 +346,8 @@ struct GamePlayAttackDefenceView: View {
     /// 수비자가 선택할 text
     func guessText(_ text: String) -> some View {
         return Button(action: {
-            viewModel.defenderSuccessCheck(text)
+//            viewModel.defenderSuccessCheck(text)
+            viewModel.decisionUpdate(text)
         }, label: {
             Text(text)
                 .font(.sea(20))
