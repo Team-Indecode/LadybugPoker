@@ -39,6 +39,7 @@ struct GameRoomDetailView: View {
                 .onChange(of: viewModel.gameRoomData.value.hostId) { oldValue, newValue in
                     isHost = Service.shared.myUserModel.id == newValue
                 }
+
         } else {
             allContent
                 .onChange(of: viewModel.gameRoomData.value.usersInGame) { newValue in
@@ -53,7 +54,6 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-
                 GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame, usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                     .frame(height: proxy.size.height * 0.6706)
                     .environmentObject(viewModel)
@@ -61,6 +61,11 @@ struct GameRoomDetailView: View {
                     .frame(height: proxy.size.height * 0.3294)
                     .environmentObject(viewModel)
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(viewModel.gameStatus == .onAir)
+            .navigationTitle(viewModel.gameRoomData.value.title)
+            .toolbarBackground(Color.bugDarkMedium, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .transparentFullScreenCover(isPresented: $viewModel.showAttackerAndDefenderView, content: {
                 GamePlayAttackDefenceView(showView: $viewModel.showAttackerAndDefenderView)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -88,12 +93,3 @@ struct GameRoomDetailView: View {
 #Preview {
     GameRoomDetailView(gameRoomId: "")
 }
-
-//if showExistAlert {
-//    CommonPopupView(isPresented: $showExistAlert, title: "를 퇴장시키겠습니까?", subTitle: "이 행동은 되돌릴 수 없습니다.") {
-////                    viewModel.deleteUserInGameRoom(user.id)
-//    } noButtonHandler: {
-//        showExistAlert.toggle()
-//    }
-//    .zIndex(1)
-//}
