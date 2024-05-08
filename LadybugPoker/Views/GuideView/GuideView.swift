@@ -18,6 +18,7 @@ struct GuideView: View {
     @State private var gameStatus: GameStatus = .onAir
     
     @State private var backgroundOpacity = 0.8
+    @State private var showAnswer = false
     
     var body: some View {
         VStack {
@@ -114,9 +115,18 @@ struct GuideView: View {
                                 Spacer()
                                 
                                 Button {
-                                    withAnimation {
-                                        level += 1
+                                    Task {
+                                        withAnimation {
+                                            level += 1
+                                        }
+                                        
+                                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                                        
+                                        withAnimation {
+                                            level += 1
+                                        }
                                     }
+                   
                                 } label: {
                                     GuideView_PlayerBoardView(isLeft: true,
                                                               user: users[1],
@@ -202,17 +212,13 @@ struct GuideView: View {
                         Text("선택하세요 !")
                     }
                     
-                case 9:
-                    VStack {
-                        if let user = service.myUserModel {
-                            HStack {
-                                LazyImage(source: user.profileUrl, resizingMode: .aspectFill)
-                                    .scaledToFit()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                            }
-                        }
-  
+                case 9, 10, 11, 12:
+                    if users.count > 5 {
+                        LevelNineView(user: service.myUserModel, 
+                                      firstUser: users[1],
+                                      level: $level,
+                                      showAnswer: $showAnswer)
+                            .padding(.bottom, 180)
                     }
                 default:
                     VStack {
@@ -356,10 +362,68 @@ struct GuideView: View {
                         Spacer()
                     }
                     .frame(height: 180)
-                } else {
+                } else if level == 10 {
                     VStack {
+                        Text("무슨 카드라고 속일까요?")
+                            .font(.sea(30))
                         
+                        Text("쥐를 눌러보세요 !")
+                            .font(.sea(30))
                     }
+                    .frame(height: 180)
+                    .foregroundStyle(Color.white)
+                } else if level == 11 {
+                    VStack {
+                        HStack {
+                            Text("맞습니다.")
+                                .padding(.horizontal, 30)
+                                .padding(.vertical, 10)
+                                .background {
+                                    Color(hex: "f1f1f1")
+                                }
+                                .clipShape(RoundedRectangle(cornerRadius: .infinity))
+                                .onAppear {
+                                    Task {
+                                        try await Task.sleep(nanoseconds: 4_000_000_000)
+                                        withAnimation {
+                                            showAnswer = true
+                                        }
+                                        
+                                        try await Task.sleep(nanoseconds: 4_000_000_000)
+
+                                        withAnimation {
+                                            level += 1
+                                        }
+                                    }
+                                }
+                            
+                            if !showAnswer {
+                                Spacer()
+                                
+                                Text("아닙니다.")
+                                    .padding(.horizontal, 30)
+                                    .padding(.vertical, 10)
+                                    .background {
+                                        Color(hex: "f1f1f1")
+                                    }
+                                    .clipShape(RoundedRectangle(cornerRadius: .infinity))
+                            }
+                        }
+                        
+                        if !showAnswer {
+                            Text("카드를 넘깁니다.")
+                                .padding(.horizontal, 30)
+                                .padding(.vertical, 10)
+                                .background {
+                                    Color(hex: "f1f1f1")
+                                }
+                                .clipShape(RoundedRectangle(cornerRadius: .infinity))
+                                .padding(.top, 20)
+                        }
+                    }
+                    .frame(height: 180)
+                    .padding(.horizontal, 30)
+                    .font(.sea(15))
                 }
 
             }

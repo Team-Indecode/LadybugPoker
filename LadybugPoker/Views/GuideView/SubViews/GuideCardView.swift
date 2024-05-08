@@ -29,6 +29,7 @@ struct GuideCardView: View {
                 Text("\(count)")
                     .font(.sea(20))
                     .foregroundStyle(Color.white)
+                    .opacity(count == 9 ? 0 : 1)
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: 5))
