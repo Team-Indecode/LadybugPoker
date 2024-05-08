@@ -69,6 +69,7 @@
 		D1AD227F2BDCF3A10030EC56 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD227E2BDCF3A10030EC56 /* Date+.swift */; };
 		D1AD22812BDCF4940030EC56 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD22802BDCF4940030EC56 /* String+.swift */; };
 		D1AD22842BDF6F4F0030EC56 /* GameError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD22832BDF6F4F0030EC56 /* GameError.swift */; };
+		D1BBBF5E2BE9D14C00608D41 /* LevelNineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BBBF5D2BE9D14C00608D41 /* LevelNineView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,6 +125,7 @@
 		D1AD22802BDCF4940030EC56 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		D1AD22822BDF55D20030EC56 /* LadybugPoker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LadybugPoker.entitlements; sourceTree = "<group>"; };
 		D1AD22832BDF6F4F0030EC56 /* GameError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameError.swift; sourceTree = "<group>"; };
+		D1BBBF5D2BE9D14C00608D41 /* LevelNineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelNineView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +222,7 @@
 			children = (
 				D12685A82BE8D34D005FDF84 /* GuideView+PlayerBoardView.swift */,
 				D1A7D8D72BE9B86C002197AE /* GuideCardView.swift */,
+				D1BBBF5D2BE9D14C00608D41 /* LevelNineView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -553,6 +556,7 @@
 				D1AD227D2BDB6D6B0030EC56 /* MyPageView.swift in Sources */,
 				D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */,
 				D125B9DC2BC1504300A5AE03 /* AppDelegate.swift in Sources */,
+				D1BBBF5E2BE9D14C00608D41 /* LevelNineView.swift in Sources */,
 				D14F34FE2BD8EB9F00ED6144 /* UserInGame.swift in Sources */,
 				D1418E292BD647EA00421904 /* User_Functions.swift in Sources */,
 				D139C5262BC6828B006A82B0 /* GameRoomDetailBottomView+PlayingView.swift in Sources */,

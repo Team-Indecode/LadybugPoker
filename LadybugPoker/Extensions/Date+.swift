@@ -40,4 +40,12 @@ extension Date {
         
         return Int(formatter.string(from: self)) ?? 1
     }
+    
+    /// 초를 반환합니다.
+    var second: Int {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "ss"
+        
+        return Int(formatter.string(from: self)) ?? 1
+    }
 }
