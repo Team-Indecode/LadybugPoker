@@ -140,6 +140,68 @@ struct GuideView: View {
                                         .padding(.leading, -40)
                                 }
                             }
+                            .padding(.trailing, 20)
+
+                            GuideView_PlayerBoardView(isLeft: true,
+                                                      user: users[1],
+                                                      gameStatus: $gameStatus,
+                                                      index: 1)
+                            .opacity(0)
+                            
+                            GuideView_PlayerBoardView(isLeft: true,
+                                                      user: users[1],
+                                                      gameStatus: $gameStatus,
+                                                      index: 1)
+                            .opacity(0)
+                            
+                            Spacer()
+                        }
+                        .padding(.bottom, 180)
+                    } else if level == 14 || level == 15 {
+                        VStack {
+                            HStack {
+                                GuideView_PlayerBoardView(isLeft: true,
+                                                          user: users[0],
+                                                          gameStatus: $gameStatus,
+                                                          index: 1)
+                                .opacity(0)
+                                
+                                Spacer()
+                                
+                                GuideView_PlayerBoardView(isLeft: true,
+                                                          user: users[1],
+                                                          gameStatus: $gameStatus,
+                                                          index: 1)
+                                .overlay(alignment: .topLeading) {
+                                    if level == 15 {
+                                        VStack(spacing: 1) {
+                                            HStack(spacing: 3) {
+                                                GuideCardView(bug: .snake, count: 1)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                            }
+                                            
+                                            HStack(spacing: 3) {
+                                                GuideCardView(bug: .snake, count: 0)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                            }
+                                            
+                                        }
+                                        .padding(.top, 40)
+                                    }
+                                }
+                                .padding(.horizontal, 10)
+                            }
+                            .padding(.trailing, 20)
                             
                             GuideView_PlayerBoardView(isLeft: true,
                                                       user: users[1],
@@ -220,6 +282,25 @@ struct GuideView: View {
                                       showAnswer: $showAnswer)
                             .padding(.bottom, 180)
                     }
+                    
+                case 13, 14:
+                    VStack {
+                        Image("ladybug")
+                            .padding(.bottom, 70)
+                        
+                        Text("공격에 성공했습니다 !")
+                    }
+                    
+                case 15:
+                    VStack {
+                        Image("ladybug")
+                            .padding(.bottom, 70)
+                        
+                        Text("카드가 상대의 보드에")
+                        
+                        Text("추가됩니다.")
+                    }
+                    
                 default:
                     VStack {
                         
@@ -232,8 +313,8 @@ struct GuideView: View {
         }
         .overlay(alignment: .bottom) {
             VStack {
-                if level < 3 {
-                    if level > 0 {
+                if level < 3 || level == 13 || level == 15 {
+                    if level > 0 && level != 13 {
                         Button {
                             withAnimation {
                                 level -= 1
@@ -445,6 +526,17 @@ struct GuideView: View {
             if newLevel == 3 {
                 withAnimation {
                     gameStatus = .onAir
+                }
+            }
+            
+            if newLevel == 14 {
+                Task {
+                    
+                    try await Task.sleep(nanoseconds: 1_000_000_000)
+                    
+                    withAnimation {
+                        level += 1
+                    }
                 }
             }
         }

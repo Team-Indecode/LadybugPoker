@@ -65,7 +65,7 @@ extension GuideView {
                 .opacity(level != 12 ? 1 : 0)
 
                 if level == 11 || level == 12 {
-                    LevelElevenView(showAnswer: $showAnswer)
+                    LevelElevenView(showAnswer: $showAnswer, level: $level)
                 
                 } else {
                     HStack {
@@ -152,10 +152,12 @@ extension GuideView {
         
         @State private var showRat = false
         
+        @Binding var level: Int
+        
         var body: some View {
             VStack {
                 HStack {
-                    Color(hex: showRat ? Bugs.rat.colorHex : "B99C00")
+                    Color(hex: showRat ? Bugs.snake.colorHex : "B99C00")
                         .frame(width: 86, height: 129)
                         .clipShape(RoundedRectangle(cornerRadius: 5))
                         .overlay(alignment: .top) {
@@ -163,7 +165,7 @@ extension GuideView {
                                 .fill(Color.white)
                                 .overlay {
                                     if showRat {
-                                        Image("rat")
+                                        Image("snake")
                                             .resizable()
                                             .scaledToFit()
                                             .padding(7)
@@ -242,6 +244,12 @@ extension GuideView {
                         
                         withAnimation {
                             showRat = true
+                        }
+                        
+                        try await Task.sleep(nanoseconds: 1_000_000_000)
+
+                        withAnimation {
+                            level += 1
                         }
 
                     }
