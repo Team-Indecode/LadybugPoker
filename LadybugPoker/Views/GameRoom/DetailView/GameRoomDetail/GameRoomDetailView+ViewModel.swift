@@ -29,6 +29,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var userType: Player? = nil
     /// 공격 & 수비 뷰 보여줄지
     @Published var showAttackerAndDefenderView: Bool = false
+    /// 0: 한번의 공격이 종료되고 결과를 보여줄지 , 1: 공격성공(true), 공격실패(false)
+    @Published var showAttackResult: (Bool, Bool) = (false, false)
     /// 패배한 유저가 누구인지 보여줌(게임 끝날때)
     @Published var showLoserView: Bool = false
     var timer: Timer?
@@ -66,14 +68,23 @@ class GameRoomDetailViewViewModel: ObservableObject {
                                 self.gameType = .selectUser
                             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard == nil {
                                 self.gameType = .attacker
-                            } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard != nil {
+                            } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard != nil && data.decision == nil {
                                 self.gameType = .defender
                                 self.gameCardTimer()
+                            } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
+                                print(#fileID, #function, #line, "- decision⭐️: \(data.decision)")
+                                
+                                if let decision = data.decision {
+                                    if let attackResult = self.defenderSuccessCheck(decision ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue) {
+                                        self.showAttackResult = (true, attackResult)
+                                    }
+                                }
                             }
                         }
                         
                         if data.gameStatus == GameStatus.onAir.rawValue {
                             if data.whoseTurn != nil && data.whoseGetting != nil {
+                                
                                 if data.whoseTurn == Service.shared.myUserModel.id {
                                     self.userType = .attacker
                                 } else if data.whoseGetting == Service.shared.myUserModel.id {
@@ -81,12 +92,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
                                 } else {
                                     self.userType = .others
                                 }
+                                
                                 self.showAttackerAndDefenderView = true
                             } else {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
-                                    self.showAttackerAndDefenderView = false
-                                })
-                                
+                                self.showAttackResult = (false, true)
+                                self.showAttackerAndDefenderView = false
                             }
                         } else if data.gameStatus == GameStatus.finished.rawValue {
                             self.showAttackerAndDefenderView = false
@@ -231,29 +241,29 @@ class GameRoomDetailViewViewModel: ObservableObject {
         userInGameUpdate(userInGame, userInGame.id, .sendUserReady)
     }
     
-    func defenderSuccessCheck(_ text: String) {
+    func defenderSuccessCheck(_ text: String) -> Bool? {
         let same = self.gameRoomData.value.selectedCard == self.gameRoomData.value.questionCard
-        
+        print(#fileID, #function, #line, "- durldudlafkjdfjlakj")
         if same {
             if text == "맞습니다." {
                 //수비성공 -> 공격자에 boardCard에 추가, whoseTurn -> 계속 공격자(즉, whoseTurn유지)
-                cardIsSame(false)
+                return false
             } else if text == "아닙니다." {
                 // 공격성공(수비실패) -> 수비자 boardCard에 추가, whoseTurn -> whoseGetting
-                cardIsSame(true)
+                return true
             } else {
                 // 카드 넘기기
-                cardSkip()
+                return nil
             }
         } else {
             // 둘이 다른 카드일떄
             if text == "맞습니다." {
                 // 공격성공 -> 수비자 boardCard에 추가, whoseTurn: whoseGetting
-                cardIsSame(true)
+                return true
             } else if text == "아닙니다." {
-                cardIsSame(false)
+                return false
             } else {
-                cardSkip()
+                return nil
             }
         }
     }
@@ -274,20 +284,23 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         
         // 공격성공, 수비실패 -> 수비자의 boardCard에 추가 / whoseTurn -> whoseGetting으로 변경
-        #warning("여기서 한턴이 끝났음을 알려주면 될듯, viewModel에 새로운 변수를 하나두고 진행")
         if defenderLose {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
-                let boardCards = stringToCards(userInGame.boardCard ?? "")
-                self.userCardChange(bugs, boardCards, false, userInGame.id)
-                self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
+                    let boardCards = self.stringToCards(userInGame.boardCard ?? "")
+                    self.userCardChange(bugs, boardCards, false, userInGame.id)
+                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
+                })
             }
         }
         // 공격실패, 수비성공 -> 공격자의 boardCard에 추가 / whoseTurn -> 계속 공격지
         else {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
-                let boardCards = stringToCards(userInGame.boardCard ?? "")
-                self.userCardChange(bugs, boardCards, false, userInGame.id)
-                self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
+                    let boardCards = self.stringToCards(userInGame.boardCard ?? "")
+                    self.userCardChange(bugs, boardCards, false, userInGame.id)
+                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
+                })
             }
         }
     }
@@ -538,7 +551,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func loserUpdate(_ loser: Int) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         
-        var updateDataDic: [String : Int?] = ["loser" : loser]
+        let updateDataDic: [String : Int?] = ["loser" : loser]
         
         gameRoomDataRef.updateData(updateDataDic) { error in
             if let error = error {
@@ -573,7 +586,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         } else if decision == "" {
             decisionBool = nil
         } else {
-            defenderSuccessCheck(decision)
+//            defenderSuccessCheck(decision)
+            cardSkip()
             return
         }
         
@@ -583,7 +597,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
             print(#fileID, #function, #line, "- update success update")
             if decision == DefenderAnswer.same.rawValue || decision == DefenderAnswer.different.rawValue {
-                self.defenderSuccessCheck(decision)
+                if let attackResult = self.defenderSuccessCheck(decision) {
+                    self.cardIsSame(attackResult)
+                }
             }
         }
     }

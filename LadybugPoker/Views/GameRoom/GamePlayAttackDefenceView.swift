@@ -51,6 +51,11 @@ struct GamePlayAttackDefenceView: View {
     var allContent: some View {
         GeometryReader { proxy in
             VStack {
+//                if viewModel.showAttackResult.0 {
+//                    attackResultView
+//                } else {
+//
+//                }
                 switch player {
                 case .attacker:
                     attackerView
@@ -86,8 +91,13 @@ struct GamePlayAttackDefenceView: View {
     /// 플레이어가 공격자 일 때
     var attackerView: some View {
         VStack {
-            playerAttackTopView
-                .frame(height: screenHeight * 0.6706)
+            if viewModel.showAttackResult.0 {
+                attackResultView
+                    .frame(height: screenHeight * 0.6706)
+            } else {
+                playerAttackTopView
+                    .frame(height: screenHeight * 0.6706)
+            }
             playerBottomView(false)
                 .frame(height: screenHeight * 0.3294)
         }
@@ -97,8 +107,13 @@ struct GamePlayAttackDefenceView: View {
     /// 플레이어가 수비자일때
     var defenderView: some View {
         VStack {
-            playerNotAttackerTopView
-                .frame(height: screenHeight * 0.6706)
+            if viewModel.showAttackResult.0 {
+                attackResultView
+                    .frame(height: screenHeight * 0.6706)
+            } else {
+                playerNotAttackerTopView
+                    .frame(height: screenHeight * 0.6706)
+            }
             playerBottomView(true)
                 .frame(height: screenHeight * 0.3294)
         }
@@ -108,8 +123,14 @@ struct GamePlayAttackDefenceView: View {
     /// 플레이어가 공격자/수비자 모두 아닐때
     var othersView: some View {
         VStack(spacing: 0) {
-            playerNotAttackerTopView
-                .frame(height: screenHeight * 0.6706)
+            if viewModel.showAttackResult.0 {
+                attackResultView
+                    .frame(height: screenHeight * 0.6706)
+            } else {
+                playerNotAttackerTopView
+                    .frame(height: screenHeight * 0.6706)
+            }
+            
             playerBottomView(false)
                 .frame(height: screenHeight * 0.3294)
         }
@@ -166,6 +187,21 @@ struct GamePlayAttackDefenceView: View {
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
             defenderProfileView
+        }
+    }
+    
+    ///게임이 종료됨
+    var attackResultView: some View {
+        VStack(spacing: 0) {
+            attackerProfileView
+                .padding(.bottom, 15)
+            if let selectBug = selectBug {
+                CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 121, cardHeightSize: 181, isBottomViewCard: false)
+                    .padding(.bottom, 15)
+            }
+           defenderProfileView
+            Text(viewModel.showAttackResult.1 ? "공격 성공" : "공격 실패")
+                .font(.sea(50))
         }
     }
     
@@ -273,19 +309,6 @@ struct GamePlayAttackDefenceView: View {
         .frame(width: 86, height: 129)
         .background(Color(hex: "B99C00"))
         .clipShape(RoundedRectangle(cornerRadius: 6))
-    }
-    
-
-    var attackFinishView: some View {
-        VStack(spacing: 0) {
-            attackerProfileView
-            if let selectBug = selectBug {
-                CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
-            }
-           defenderProfileView
-            Text("공격 성공")
-                .font(.sea(50))
-        }
     }
     
     var attackerProfileView: some View {

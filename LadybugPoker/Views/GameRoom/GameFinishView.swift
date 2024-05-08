@@ -23,11 +23,11 @@ struct GameFinishView: View {
         GeometryReader { proxy in
             VStack(spacing: 0) {
                 topView
-                    .frame(height: proxy.size.height * 0.6706)
+                    .frame(height: proxy.size.height * 0.69)
                     .frame(maxWidth: .infinity)
                     .background(Color.black.opacity(0.5))
                 Spacer()
-                    .frame(height: proxy.size.height * 0.3294)
+                    .frame(height: proxy.size.height * 0.31)
                     .background(Color.black.opacity(0.0))
             }
             
@@ -36,7 +36,7 @@ struct GameFinishView: View {
             guard let loserIndex = loserIndex else { return }
             self.winnersProfile = []
             for idx in 0..<6 {
-                var userId = viewModel.usersId[idx]
+                let userId = viewModel.usersId[idx]
                 if userId != "" {
                     guard let userData =  viewModel.gameRoomData.value.usersInGame[userId] else {
                         return
@@ -59,6 +59,7 @@ struct GameFinishView: View {
             winnersView
             Text("새로운 게임을 기다리고 있습니다.")
                 .font(.sea(25))
+                .foregroundStyle(Color.white)
 //                .padding(.top, 15)
             outRoomOrNewGame
                 .padding(.top, 15)
@@ -95,7 +96,7 @@ struct GameFinishView: View {
                 .frame(width: 40)
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(self.winnersProfile, id: \.self) { profile in
-                    UserProfileView(user: profile, profileWidth: 118, profileHeight: 33)
+                    UserProfileView(user: profile, profileWidth: 118, profileHeight: 33, profileFontSize: 15)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
