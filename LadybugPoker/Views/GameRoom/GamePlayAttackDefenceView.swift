@@ -21,6 +21,8 @@ struct GamePlayAttackDefenceView: View {
     @State private var selectBug: Bugs? = nil
     @State private var screenHeight: CGFloat = 700
     @Binding var showView: Bool
+    let screenHeightTop: CGFloat = 0.683
+    let screenHeightBottom: CGFloat = 0.317
     
     var body: some View {
         if #available(iOS 17, *) {
@@ -93,13 +95,13 @@ struct GamePlayAttackDefenceView: View {
         VStack {
             if viewModel.showAttackResult.0 {
                 attackResultView
-                    .frame(height: screenHeight * 0.6706)
+                    .frame(height: screenHeight * screenHeightTop)
             } else {
                 playerAttackTopView
-                    .frame(height: screenHeight * 0.6706)
+                    .frame(height: screenHeight * screenHeightTop)
             }
             playerBottomView(false)
-                .frame(height: screenHeight * 0.3294)
+                .frame(height: screenHeight * screenHeightBottom)
         }
     }
     
@@ -109,13 +111,13 @@ struct GamePlayAttackDefenceView: View {
         VStack {
             if viewModel.showAttackResult.0 {
                 attackResultView
-                    .frame(height: screenHeight * 0.6706)
+                    .frame(height: screenHeight * screenHeightTop)
             } else {
                 playerNotAttackerTopView
-                    .frame(height: screenHeight * 0.6706)
+                    .frame(height: screenHeight * screenHeightTop)
             }
             playerBottomView(true)
-                .frame(height: screenHeight * 0.3294)
+                .frame(height: screenHeight * screenHeightBottom)
         }
     }
     
@@ -125,14 +127,14 @@ struct GamePlayAttackDefenceView: View {
         VStack(spacing: 0) {
             if viewModel.showAttackResult.0 {
                 attackResultView
-                    .frame(height: screenHeight * 0.6706)
+                    .frame(height: screenHeight * screenHeightTop)
             } else {
                 playerNotAttackerTopView
-                    .frame(height: screenHeight * 0.6706)
+                    .frame(height: screenHeight * screenHeightTop)
             }
             
             playerBottomView(false)
-                .frame(height: screenHeight * 0.3294)
+                .frame(height: screenHeight * screenHeightBottom)
         }
 //        .background(.opacity(1.0))
     }

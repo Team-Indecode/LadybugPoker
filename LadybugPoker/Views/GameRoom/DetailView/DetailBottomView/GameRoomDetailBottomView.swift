@@ -12,7 +12,7 @@ struct GameRoomDetailBottomView: View {
     
     private let beforeGameText = "게임시작 전 입니다."
     private let allPlayerReadied = "모든 플레이어가 준비되었습니다."
-    private let hostWarningText = "시작하지 않으면 10초 뒤에 강퇴됩니다."
+//    private let hostWarningText =
     private let readyText = "준비 완료"
     private let cancelText = "준비 취소"
     private let suggestReadyText = "준비 완료를 눌러주세요."
@@ -68,7 +68,7 @@ struct GameRoomDetailBottomView: View {
                             Text(allPlayerReadied)
                                 .font(.sea(15))
                                 .padding(.bottom, 20)
-                            Text(hostWarningText)
+                            Text("시작하지 않으면 \(self.viewModel.secondsLeft)초 뒤에 강퇴됩니다.")
                                 .font(.sea(15))
                                 .padding(.bottom, 20)
                         } else {
