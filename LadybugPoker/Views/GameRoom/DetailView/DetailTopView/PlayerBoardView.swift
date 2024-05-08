@@ -49,6 +49,7 @@ struct PlayerBoardView: View {
         }
         .onChange(of: self.cards) { newValue in
             self.userCardCnt = newValue.count
+            viewModel.userIsLoserChecking(userBoardIndex, newValue)
         }
         .onChange(of: viewModel.usersChat[userBoardIndex]) { newValue in
             if let userChat = newValue {

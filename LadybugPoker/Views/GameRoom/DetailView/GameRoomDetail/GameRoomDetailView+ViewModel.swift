@@ -72,8 +72,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
                                 self.gameType = .defender
                                 self.gameCardTimer()
                             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
-                                print(#fileID, #function, #line, "- decision⭐️: \(data.decision)")
-                                
                                 if let decision = data.decision {
                                     if let attackResult = self.defenderSuccessCheck(decision ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue) {
                                         self.showAttackResult = (true, attackResult)
@@ -401,9 +399,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         
         self.userInGameUpdate(userInGame, userId, nil)
-        if !isHandCard {
-            userIsLoserChecking(userInGame.idx, updateCardArr)
-        }
+//        if !isHandCard {
+//            userIsLoserChecking(userInGame.idx, updateCardArr)
+//        }
     }
     
     /// 유저가 졌는지 체크
