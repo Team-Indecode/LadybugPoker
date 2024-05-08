@@ -12,11 +12,13 @@ struct UserProfileView: View {
     let user: UserInGame
     let profileWidth: CGFloat
     let profileHeight: CGFloat
+    let profileFontSize: CGFloat
     
-    init(user: UserInGame, profileWidth: CGFloat = 171, profileHeight: CGFloat = 69) {
+    init(user: UserInGame, profileWidth: CGFloat = 171, profileHeight: CGFloat = 69, profileFontSize: CGFloat = 20) {
         self.user = user
         self.profileWidth = profileWidth
         self.profileHeight = profileHeight
+        self.profileFontSize = profileFontSize
     }
     
     var body: some View {
@@ -26,16 +28,16 @@ struct UserProfileView: View {
                     .scaledToFit()
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())
-                    .padding(.leading, 10)
+                    .padding(.leading, 2)
             } else {
                 Image(Bugs.ladybug.rawValue)
                     .resizable()
                     .frame(width: 30, height: 30)
                     .clipShape(Circle())
-                    .padding(.leading, 10)
+                    .padding(.leading, 2)
             }
             Text(user.displayName)
-                .font(.sea(20))
+                .font(.sea(profileFontSize))
         }
         .frame(width: profileWidth, height: profileHeight, alignment: .leading)
         .background(Color.white)

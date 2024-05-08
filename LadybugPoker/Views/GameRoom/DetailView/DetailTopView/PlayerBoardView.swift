@@ -49,6 +49,7 @@ struct PlayerBoardView: View {
         }
         .onChange(of: self.cards) { newValue in
             self.userCardCnt = newValue.count
+            viewModel.userIsLoserChecking(userBoardIndex, newValue)
         }
         .onChange(of: viewModel.usersChat[userBoardIndex]) { newValue in
             if let userChat = newValue {
@@ -153,7 +154,7 @@ struct PlayerBoardView: View {
             Image(systemName: self.isOdd ? "arrowshape.left.fill" : "arrowshape.right.fill")
                 .resizable()
                 .foregroundStyle(Color.orange)
-                .frame(width: 56, height: 40)
+                .frame(width: 56, height: 32)
         }
         .disabled(viewModel.gameType != .selectUser)
         .disabled(viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id ? false : true)

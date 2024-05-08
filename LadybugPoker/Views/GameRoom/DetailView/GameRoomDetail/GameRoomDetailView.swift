@@ -63,11 +63,17 @@ struct GameRoomDetailView: View {
                     .environmentObject(viewModel)
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(viewModel.gameStatus == .onAir)
-            
             .navigationTitle(viewModel.gameRoomData.value.title)
             .toolbarBackground(Color.bugDarkMedium, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
+            .toolbar(content: {
+                if viewModel.gameStatus == .notStarted || viewModel.gameStatus == .notEnoughUsers {
+                    ToolbarItem(placement: .topBarLeading) {
+                        navigationBackButton
+                    }
+                }
+                
+            })
             .transparentFullScreenCover(isPresented: $viewModel.showAttackerAndDefenderView, content: {
                 GamePlayAttackDefenceView(showView: $viewModel.showAttackerAndDefenderView)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
