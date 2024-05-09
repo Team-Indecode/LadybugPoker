@@ -84,13 +84,13 @@ extension GuideView {
                                     Spacer()
                                 }
                                 
-                                GuideCardView(bug: .snake, count: 2)
+                                GuideCardView(bug: .snake, count: 0)
                                 
-                                GuideCardView(bug: .ladybug, count: 1)
+                                GuideCardView(bug: .ladybug, count: 0)
                                 
-                                GuideCardView(bug: .frog, count: 3)
+                                GuideCardView(bug: .frog, count: 0)
                                 
-                                GuideCardView(bug: .rat, count: 1)
+                                GuideCardView(bug: .rat, count: 0)
                                 
                                 if isLeft {
                                     Spacer()
@@ -102,11 +102,11 @@ extension GuideView {
                                     Spacer()
                                 }
                                 
-                                GuideCardView(bug: .spider, count: 1)
+                                GuideCardView(bug: .spider, count: 0)
                                 
-                                GuideCardView(bug: .snail, count: 1)
+                                GuideCardView(bug: .snail, count: 0)
                                 
-                                GuideCardView(bug: .worm, count: 3)
+                                GuideCardView(bug: .worm, count: 0)
                                 
                                 GuideCardView(bug: .bee, count: 0)
                                 

@@ -1,24 +1,33 @@
 //
-//  LevelNineView.swift
+//  LevelSixteenView.swift
 //  LadybugPoker
 //
-//  Created by 박진서 on 5/7/24.
+//  Created by 박진서 on 5/8/24.
 //
 
 import SwiftUI
 import NukeUI
 
 extension GuideView {
-    struct LevelNineView: View {
+    struct LevelSixteenView: View {
         @State var user: User?
         
         @State var firstUser: User
+        
+        @Binding var showAnswerSixteen: Bool
+        
         @State private var dots = 0
         
+        @State private var showRat = false
+        @State private var hideElements = false
+        
+        @State private var circleSize = [7.0, 7.0, 7.0]
+        
+        @State private var angle = 0.0
+        @State private var count = 0
+        
         @Binding var level: Int
-        
-        @Binding var showAnswer: Bool
-        
+                
         let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         
         var body: some View {
@@ -40,14 +49,6 @@ extension GuideView {
                         .clipShape(RoundedRectangle(cornerRadius: .infinity))
                         
                         Spacer()
-                        
-                        VStack {
-                            Text("고른 카드")
-                                .font(.sea(15))
-                            
-                            GuideCardView(bug: .snake, count: 9)
-                                .frame(width: 45, height: 75)
-                        }
        
                     }
                     .padding(.horizontal, 20)
@@ -63,49 +64,64 @@ extension GuideView {
                 }
                 .font(.sea(30))
                 .opacity(level != 12 ? 1 : 0)
-
-                if level == 11 || level == 12 {
-                    LevelElevenView(showAnswer: $showAnswer, level: $level)
                 
-                } else {
-                    HStack {
-                        ForEach([Bugs.snake, Bugs.ladybug, Bugs.frog, Bugs.rat], id: \.rawValue) { bug in
-                            Button {
-                                withAnimation {
-                                    level += 1
-                                    
-                                }
-                            } label: {
-                                Circle()
-                                    .fill(Color(hex: "d9d9d9"))
-                                    .overlay {
-                                        Image(bug.rawValue)
+                HStack {
+                    Color(hex: showRat ? Bugs.frog.colorHex : "B99C00")
+                        .frame(width: 86, height: 129)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .overlay(alignment: .top) {
+                            Circle()
+                                .fill(Color.white)
+                                .overlay {
+                                    if showRat {
+                                        Image("frog")
                                             .resizable()
                                             .scaledToFit()
-                                            .padding(10)
+                                            .padding(7)
+                                    } else {
+                                        Text("?")
+                                            .font(.sea(35))
+                                            .foregroundStyle(Color.black)
                                     }
-                            }
-                            .opacity(level == 9 || bug == .rat ? 1 : 0.3)
-                            .disabled(bug != .rat)
+             
+                                }
+                                .padding()
                         }
-                    }
-                    .padding(.horizontal, 30)
+                        .rotationEffect(.degrees(angle))
                     
-                    HStack {
-                        ForEach([Bugs.spider, Bugs.snail, Bugs.worm, Bugs.bee], id: \.rawValue) { bug in
-                            Circle()
-                                .fill(Color(hex: "d9d9d9"))
-                                .overlay {
-                                    Image(bug.rawValue)
+                    if !hideElements {
+                        Spacer()
+
+                        Circle()
+                            .fill(Color(hex: "d9d9d9"))
+                            .frame(width: 70, height: 70)
+                            .overlay {
+                                if count < 4 {
+                                    HStack {
+                                        Circle()
+                                            .fill(Color.black)
+                                            .frame(width: circleSize[0], height: circleSize[0])
+                                        
+                                        Circle()
+                                            .fill(Color.black)
+                                            .frame(width: circleSize[1], height: circleSize[1])
+                                        
+                                        Circle()
+                                            .fill(Color.black)
+                                            .frame(width: circleSize[2], height: circleSize[2])
+                                    }
+                                } else {
+                                    Image("frog")
                                         .resizable()
                                         .scaledToFit()
-                                        .padding(10)
+                                        .padding()
                                 }
-                                .opacity(level == 9 || bug == .rat ? 1 : 0.3)
-                        }
+      
+                            }
                     }
-                    .padding(.horizontal, 30)
+
                 }
+                .padding(.horizontal, 60)
                 
                 Text("입니다.")
                     .font(.sea(30))
@@ -132,100 +148,23 @@ extension GuideView {
                 
             }
             .onReceive(timer) { value in
-                if level == 9 || level == 10 {
-                    dots += 1
-                }
-            }
-        }
-    }
-    
-    struct LevelElevenView: View {
-        @State private var circleSize = [7.0, 7.0, 7.0]
-        let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-        @State private var count = 0
-        
-        @Binding var showAnswer: Bool
-        
-        @State private var hideElements = false
-        
-        @State private var angle = 0.0
-        
-        @State private var showRat = false
-        
-        @Binding var level: Int
-        
-        var body: some View {
-            VStack {
-                HStack {
-                    Color(hex: showRat ? Bugs.snake.colorHex : "B99C00")
-                        .frame(width: 86, height: 129)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                        .overlay(alignment: .top) {
-                            Circle()
-                                .fill(Color.white)
-                                .overlay {
-                                    if showRat {
-                                        Image("snake")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .padding(7)
-                                    } else {
-                                        Text("?")
-                                            .font(.sea(35))
-                                            .foregroundStyle(Color.black)
-                                    }
-             
-                                }
-                                .padding()
-                        }
-                        .rotationEffect(.degrees(angle))
-                    
-                    if !hideElements {
-                        Spacer()
+                dots += 1
 
-                        Circle()
-                            .fill(Color(hex: "d9d9d9"))
-                            .frame(width: 70, height: 70)
-                            .overlay {
-                                if count < 3 {
-                                    HStack {
-                                        Circle()
-                                            .fill(Color.black)
-                                            .frame(width: circleSize[0], height: circleSize[0])
-                                        
-                                        Circle()
-                                            .fill(Color.black)
-                                            .frame(width: circleSize[1], height: circleSize[1])
-                                        
-                                        Circle()
-                                            .fill(Color.black)
-                                            .frame(width: circleSize[2], height: circleSize[2])
-                                    }
-                                } else {
-                                    Image("rat")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .padding()
-                                }
-      
-                            }
-                    }
-
-                }
-                .padding(.horizontal, 60)
-            }
-            .onReceive(timer) { _ in
                 withAnimation {
                     count += 1
+                    
+                    if count == 5 {
+                        level += 1
+                    }
                 }
             }
-            .onChange(of: count) { newValue in
+            .onChange(of: dots) { newValue in
                 withAnimation {
                     circleSize = [7.0, 7.0, 7.0]
                     circleSize[newValue % 3] = 12.0
                 }
             }
-            .onChange(of: showAnswer) { newValue in
+            .onChange(of: showAnswerSixteen) { newValue in
                 if newValue {
                     Task {
                         try await Task.sleep(nanoseconds: 1_000_000_000)
@@ -246,7 +185,7 @@ extension GuideView {
                             showRat = true
                         }
                         
-                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                        try await Task.sleep(nanoseconds: 3_000_000_000)
 
                         withAnimation {
                             level += 1
@@ -255,12 +194,12 @@ extension GuideView {
                     }
                 }
             }
+            
         }
     }
 
 }
 
-
 #Preview {
-    GuideView.LevelNineView(user: User.random(), firstUser: User.random(), level: .constant(12), showAnswer: .constant(false))
+    GuideView.LevelSixteenView(user: User.random(), firstUser: User.random(), showAnswerSixteen: .constant(false), level: .constant(17))
 }
