@@ -12,7 +12,7 @@ extension Date {
     /// 2024-04-26 15:22:32 포멧으로 반환합니다.
     var toString: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
         
         return formatter.string(from: self)
     }
@@ -44,7 +44,7 @@ extension Date {
     /// 초를 반환합니다.
     var second: Int {
         let formatter = DateFormatter()
-        formatter.dateFormat = "ss"
+        formatter.dateFormat = "SS"
         
         return Int(formatter.string(from: self)) ?? 1
     }

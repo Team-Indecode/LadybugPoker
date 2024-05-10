@@ -166,6 +166,11 @@ struct GameRoom: Codable, Identifiable, Equatable {
     }
 }
 
+struct Chat {
+    var msg: String
+    var time: String
+}
+
 
 enum GameUpdateType {
     case gameStart
