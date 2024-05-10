@@ -15,7 +15,8 @@ struct PlayerBoardView: View {
     let userBoardIndex: Int
     /// 플레어의 보드판 위에 있는 카드들 스트링(이거에 따라서 view변경이 아니므로 state가 아님)
     var cardsString: String
-    /// 플레이어의 보드판 위에 있는 카드 수
+    var handCardString: String
+    /// 플레이어의가 손에 가지고 있는 카드 수
     @State private var userCardCnt: Int = 0
     /// 플레이어의 보드판 카드들
     @State private var cards: [Card] = []
@@ -47,8 +48,11 @@ struct PlayerBoardView: View {
         .onChange(of: self.cardsString) { newValue in
             self.cards = viewModel.stringToCards(newValue)
         }
+        .onChange(of: self.handCardString) { newValue in
+            print(#fileID, #function, #line, "- handCardString: \(handCardString)")
+            self.userCardCnt = viewModel.userHandCardCntChecking(newValue)
+        }
         .onChange(of: self.cards) { newValue in
-            self.userCardCnt = newValue.count
             if viewModel.gameStatus != .finished {
                 viewModel.userIsLoserChecking(userBoardIndex, newValue)
             }
@@ -65,6 +69,7 @@ struct PlayerBoardView: View {
         }
         .onAppear {
             self.cards = viewModel.stringToCards(self.cardsString)
+            self.userCardCnt = viewModel.userHandCardCntChecking(self.handCardString)
         }
     }
     
@@ -229,5 +234,5 @@ struct PlayerBoardView: View {
 //    PlayerBoardView(user: User(id: "", displayName: "rayoung", profileUrl: "https://picsum.photos/200"), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)])
     
 //    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil), userBoardIndex: 1, cardsString: "", boardWidth: 250, boardHeight: 250, userReadyOrNot: false, isOdd: false, showExitAlert: .constant(false))
-    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil), userBoardIndex: 1, cardsString: "", boardWidth: 250, boardHeight: 250, userReadyOrNot: false, isOdd: false, showExitAlert: .constant(false), existUserId: .constant(""), existUserDisplayName: .constant(""))
+    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil), userBoardIndex: 1, cardsString: "", handCardString: "", boardWidth: 250, boardHeight: 250, userReadyOrNot: false, isOdd: false, showExitAlert: .constant(false), existUserId: .constant(""), existUserDisplayName: .constant(""))
 }

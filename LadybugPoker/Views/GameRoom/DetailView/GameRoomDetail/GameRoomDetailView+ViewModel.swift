@@ -448,7 +448,24 @@ class GameRoomDetailViewViewModel: ObservableObject {
             gameroomDataUpdate(.gameStatus, "finished")
         }
     }
-
+    
+    func userHandCardCntChecking(_ cardString: String) -> Int {
+        let cardStringArr = cardString.components(separatedBy: ",")
+        var handCardCnt: Int = 0
+        cardStringArr.forEach { card in
+            var tempCard = card
+            let tempCnt = tempCard.popLast()
+            print(#fileID, #function, #line, "- tempCnt: \(tempCnt)")
+            if let tempCnt = tempCnt {
+                if let cnt = Int(String(tempCnt)) {
+                    handCardCnt += cnt
+                }
+            }
+        }
+        
+        return handCardCnt
+    }
+    
     /// string으로 오는 card를 Card strcut로 변경(ex. f1, l2)
     func stringToCards(_ cardString: String) -> [Card] {
         if cardString == "" {

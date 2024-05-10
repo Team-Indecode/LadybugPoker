@@ -12,7 +12,7 @@ struct GameRoomDetailView: View {
     @State private var showCardSelectedPopup: Bool = false
     @State private var amIReadied: Bool = false
     @State private var isHost: Bool = false
-    @State private var myCards: [Card] = [] 
+    @State private var myCards: [Card] = []
     @State var showExistAlert: Bool = false
     @State var existUserId: String = ""
     @State var existUserDisplayName: String = ""
@@ -35,7 +35,6 @@ struct GameRoomDetailView: View {
                             amIReadied = user.readyOrNot
                         }
                     }
-                    
                 }
                 .onChange(of: viewModel.gameRoomData.value.hostId) { oldValue, newValue in
                     isHost = Service.shared.myUserModel.id == newValue
