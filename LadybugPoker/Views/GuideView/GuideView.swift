@@ -13,12 +13,14 @@ struct GuideView: View {
     
     @State private var users: [User] = []
     
-    @State private var level = 9
+    @State private var level = 23
     
     @State private var gameStatus: GameStatus = .onAir
     
     @State private var backgroundOpacity = 0.8
     @State private var showAnswer = false
+    @State private var showAnswerSixteen = false
+
     
     var body: some View {
         VStack {
@@ -140,6 +142,68 @@ struct GuideView: View {
                                         .padding(.leading, -40)
                                 }
                             }
+                            .padding(.trailing, 20)
+
+                            GuideView_PlayerBoardView(isLeft: true,
+                                                      user: users[1],
+                                                      gameStatus: $gameStatus,
+                                                      index: 1)
+                            .opacity(0)
+                            
+                            GuideView_PlayerBoardView(isLeft: true,
+                                                      user: users[1],
+                                                      gameStatus: $gameStatus,
+                                                      index: 1)
+                            .opacity(0)
+                            
+                            Spacer()
+                        }
+                        .padding(.bottom, 180)
+                    } else if level == 14 || level == 15 || level == 23 {
+                        VStack {
+                            HStack {
+                                GuideView_PlayerBoardView(isLeft: true,
+                                                          user: users[0],
+                                                          gameStatus: $gameStatus,
+                                                          index: 1)
+                                .opacity(0)
+                                
+                                Spacer()
+                                
+                                GuideView_PlayerBoardView(isLeft: true,
+                                                          user: users[1],
+                                                          gameStatus: $gameStatus,
+                                                          index: 1)
+                                .overlay(alignment: .topLeading) {
+                                    if level == 15 || level == 23 {
+                                        VStack(spacing: 1) {
+                                            HStack(spacing: 3) {
+                                                GuideCardView(bug: .snake, count: level == 15 ? 1 : 2)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                            }
+                                            
+                                            HStack(spacing: 3) {
+                                                GuideCardView(bug: .snake, count: 0)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                                
+                                                GuideCardView(bug: .snake, count: 0)
+                                            }
+                                            
+                                        }
+                                        .padding(.top, 40)
+                                    }
+                                }
+                                .padding(.horizontal, 10)
+                            }
+                            .padding(.trailing, 20)
                             
                             GuideView_PlayerBoardView(isLeft: true,
                                                       user: users[1],
@@ -220,6 +284,58 @@ struct GuideView: View {
                                       showAnswer: $showAnswer)
                             .padding(.bottom, 180)
                     }
+                    
+                case 13, 14:
+                    VStack {
+                        Image("ladybug")
+                            .padding(.bottom, 70)
+                        
+                        Text("공격에 성공했습니다 !")
+                    }
+                    
+                case 15:
+                    VStack {
+                        Image("ladybug")
+                            .padding(.bottom, 70)
+                        
+                        Text("카드가 상대의 보드에")
+                        
+                        Text("추가됩니다.")
+                    }
+                    
+                case 16:
+                    VStack {
+                        Image("ladybug")
+                            .padding(.bottom, 70)
+                        
+                        Text("화난 신사동 호랑이가")
+                        
+                        Text("공격을 해왔어요 !")
+                    }
+                    
+                case 17, 18, 19, 20, 21:
+                    LevelSixteenView(user: service.myUserModel,
+                                     firstUser: users[1],
+                                     showAnswerSixteen: $showAnswerSixteen,
+                                     level: $level)
+                    .padding(.bottom, 180)
+                case 22:
+                    VStack {
+                        Image("ladybug")
+                            .padding(.bottom, 70)
+                        
+                        Text("수비에 성공했어요 !")
+                    }
+                    
+                case 23:
+                    VStack {
+                        Image("ladybug")
+                            .padding(.bottom, 70)
+                        
+                        Text("카드가 공격자의 보드에")
+                        
+                        Text("추가됩니다.")
+                    }
                 default:
                     VStack {
                         
@@ -232,8 +348,8 @@ struct GuideView: View {
         }
         .overlay(alignment: .bottom) {
             VStack {
-                if level < 3 {
-                    if level > 0 {
+                if level < 3 || level == 13 || level == 15 || level == 16 || level == 22 || level == 23 || level == 24 {
+                    if level > 0 && level != 13 && level != 16 && level != 22 {
                         Button {
                             withAnimation {
                                 level -= 1
@@ -424,6 +540,119 @@ struct GuideView: View {
                     .frame(height: 180)
                     .padding(.horizontal, 30)
                     .font(.sea(15))
+                } else if level == 18 {
+                    VStack {
+                        HStack {
+                            Text("맞습니다.")
+                                .padding(.horizontal, 30)
+                                .padding(.vertical, 10)
+                                .background {
+                                    Color(hex: "f1f1f1")
+                                }
+                                .clipShape(RoundedRectangle(cornerRadius: .infinity))
+                            
+                            Spacer()
+                            
+                            Text("아닙니다.")
+                                .padding(.horizontal, 30)
+                                .padding(.vertical, 10)
+                                .background {
+                                    Color(hex: "f1f1f1")
+                                }
+                                .clipShape(RoundedRectangle(cornerRadius: .infinity))
+                        }
+                        
+                        Text("카드를 넘깁니다.")
+                            .padding(.horizontal, 30)
+                            .padding(.vertical, 10)
+                            .background {
+                                Color(hex: "f1f1f1")
+                            }
+                            .clipShape(RoundedRectangle(cornerRadius: .infinity))
+                            .padding(.top, 20)
+                    }
+                    .frame(height: 180)
+                    .padding(.horizontal, 30)
+                    .font(.sea(15))
+                    .onAppear {
+                        Task {
+                            try await Task.sleep(nanoseconds: 2_000_000_000)
+                            
+                            withAnimation {
+                                level += 1
+                            }
+                        }
+                    }
+                } else if level == 19 {
+                    VStack {
+                        Text("정말 개구리일까요?")
+                            .font(.sea(30))
+                        
+                        Text("맞습니다를 선택해보세요 !")
+                            .font(.sea(30))
+                    }
+                    .frame(height: 180)
+                    .foregroundStyle(Color.white)
+                    .onAppear {
+                        Task {
+                            try await Task.sleep(nanoseconds: 2_000_000_000)
+                            
+                            withAnimation {
+                                level += 1
+                            }
+                        }
+                    }
+                } else if level == 20 {
+                    VStack {
+                        HStack {
+                            Button {
+                                Task {
+                                    try await Task.sleep(nanoseconds: 300_000_000)
+                                    
+                                    withAnimation {
+                                        level += 1
+                                    }
+                                    
+                                    try await Task.sleep(nanoseconds: 1_000_000_000)
+
+                                    withAnimation {
+                                        showAnswerSixteen = true
+                                    }
+                                }
+                            } label: {
+                                Text("맞습니다.")
+                                    .padding(.horizontal, 30)
+                                    .padding(.vertical, 10)
+                                    .background {
+                                        Color(hex: "f1f1f1")
+                                    }
+                                    .clipShape(RoundedRectangle(cornerRadius: .infinity))
+                                    .foregroundStyle(Color.black)
+                            }
+          
+                            Spacer()
+                            
+                            Text("아닙니다.")
+                                .padding(.horizontal, 30)
+                                .padding(.vertical, 10)
+                                .background {
+                                    Color(hex: "f1f1f1")
+                                }
+                                .clipShape(RoundedRectangle(cornerRadius: .infinity))
+                        }
+                        
+                        Text("카드를 넘깁니다.")
+                            .padding(.horizontal, 30)
+                            .padding(.vertical, 10)
+                            .background {
+                                Color(hex: "f1f1f1")
+                            }
+                            .clipShape(RoundedRectangle(cornerRadius: .infinity))
+                            .padding(.top, 20)
+                    }
+                    .frame(height: 180)
+                    .padding(.horizontal, 30)
+                    .font(.sea(15))
                 }
 
             }
@@ -445,6 +674,17 @@ struct GuideView: View {
             if newLevel == 3 {
                 withAnimation {
                     gameStatus = .onAir
+                }
+            }
+            
+            if newLevel == 14 {
+                Task {
+                    
+                    try await Task.sleep(nanoseconds: 1_000_000_000)
+                    
+                    withAnimation {
+                        level += 1
+                    }
                 }
             }
         }
