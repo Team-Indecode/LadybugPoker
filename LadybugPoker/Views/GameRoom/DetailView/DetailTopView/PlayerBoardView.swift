@@ -117,13 +117,16 @@ struct PlayerBoardView: View {
                     .rotationEffect(.degrees(-180))
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)
-            Text(self.userChat.msg ?? "")
-                .multilineTextAlignment(.leading)
-                .font(.sea(10))
-                .frame(maxWidth: 124)
-                .background(Color(hex: "EAD8C0"))
-                .clipShape(RoundedRectangle(cornerRadius: 5))
-                .frame(maxWidth: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
+            if let msg = self.userChat.msg {
+                Text(msg)
+                    .multilineTextAlignment(.leading)
+                    .font(.sea(10))
+                    .frame(maxWidth: 124)
+                    .background(Color(hex: "EAD8C0"))
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .frame(maxWidth: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
+            }
+            
         }
         
         .padding(.leading, 5)

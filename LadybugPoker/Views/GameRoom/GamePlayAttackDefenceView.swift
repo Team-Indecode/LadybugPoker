@@ -53,11 +53,6 @@ struct GamePlayAttackDefenceView: View {
     var allContent: some View {
         GeometryReader { proxy in
             VStack {
-//                if viewModel.showAttackResult.0 {
-//                    attackResultView
-//                } else {
-//
-//                }
                 switch player {
                 case .attacker:
                     attackerView
@@ -341,8 +336,12 @@ struct GamePlayAttackDefenceView: View {
             } else if viewModel.gameRoomData.value.decision != nil && viewModel.gameRoomData.value.questionCard != nil && !isDefender {
                 if let decision = viewModel.gameRoomData.value.decision {
                     Spacer()
-                    guessText(decision ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
-                    
+                    switch decision {
+                    case "yes": guessText(DefenderAnswer.same.rawValue)
+                    case "no": guessText(DefenderAnswer.different.rawValue)
+                    case "pass": guessText(DefenderAnswer.cardSkip.rawValue)
+                    default: EmptyView()
+                    }
                 }
             }
             Spacer()

@@ -35,8 +35,8 @@ struct GameRoom: Codable, Identifiable, Equatable {
     let turnTime: Int
     let gameStatus: String
     var loser: Int?
-    /// 수비자의 맞,틀 선택(true -> 맞습니다, false -> 아닙니다)
-    let decision: Bool?
+    /// 수비자의 맞,틀 선택(yes -> 맞습니다, no -> 아닙니다, pass: 카드 넘기기)
+    let decision: String?
     
     var toJson: [String: Any] {
         var userGameData: [String: Any] = [:]
@@ -61,11 +61,12 @@ struct GameRoom: Codable, Identifiable, Equatable {
             "createdAt" : createdAt,
             "turnTime" : turnTime,
             "loser" : loser,
-            "decision" : decision
+            "decision" : decision,
+            "gameStatus": gameStatus
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: Int?, decision: Bool?) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: Int?, decision: String?) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -159,7 +160,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.turnTime = turnTime
         self.gameStatus = gameStatus
         self.loser = data["loser"] as? Int
-        self.decision = data["decision"] as? Bool
+        self.decision = data["decision"] as? String
     }
 }
 
