@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 class GameRoomDetailViewViewModel: ObservableObject {
     let db = Firestore.firestore()
+    @Published var gameRoomId: String = ""
     @Published var gameStatus: GameStatus = .notStarted
     
     @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil))
@@ -22,7 +23,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 모든 플레이어가 준비 되었는지
     @Published var allPlayerReadied: Bool = false
     /// 유저 채팅[유저 idx : 유저 채팅]
-    @Published var usersChat: [Int : String] = [:]
+    @Published var usersChat: [Int : Chat] = [:]
     /// 게임 타입(ex. 카드 선택, whoseGetting 선택 등)
     @Published var gameType: GameType? = nil
     /// 플레이어가 어떤 타입인지(공격자, 수비자, 둘다 아님)
@@ -78,7 +79,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func gameStatusChecking(_ data: String, _ turnTime: Int) {
         switch data {
         case GameStatus.finished.rawValue: self.gameStatus = .finished
-        case GameStatus.notStarted.rawValue: self.gameStatus = .notStarted
+        case GameStatus.notStarted.rawValue: 
+            self.gameStatus = .notStarted
         case GameStatus.notEnoughUsers.rawValue: self.gameStatus = .notEnoughUsers
         case GameStatus.onAir.rawValue:
             self.gameStatus = .onAir
@@ -105,9 +107,15 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
                 guard let decision = data.decision else { return }
-                guard let attackResult = self.defenderSuccessCheck(decision ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue) else { return }
-                
-                self.showAttackResult = (true, attackResult)
+                if decision == "yes" {
+                    guard let attackResult = self.defenderSuccessCheck(DefenderAnswer.same.rawValue) else { return }
+                    self.showAttackResult = (true, attackResult)
+                } else if decision == "no" {
+                    guard let attackResult = self.defenderSuccessCheck(DefenderAnswer.different.rawValue) else { return }
+                    self.showAttackResult = (true, attackResult)
+                } else {
+                    return
+                }
             }
         }
     }
@@ -136,7 +144,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
     // 1. tuple을 만들어서(userIdx, userId)이런식으로 만들어서 userIdx를 오름차순으로 정렬한다
     // 2. 그런다음 userId만 그 tuple에서 추출한다
     func getUsersId(_ usersInGame: [String : UserInGame]) {
-        
         usersInGame.forEach { (key: String, value: UserInGame) in
             usersId[value.idx] = key
             usersChat[value.idx] = value.chat
@@ -334,7 +341,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
               let whoseGetting = self.gameRoomData.value.whoseGetting else { return }
         
         for (index, id) in usersId.enumerated() {
-            // 카드 넘기기가 처음인 경우
             if !attackers.contains(index) {
                 if whoseTurn == id || whoseGetting == id {
                     attackers.append(index)
@@ -450,7 +456,24 @@ class GameRoomDetailViewViewModel: ObservableObject {
             gameroomDataUpdate(.gameStatus, "finished")
         }
     }
-
+    
+    func userHandCardCntChecking(_ cardString: String) -> Int {
+        let cardStringArr = cardString.components(separatedBy: ",")
+        var handCardCnt: Int = 0
+        cardStringArr.forEach { card in
+            var tempCard = card
+            let tempCnt = tempCard.popLast()
+            print(#fileID, #function, #line, "- tempCnt: \(tempCnt)")
+            if let tempCnt = tempCnt {
+                if let cnt = Int(String(tempCnt)) {
+                    handCardCnt += cnt
+                }
+            }
+        }
+        
+        return handCardCnt
+    }
+    
     /// string으로 오는 card를 Card strcut로 변경(ex. f1, l2)
     func stringToCards(_ cardString: String) -> [Card] {
         if cardString == "" {
@@ -512,7 +535,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             "id" : userInGame.id,
             "idx" : userInGame.idx,
             "profileUrl" : userInGame.profileUrl,
-            "chat" : userInGame.chat
+            "chat" : ["msg" : userInGame.chat?.msg,
+                      "time" : userInGame.chat?.time]
         ] as [String : Any]
         
         gameRoomDataRef.updateData(["usersInGame.\(userId)" : oneUserData] ) { error in
@@ -531,7 +555,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     }
 
     /// gameRoomData업데이트(ex. whoseTurn, whoseGetting, turnStartTime, gameStatus)
-    func gameroomDataUpdate(_ updateDataType: GameRoomUpdateType, _ updateStringData: String, _ updateDatas: [Int]? = nil, _ updateInt: Int? = nil) {
+    func gameroomDataUpdate(_ updateDataType: GameRoomUpdateType, _ updateStringData: String, _ updateIntDatas: [Int]? = nil, _ updateInt: Int? = nil) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         var updateDataDic: [String : String?] = [updateDataType.rawValue : updateStringData]
         if updateDataType == .whoseTurn {
@@ -542,26 +566,31 @@ class GameRoomDetailViewViewModel: ObservableObject {
             
         } else if updateDataType == .whoseGetting {
             updateDataDic["turnStartTime"] = Date().toString
+            if self.gameRoomData.value.decision != nil {
+                updateDataDic["decision"] = nil as String?
+            }
+            guard let updateDatas = updateIntDatas else { return }
+            attackersUpdate(updateDatas)
         } else if updateDataType == .gameAttackFinish {
             updateDataDic = [:]
             updateDataDic["turnStartTime"] = Date().toString
             updateDataDic["selectedCard"] = nil as String?
             updateDataDic["questionCard"] = nil as String?
             updateDataDic["whoseGetting"] = nil as String?
+            updateDataDic["decision"] = nil as String?
             // 다음턴은 공격/수비에서 진 사람이 정해진다
             updateDataDic["whoseTurn"] = updateStringData
-            decisionUpdate("")
             attackersUpdate([])
         } else if updateDataType == .cardSkip {
             updateDataDic = [:]
-            guard let updateDatas = updateDatas else { return }
+            guard let updateDatas = updateIntDatas else { return }
             attackersUpdate(updateDatas)
             guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
             updateDataDic["whoseTurn"] = nextTurn
             updateDataDic["whoseGetting"] = nil as String?
             updateDataDic["turnStartTime"] = Date().toString
             print(#fileID, #function, #line, "- updateDicchecking⭐️: \(updateDataDic)")
-        }
+        } 
         
         gameRoomDataRef.updateData(updateDataDic) { error in
             if let error = error {
@@ -602,20 +631,16 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// - Parameter decision: 수비자가 선택한 text
     func decisionUpdate(_ decision: String) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
-        var decisionBool: Bool?
+        var decisionFb: String?
         if decision == DefenderAnswer.same.rawValue {
-            decisionBool = true
+            decisionFb = "yes"
         } else if decision == DefenderAnswer.different.rawValue {
-            decisionBool = false
-        } else if decision == "" {
-            decisionBool = nil
-        } else {
-//            defenderSuccessCheck(decision)
-            cardSkip()
-            return
+            decisionFb = "no"
+        } else if decision == DefenderAnswer.cardSkip.rawValue {
+            decisionFb = "pass"
         }
         
-        gameRoomDataRef.updateData(["decision" : decisionBool]) { error in
+        gameRoomDataRef.updateData(["decision" : decisionFb]) { error in
             if let error = error {
                 print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
             }
@@ -624,6 +649,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 if let attackResult = self.defenderSuccessCheck(decision) {
                     self.cardIsSame(attackResult)
                 }
+            } else if decision == DefenderAnswer.cardSkip.rawValue {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                    self.cardSkip()
+                })
+                
             }
         }
     }
@@ -649,6 +679,33 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
             print(#fileID, #function, #line, "- 게임 룸 삭제 success")
         }
+    }
+    
+    // 다른 사람들은 어떻게 옮기지 다른 게임으로 
+    func makeNewGameRoom() async {
+        var settingUser: [String : UserInGame] = [:]
+        
+        self.gameRoomData.value.usersInGame.forEach { (key: String, value: UserInGame) in
+            var afterValue = value
+            afterValue.chat = nil
+            afterValue.boardCard = nil
+            afterValue.readyOrNot = false
+            afterValue.handCard = nil
+            settingUser[key] = afterValue
+        }
+        
+        let model = GameRoom(id: UUID().uuidString, hostId: self.gameRoomData.value.hostId, title: self.gameRoomData.value.title, password: self.gameRoomData.value.password, maxUserCount: self.gameRoomData.value.maxUserCount, code: self.gameRoomData.value.code, usersInGame: settingUser, whoseGetting: nil, turnStartTime: nil, attackers: [], createdAt: Date().toString, turnTime: self.gameRoomData.value.turnTime, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil)
+        
+        do {
+            try await GameRoom.create(model: model)
+            DispatchQueue.main.async {
+                self.gameRoomId = model.id
+                self.showLoserView = false
+            }
+        } catch {
+            print(#fileID, #function, #line, "- make new gameRoom error: \(error.localizedDescription)")
+        }
+        
     }
 
 }

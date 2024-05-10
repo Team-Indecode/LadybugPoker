@@ -8,6 +8,7 @@
 import SwiftUI
 
 @main
+
 struct LadybugPokerApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     

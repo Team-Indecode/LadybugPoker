@@ -143,6 +143,10 @@ struct GameFinishView: View {
     var newGame: some View {
         Button {
             print(#fileID, #function, #line, "- 새 게임")
+            Task {
+                await viewModel.makeNewGameRoom()
+            }
+            
         } label: {
             Text("새 게임")
                 .foregroundStyle(Color.white)

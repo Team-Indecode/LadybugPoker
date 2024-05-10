@@ -52,7 +52,8 @@ struct GameRoomDetailBottomView: View {
                 .environmentObject(viewModel)
                 .onChange(of: viewModel.gameRoomData.value.whoseTurn) { newValue in
                     if let userId = newValue {
-                        self.userDisplayName = viewModel.gameRoomData.value.usersInGame[userId]?.displayName
+                        let userInGame = viewModel.gameRoomData.value.usersInGame[userId]
+                        self.userDisplayName = userInGame?.displayName
                     }
                 }
                 .onAppear {
@@ -187,7 +188,8 @@ struct GameRoomDetailBottomView: View {
     func chatLogic() {
         let userId = Service.shared.myUserModel.id
         if var userInGame = viewModel.gameRoomData.value.usersInGame[userId] {
-            userInGame.chat = chat
+//            userInGame.chat = chat
+            userInGame.chat = Chat(msg: chat, time: Date().toString)
             viewModel.userInGameUpdate(userInGame, userId, nil)
         }
         chat = ""

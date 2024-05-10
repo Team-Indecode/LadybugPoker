@@ -12,13 +12,13 @@ struct GameRoomDetailView: View {
     @State private var showCardSelectedPopup: Bool = false
     @State private var amIReadied: Bool = false
     @State private var isHost: Bool = false
-    @State private var myCards: [Card] = [] 
+    @State private var myCards: [Card] = []
     @State var showExistAlert: Bool = false
     @State var existUserId: String = ""
     @State var existUserDisplayName: String = ""
     /// 이 게임방 퇴장
     @State private var showExistThisRoom: Bool = false
-    let gameRoomId: String
+    @State var gameRoomId: String
     
     var body: some View {
         if #available(iOS 17, *) {
@@ -35,10 +35,16 @@ struct GameRoomDetailView: View {
                             amIReadied = user.readyOrNot
                         }
                     }
-                    
                 }
                 .onChange(of: viewModel.gameRoomData.value.hostId) { oldValue, newValue in
                     isHost = Service.shared.myUserModel.id == newValue
+                }
+                .onChange(of: viewModel.gameRoomId) { _, viewGameRoomId in
+                    gameRoomId = viewGameRoomId
+                    Task {
+                        print(#fileID, #function, #line, "- new gameRoomId⭐️: \(gameRoomId)")
+                        try? await viewModel.getGameData(gameRoomId)
+                    }
                 }
 
         } else {
@@ -95,6 +101,7 @@ struct GameRoomDetailView: View {
             })
             .task {
                 print(#fileID, #function, #line, "- gameId gameRoomId: \(gameRoomId)")
+                viewModel.gameRoomId = gameRoomId
                 try? await viewModel.getGameData(gameRoomId)
             }
         })
@@ -115,6 +122,6 @@ struct GameRoomDetailView: View {
     }
 }
 
-#Preview {
-    GameRoomDetailView(gameRoomId: "")
-}
+//#Preview {
+//    GameRoomDetailView(gameRoomId: "")
+//}

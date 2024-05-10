@@ -24,7 +24,7 @@ struct GameRoomDetailTopView: View {
                 ForEach(usersId, id: \.self) { userId in
                     if userId != "" {
                         if let userData = usersInGame[userId] {
-                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], currentUserId: nil), userBoardIndex: userData.idx, cardsString: userData.boardCard ?? "", boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, userReadyOrNot: userData.readyOrNot, isOdd: userData.idx % 2 == 0 ? true : false, showExitAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
+                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], currentUserId: nil), userBoardIndex: userData.idx, cardsString: userData.boardCard ?? "", handCardString: userData.handCard ?? "", boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, userReadyOrNot: userData.readyOrNot, isOdd: userData.idx % 2 == 0 ? true : false, showExitAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                                 .environmentObject(viewModel)
                         } else {
                             Rectangle()
