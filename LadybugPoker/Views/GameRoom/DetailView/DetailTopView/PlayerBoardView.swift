@@ -151,7 +151,19 @@ struct PlayerBoardView: View {
     
     var arrowView: some View {
         Button {
-            viewModel.gameroomDataUpdate(.whoseGetting, user.id, [userBoardIndex])
+            var attackers: [Int] = viewModel.gameRoomData.value.attackers
+            
+            if !attackers.contains(userBoardIndex) {
+                attackers.append(userBoardIndex)
+            }
+            
+            if let whoseTurnIndex = viewModel.usersId.firstIndex(of: viewModel.gameRoomData.value.whoseTurn ?? "") {
+                if !attackers.contains(whoseTurnIndex) {
+                    attackers.append(whoseTurnIndex)
+                }
+            }
+            
+            viewModel.gameroomDataUpdate(.whoseGetting, user.id, attackers)
         } label: {
             Image(systemName: self.isOdd ? "arrowshape.left.fill" : "arrowshape.right.fill")
                 .resizable()

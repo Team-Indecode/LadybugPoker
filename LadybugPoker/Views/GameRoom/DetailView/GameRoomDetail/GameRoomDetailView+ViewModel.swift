@@ -136,7 +136,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
     // 1. tuple을 만들어서(userIdx, userId)이런식으로 만들어서 userIdx를 오름차순으로 정렬한다
     // 2. 그런다음 userId만 그 tuple에서 추출한다
     func getUsersId(_ usersInGame: [String : UserInGame]) {
-        
         usersInGame.forEach { (key: String, value: UserInGame) in
             usersId[value.idx] = key
             usersChat[value.idx] = value.chat
@@ -563,10 +562,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             updateDataDic["whoseGetting"] = nil as String?
             updateDataDic["turnStartTime"] = Date().toString
             print(#fileID, #function, #line, "- updateDicchecking⭐️: \(updateDataDic)")
-        } else if updateDataType == .selectedCard {
-            guard let updateDatas = updateIntDatas else { return }
-            attackersUpdate(updateDatas)
-        }
+        } 
         
         gameRoomDataRef.updateData(updateDataDic) { error in
             if let error = error {

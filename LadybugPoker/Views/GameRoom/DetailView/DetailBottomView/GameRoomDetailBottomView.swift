@@ -24,7 +24,6 @@ struct GameRoomDetailBottomView: View {
     @Binding var amIReadied: Bool
     @State var chat: String = ""
     @State private var userDisplayName: String? = ""
-    @State private var userIdx: Int? = 0
     
     /// 내가 방장인지
     @Binding var isHost: Bool
@@ -48,15 +47,13 @@ struct GameRoomDetailBottomView: View {
                             secondsLeft: $viewModel.secondsLeft,
                             selectedCardType: $viewModel.gameRoomData.value.selectedCard,
                             showCardSelectedPopup: $showCardSelectedPopup,
-                            bottomGameType: $gameType,
-                            userIdx: $userIdx
+                            bottomGameType: $gameType
                 )
                 .environmentObject(viewModel)
                 .onChange(of: viewModel.gameRoomData.value.whoseTurn) { newValue in
                     if let userId = newValue {
                         let userInGame = viewModel.gameRoomData.value.usersInGame[userId]
                         self.userDisplayName = userInGame?.displayName
-                        self.userIdx = userInGame?.idx
                     }
                 }
                 .onAppear {

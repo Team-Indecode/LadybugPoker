@@ -23,7 +23,6 @@ extension GameRoomDetailBottomView {
         
         @Binding var showCardSelectedPopup: Bool
         @Binding var bottomGameType: GameType?
-        @Binding var userIdx: Int?
         
         var body: some View {
             VStack(spacing: 0) {
@@ -79,8 +78,7 @@ extension GameRoomDetailBottomView {
 //                                        }
 //                                    }
                                     guard let whoseTurn = viewModel.gameRoomData.value.whoseTurn else { return }
-                                    guard let userIdx = userIdx else { return }
-                                    viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString, [userIdx])
+                                    viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
                                     viewModel.userCardChange(card.bug, myCards, true, whoseTurn)
                                 } label: {
                                     if card.cardCnt != 0 {
@@ -116,7 +114,6 @@ extension GameRoomDetailBottomView {
         secondsLeft: .constant(48),
         selectedCardType: .constant(nil),
         showCardSelectedPopup: .constant(false),
-        bottomGameType: .constant(nil),
-        userIdx: .constant(1)
+        bottomGameType: .constant(nil)
     )
 }
