@@ -27,7 +27,7 @@ struct PlayerBoardView: View {
     let userReadyOrNot: Bool
     /// 유저가 보드판에서 왼쪽인지 오른쪽에 위치하는지
     let isOdd: Bool
-    @State private var userChat: String = ""
+    @State private var userChat: Chat = Chat(msg: "", time: "")
     @State private var userChatShow: Bool = false
     @Binding var showExitAlert: Bool
     @Binding var existUserId: String
@@ -112,7 +112,7 @@ struct PlayerBoardView: View {
                     .rotationEffect(.degrees(-180))
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)
-            Text(self.userChat)
+            Text(self.userChat.msg ?? "")
                 .multilineTextAlignment(.leading)
                 .font(.sea(10))
                 .frame(maxWidth: 124)
@@ -151,7 +151,7 @@ struct PlayerBoardView: View {
     
     var arrowView: some View {
         Button {
-            viewModel.gameroomDataUpdate(.whoseGetting, user.id)
+            viewModel.gameroomDataUpdate(.whoseGetting, user.id, [userBoardIndex])
         } label: {
             Image(systemName: self.isOdd ? "arrowshape.left.fill" : "arrowshape.right.fill")
                 .resizable()

@@ -22,7 +22,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 모든 플레이어가 준비 되었는지
     @Published var allPlayerReadied: Bool = false
     /// 유저 채팅[유저 idx : 유저 채팅]
-    @Published var usersChat: [Int : String] = [:]
+    @Published var usersChat: [Int : Chat] = [:]
     /// 게임 타입(ex. 카드 선택, whoseGetting 선택 등)
     @Published var gameType: GameType? = nil
     /// 플레이어가 어떤 타입인지(공격자, 수비자, 둘다 아님)
@@ -334,7 +334,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
               let whoseGetting = self.gameRoomData.value.whoseGetting else { return }
         
         for (index, id) in usersId.enumerated() {
-            // 카드 넘기기가 처음인 경우
             if !attackers.contains(index) {
                 if whoseTurn == id || whoseGetting == id {
                     attackers.append(index)
@@ -512,7 +511,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             "id" : userInGame.id,
             "idx" : userInGame.idx,
             "profileUrl" : userInGame.profileUrl,
-            "chat" : userInGame.chat
+            "chat" : ["msg" : userInGame.chat?.msg,
+                      "time" : userInGame.chat?.time]
         ] as [String : Any]
         
         gameRoomDataRef.updateData(["usersInGame.\(userId)" : oneUserData] ) { error in
@@ -531,7 +531,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     }
 
     /// gameRoomData업데이트(ex. whoseTurn, whoseGetting, turnStartTime, gameStatus)
-    func gameroomDataUpdate(_ updateDataType: GameRoomUpdateType, _ updateStringData: String, _ updateDatas: [Int]? = nil, _ updateInt: Int? = nil) {
+    func gameroomDataUpdate(_ updateDataType: GameRoomUpdateType, _ updateStringData: String, _ updateIntDatas: [Int]? = nil, _ updateInt: Int? = nil) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         var updateDataDic: [String : String?] = [updateDataType.rawValue : updateStringData]
         if updateDataType == .whoseTurn {
@@ -542,6 +542,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             
         } else if updateDataType == .whoseGetting {
             updateDataDic["turnStartTime"] = Date().toString
+            guard let updateDatas = updateIntDatas else { return }
+            attackersUpdate(updateDatas)
         } else if updateDataType == .gameAttackFinish {
             updateDataDic = [:]
             updateDataDic["turnStartTime"] = Date().toString
@@ -554,13 +556,16 @@ class GameRoomDetailViewViewModel: ObservableObject {
             attackersUpdate([])
         } else if updateDataType == .cardSkip {
             updateDataDic = [:]
-            guard let updateDatas = updateDatas else { return }
+            guard let updateDatas = updateIntDatas else { return }
             attackersUpdate(updateDatas)
             guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
             updateDataDic["whoseTurn"] = nextTurn
             updateDataDic["whoseGetting"] = nil as String?
             updateDataDic["turnStartTime"] = Date().toString
             print(#fileID, #function, #line, "- updateDicchecking⭐️: \(updateDataDic)")
+        } else if updateDataType == .selectedCard {
+            guard let updateDatas = updateIntDatas else { return }
+            attackersUpdate(updateDatas)
         }
         
         gameRoomDataRef.updateData(updateDataDic) { error in

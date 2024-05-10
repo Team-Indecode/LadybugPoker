@@ -47,5 +47,5 @@ struct UserProfileView: View {
 }
 
 #Preview {
-    UserProfileView(user: UserInGame(id: "", readyOrNot: false, handCard: "", boardCard: "", displayName: "", profileUrl: "", idx: 0, chat: ""), profileWidth: 171, profileHeight: 69)
+    UserProfileView(user: UserInGame(id: "", readyOrNot: false, handCard: "", boardCard: "", displayName: "", profileUrl: "", idx: 0, chat: Chat(msg: "", time: "")), profileWidth: 171, profileHeight: 69)
 }

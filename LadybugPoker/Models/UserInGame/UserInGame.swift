@@ -20,7 +20,7 @@ struct UserInGame: Codable, Hashable {
     let profileUrl: String?
     /// 무조건 인덱스가 수정되지 않기 때문에 -> 게임방의 데이터가 변경될때마다 유저들의
     let idx: Int
-    var chat: String?
+    var chat: Chat?
     
     var toJson: [String: Any] {
         [
@@ -35,7 +35,7 @@ struct UserInGame: Codable, Hashable {
         ]
     }
     
-    init(id: String, readyOrNot: Bool, handCard: String?, boardCard: String?, displayName: String, profileUrl: String?, idx: Int, chat: String?) {
+    init(id: String, readyOrNot: Bool, handCard: String?, boardCard: String?, displayName: String, profileUrl: String?, idx: Int, chat: Chat?) {
         self.id = id
         self.readyOrNot = readyOrNot
         self.handCard = handCard
@@ -60,6 +60,23 @@ struct UserInGame: Codable, Hashable {
         self.displayName = displayName
         self.profileUrl = data["profileUrl"] as? String
         self.idx = idx
-        self.chat = data["chat"] as? String
+        var tempChat = Chat(data: data["chat"] as? [String : Any] ?? [:])
+        self.chat = tempChat
+    }
+}
+
+
+struct Chat: Equatable, Hashable, Codable {
+    var msg: String?
+    var time: String?
+    
+    init(msg: String?, time: String?) {
+        self.msg = msg
+        self.time = time
+    }
+    
+    init?(data: [String: Any]) {
+        self.msg = data["msg"] as? String
+        self.time = data["time"] as? String
     }
 }

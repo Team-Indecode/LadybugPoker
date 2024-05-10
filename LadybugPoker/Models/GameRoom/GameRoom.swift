@@ -144,9 +144,6 @@ struct GameRoom: Codable, Identifiable, Equatable {
         for userData in usersInGameData {
             let userId = userData.key
             let userInGame = UserInGame(data: userData.value as? [String: Any] ?? [:])
-            print(#fileID, #function, #line, "- userData in firstParsingCheck⭐️: \(userInGame)")
-            print(#fileID, #function, #line, "- userData in firstParsingCheck⭐️: \(userData.value)")
-            print(#fileID, #function, #line, "- userData in firstParsingCheck⭐️: \(userData)")
             if let userInGame {
                 tempData[userId] = userInGame
             }
@@ -166,15 +163,10 @@ struct GameRoom: Codable, Identifiable, Equatable {
     }
 }
 
-struct Chat {
-    var msg: String
-    var time: String
-}
-
-
 enum GameUpdateType {
     case gameStart
     case sendUserReady
+    case makeNewGame
 }
 
 enum GameRoomUpdateType: String {

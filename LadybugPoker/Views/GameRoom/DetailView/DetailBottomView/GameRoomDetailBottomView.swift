@@ -24,6 +24,7 @@ struct GameRoomDetailBottomView: View {
     @Binding var amIReadied: Bool
     @State var chat: String = ""
     @State private var userDisplayName: String? = ""
+    @State private var userIdx: Int? = 0
     
     /// 내가 방장인지
     @Binding var isHost: Bool
@@ -47,12 +48,15 @@ struct GameRoomDetailBottomView: View {
                             secondsLeft: $viewModel.secondsLeft,
                             selectedCardType: $viewModel.gameRoomData.value.selectedCard,
                             showCardSelectedPopup: $showCardSelectedPopup,
-                            bottomGameType: $gameType
+                            bottomGameType: $gameType,
+                            userIdx: $userIdx
                 )
                 .environmentObject(viewModel)
                 .onChange(of: viewModel.gameRoomData.value.whoseTurn) { newValue in
                     if let userId = newValue {
-                        self.userDisplayName = viewModel.gameRoomData.value.usersInGame[userId]?.displayName
+                        let userInGame = viewModel.gameRoomData.value.usersInGame[userId]
+                        self.userDisplayName = userInGame?.displayName
+                        self.userIdx = userInGame?.idx
                     }
                 }
                 .onAppear {
@@ -187,7 +191,8 @@ struct GameRoomDetailBottomView: View {
     func chatLogic() {
         let userId = Service.shared.myUserModel.id
         if var userInGame = viewModel.gameRoomData.value.usersInGame[userId] {
-            userInGame.chat = chat
+//            userInGame.chat = chat
+            userInGame.chat = Chat(msg: chat, time: Date().toString)
             viewModel.userInGameUpdate(userInGame, userId, nil)
         }
         chat = ""
