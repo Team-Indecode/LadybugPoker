@@ -21,6 +21,10 @@ struct GamePlayAttackDefenceView: View {
     @State private var selectBug: Bugs? = nil
     @State private var screenHeight: CGFloat = 700
     @Binding var showView: Bool
+    /// 수비자가 선택한 대답
+    @State private var defenderChooseAnswer: String? = nil
+    /// 수비자가 선택한 대답만 보여주는 애니메이션
+    @State private var showDefenderChooseAnser: Bool = false
     let screenHeightTop: CGFloat = 0.683
     let screenHeightBottom: CGFloat = 0.317
     
@@ -64,6 +68,7 @@ struct GamePlayAttackDefenceView: View {
             }
             .onAppear(perform: {
                 screenHeight = proxy.size.height
+                defenderChooseAnswer = nil
                 if let userType = viewModel.userType {
                     player = userType
                 }
@@ -333,6 +338,7 @@ struct GamePlayAttackDefenceView: View {
             timerView
             if isDefender && viewModel.gameRoomData.value.questionCard != nil {
                 cardGuessChooseView
+                
             } else if viewModel.gameRoomData.value.decision != nil && viewModel.gameRoomData.value.questionCard != nil && !isDefender {
                 if let decision = viewModel.gameRoomData.value.decision {
                     Spacer()
@@ -364,19 +370,45 @@ struct GamePlayAttackDefenceView: View {
     }
     
     /// 수비자가 해당 카드가 공격자가 말한 벌레가 맞는지 아닌지 판단
+//    var cardGuessChooseView: some View {
+//        VStack {
+//            Spacer()
+//            if defenderChooseAnswer == "y" {
+//                guessText(DefenderAnswer.same.rawValue)
+//            } else if defenderChooseAnswer == "n" {
+//                guessText(DefenderAnswer.different.rawValue)
+//            } else if defenderChooseAnswer == "p" {
+//                guessText(DefenderAnswer.cardSkip.rawValue)
+//            }
+//            Spacer()
+//        }
+//    }
+    
     var cardGuessChooseView: some View {
         VStack {
-            HStack {
-                guessText(DefenderAnswer.same.rawValue)
+            if showDefenderChooseAnser {
                 Spacer()
-                    .frame(width: 70)
-                guessText(DefenderAnswer.different.rawValue)
+            }
+            HStack {
+                if (showDefenderChooseAnser && defenderChooseAnswer == "y") || !showDefenderChooseAnser {
+                    guessText(DefenderAnswer.same.rawValue)
+                }
+                if (showDefenderChooseAnser && defenderChooseAnswer == "n") || !showDefenderChooseAnser {
+                    if !showDefenderChooseAnser {
+                        Spacer()
+                    }
+                    guessText(DefenderAnswer.different.rawValue)
+                }
             }
             .padding(.bottom, 26)
             if viewModel.gameRoomData.value.attackers.count != viewModel.gameRoomData.value.usersInGame.count - 1 {
-                guessText(DefenderAnswer.cardSkip.rawValue)
+                if (showDefenderChooseAnser && defenderChooseAnswer == "p") || !showDefenderChooseAnser {
+                    guessText(DefenderAnswer.cardSkip.rawValue)
+                }
             }
-            
+            if showDefenderChooseAnser {
+                Spacer()
+            }
         }
         .padding(.top, 30)
     }
@@ -385,6 +417,18 @@ struct GamePlayAttackDefenceView: View {
     func guessText(_ text: String) -> some View {
         return Button(action: {
 //            viewModel.defenderSuccessCheck(text)
+            Task {
+                withAnimation {
+                    if text == DefenderAnswer.same.rawValue {
+                        defenderChooseAnswer = "y"
+                    } else if text == DefenderAnswer.different.rawValue {
+                        defenderChooseAnswer = "n"
+                    } else if text == DefenderAnswer.cardSkip.rawValue {
+                        defenderChooseAnswer = "p"
+                    }
+                    showDefenderChooseAnser = true
+                }
+            }
             viewModel.decisionUpdate(text)
         }, label: {
             Text(text)
