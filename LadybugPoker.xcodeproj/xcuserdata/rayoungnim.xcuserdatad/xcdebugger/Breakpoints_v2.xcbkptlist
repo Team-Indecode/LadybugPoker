@@ -533,8 +533,8 @@
             filePath = "LadybugPoker/Views/GameRoom/GamePlayAttackDefenceView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "432"
-            endingLineNumber = "432"
+            startingLineNumber = "421"
+            endingLineNumber = "421"
             landmarkName = "guessText(_:)"
             landmarkType = "7">
             <Locations>

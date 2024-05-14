@@ -25,6 +25,9 @@ struct GamePlayAttackDefenceView: View {
     @State private var defenderChooseAnswer: String? = nil
     /// 수비자가 선택한 대답만 보여주는 애니메이션
     @State private var showDefenderChooseAnser: Bool = false
+    @State private var showAttackResult: Bool = false
+    @State private var attackeResult: Bool = false
+    @State private var startRotation = false
     let screenHeightTop: CGFloat = 0.683
     let screenHeightBottom: CGFloat = 0.317
     
@@ -35,6 +38,18 @@ struct GamePlayAttackDefenceView: View {
                     if let userType = userType {
                         player = userType
                     }
+                })
+                .onChange(of: viewModel.showAttackResult.0, { oldValue, newValue in
+                    withAnimation {
+                        showAttackResult = true
+                    }
+                    attackeResult = viewModel.showAttackResult.1
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                        withAnimation {
+                            startRotation = true
+                        }
+                    })
+                    
                 })
                 .onChange(of: viewModel.gameRoomData.value.selectedCard, { oldValue, newValue in
                     switch newValue {
@@ -69,6 +84,7 @@ struct GamePlayAttackDefenceView: View {
             .onAppear(perform: {
                 screenHeight = proxy.size.height
                 defenderChooseAnswer = nil
+                startRotation = false
                 if let userType = viewModel.userType {
                     player = userType
                 }
@@ -93,13 +109,8 @@ struct GamePlayAttackDefenceView: View {
     /// 플레이어가 공격자 일 때
     var attackerView: some View {
         VStack {
-            if viewModel.showAttackResult.0 {
-                attackResultView
-                    .frame(height: screenHeight * screenHeightTop)
-            } else {
-                playerAttackTopView
-                    .frame(height: screenHeight * screenHeightTop)
-            }
+            playerAttackTopView
+                .frame(height: screenHeight * screenHeightTop)
             playerBottomView(false)
                 .frame(height: screenHeight * screenHeightBottom)
         }
@@ -109,13 +120,8 @@ struct GamePlayAttackDefenceView: View {
     /// 플레이어가 수비자일때
     var defenderView: some View {
         VStack {
-            if viewModel.showAttackResult.0 {
-                attackResultView
-                    .frame(height: screenHeight * screenHeightTop)
-            } else {
-                playerNotAttackerTopView
-                    .frame(height: screenHeight * screenHeightTop)
-            }
+            playerNotAttackerTopView
+                .frame(height: screenHeight * screenHeightTop)
             playerBottomView(true)
                 .frame(height: screenHeight * screenHeightBottom)
         }
@@ -125,14 +131,8 @@ struct GamePlayAttackDefenceView: View {
     /// 플레이어가 공격자/수비자 모두 아닐때
     var othersView: some View {
         VStack(spacing: 0) {
-            if viewModel.showAttackResult.0 {
-                attackResultView
-                    .frame(height: screenHeight * screenHeightTop)
-            } else {
-                playerNotAttackerTopView
-                    .frame(height: screenHeight * screenHeightTop)
-            }
-            
+            playerNotAttackerTopView
+                .frame(height: screenHeight * screenHeightTop)
             playerBottomView(false)
                 .frame(height: screenHeight * screenHeightBottom)
         }
@@ -149,30 +149,41 @@ struct GamePlayAttackDefenceView: View {
                     makeUserView(userData)
                 }
                 Spacer()
-                if let selectBug = selectBug {
-                    VStack(spacing: 2) {
-                        Text("고른 카드")
-                            .font(.sea(10))
-                            .foregroundStyle(Color.white)
-                        CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
-                            
+                if !showAttackResult {
+                    if let selectBug = selectBug {
+                        VStack(spacing: 2) {
+                            Text("고른 카드")
+                                .font(.sea(10))
+                                .foregroundStyle(Color.white)
+                            CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
+                        }
+                        .padding(.trailing, 20)
                     }
-                    .padding(.trailing, 20)
                 }
             }
             Text("이 카드는....")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
-            if viewModel.gameType == .attacker {
-                bugsView
+            if !showAttackResult {
+                if viewModel.gameType == .attacker {
+                    bugsView
+                } else {
+                    bugAndCard
+                }
             } else {
-                bugAndCard
+                if let selectBug = selectBug {
+                    CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
+                        .rotationEffect(startRotation ? Angle(degrees: 360) : Angle(degrees: 0))
+                }
             }
-            
             Text("입니다.")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
             defenderProfileView
+            if showAttackResult {
+                Text(viewModel.showAttackResult.1 ? "공격 성공" : "공격 실패")
+                    .font(.sea(50))
+            }
         }
     }
     
@@ -184,26 +195,18 @@ struct GamePlayAttackDefenceView: View {
             Text("이 카드는....")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
-            bugAndCard
+            if showAttackResult {
+                if let selectBug = selectBug {
+                    CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
+                        .rotationEffect(startRotation ? Angle(degrees: 360) : Angle(degrees: 0))
+                }
+            } else {
+                bugAndCard
+            }
             Text("입니다.")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
             defenderProfileView
-        }
-    }
-    
-    ///게임이 종료됨
-    var attackResultView: some View {
-        VStack(spacing: 0) {
-            attackerProfileView
-                .padding(.bottom, 15)
-            if let selectBug = selectBug {
-                CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 121, cardHeightSize: 181, isBottomViewCard: false)
-                    .padding(.bottom, 15)
-            }
-           defenderProfileView
-            Text(viewModel.showAttackResult.1 ? "공격 성공" : "공격 실패")
-                .font(.sea(50))
         }
     }
     
@@ -370,20 +373,6 @@ struct GamePlayAttackDefenceView: View {
     }
     
     /// 수비자가 해당 카드가 공격자가 말한 벌레가 맞는지 아닌지 판단
-//    var cardGuessChooseView: some View {
-//        VStack {
-//            Spacer()
-//            if defenderChooseAnswer == "y" {
-//                guessText(DefenderAnswer.same.rawValue)
-//            } else if defenderChooseAnswer == "n" {
-//                guessText(DefenderAnswer.different.rawValue)
-//            } else if defenderChooseAnswer == "p" {
-//                guessText(DefenderAnswer.cardSkip.rawValue)
-//            }
-//            Spacer()
-//        }
-//    }
-    
     var cardGuessChooseView: some View {
         VStack {
             if showDefenderChooseAnser {
