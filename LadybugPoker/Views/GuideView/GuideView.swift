@@ -13,14 +13,13 @@ struct GuideView: View {
     
     @State private var users: [User] = []
     
-    @State private var level = 23
+    @State private var level = 26
     
     @State private var gameStatus: GameStatus = .onAir
     
     @State private var backgroundOpacity = 0.8
     @State private var showAnswer = false
     @State private var showAnswerSixteen = false
-
     
     var body: some View {
         VStack {
@@ -336,6 +335,72 @@ struct GuideView: View {
                         
                         Text("추가됩니다.")
                     }
+                    
+                case 24:
+                    VStack {
+                        Text("패배 조건")
+                            .font(.sea(30))
+                        
+                        Image("ladybug")
+                            .padding(.bottom, 70)
+                        
+                        Text("하나의 동물카드가")
+                        
+                        Text("4장이 되거나")
+                        
+                        GuideCardView(bug: .worm, count: 4)
+                            .frame(width: 70, height: 110)
+                            .padding(.bottom, 100)
+                    }
+                case 25:
+                    VStack {
+                        Text("패배 조건")
+                            .font(.sea(30))
+                        
+                        Image("ladybug")
+                            .padding(.bottom, 70)
+                        
+                        Text("모든 동물카드가")
+                        
+                        Text("1장 이상이 수집되면")
+                        
+                        HStack {
+                            GuideCardView(bug: .snake, count: 2)
+                            
+                            GuideCardView(bug: .ladybug, count: 1)
+                            
+                            GuideCardView(bug: .frog, count: 3)
+                            
+                            GuideCardView(bug: .rat, count: 1)
+                        }
+                        .frame(width: 200, height: 80)
+                        
+                        HStack {
+                            GuideCardView(bug: .spider, count: 2)
+                            
+                            GuideCardView(bug: .snail, count: 1)
+                            
+                            GuideCardView(bug: .worm, count: 3)
+                            
+                            GuideCardView(bug: .bee, count: 1)
+                        }
+                        .frame(width: 200, height: 80)
+                        .padding(.bottom, 100)
+                    }
+                case 26:
+                    VStack {
+                        Text("패배 조건")
+                            .font(.sea(30))
+                        
+                        Image("ladybug")
+                            .padding(.bottom, 70)
+                        
+                        Text("패배하고")
+                        
+                        Text("게임이 종료됩니다.")
+                        
+                    }
+
                 default:
                     VStack {
                         
@@ -348,7 +413,7 @@ struct GuideView: View {
         }
         .overlay(alignment: .bottom) {
             VStack {
-                if level < 3 || level == 13 || level == 15 || level == 16 || level == 22 || level == 23 || level == 24 {
+                if level < 3 || level == 13 || level == 15 || level == 16 || level == 22 || level == 23 || level == 24 || level == 25 || level == 26 {
                     if level > 0 && level != 13 && level != 16 && level != 22 {
                         Button {
                             withAnimation {
@@ -684,11 +749,30 @@ struct GuideView: View {
                     
                     withAnimation {
                         level += 1
-                    }
+                    }                    
                 }
             }
         }
     }
+    
+    let names = ["Jake", "annie", "tom", "john"]
+
+
+    func getIndexOfName(givenNames: [String]) {
+        //이름이 names에 있으면 index를 출력 없으면 "no Name" 출력
+        // index 로 접근
+        
+        for name in givenNames {
+            if let index = names.firstIndex(of: name) {
+                print(index)
+            } else {
+                print("no name!")
+            }
+        }
+    }
+    
+    
+    
 }
 
 #Preview {
