@@ -150,32 +150,13 @@ struct GamePlayAttackDefenceView: View {
                 }
                 Spacer()
                 if !showAttackResult {
-                    if let selectBug = selectBug {
-                        VStack(spacing: 2) {
-                            Text("고른 카드")
-                                .font(.sea(10))
-                                .foregroundStyle(Color.white)
-                            CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
-                        }
-                        .padding(.trailing, 20)
-                    }
+                    realSelectCard
                 }
             }
             Text("이 카드는....")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
-            if !showAttackResult {
-                if viewModel.gameType == .attacker {
-                    bugsView
-                } else {
-                    bugAndCard
-                }
-            } else {
-                if let selectBug = selectBug {
-                    CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
-                        .rotationEffect(startRotation ? Angle(degrees: 360) : Angle(degrees: 0))
-                }
-            }
+            attackOrResult
             Text("입니다.")
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
@@ -183,6 +164,41 @@ struct GamePlayAttackDefenceView: View {
             if showAttackResult {
                 Text(viewModel.showAttackResult.1 ? "공격 성공" : "공격 실패")
                     .font(.sea(50))
+            }
+        }
+    }
+    
+    @ViewBuilder
+    /// 공격자가 실제로 선택한 카드
+    var realSelectCard: some View {
+        if let selectBug = selectBug {
+            VStack(spacing: 2) {
+                Text("고른 카드")
+                    .font(.sea(10))
+                    .foregroundStyle(Color.white)
+                CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 40, cardHeightSize: 60, isBottomViewCard: false)
+            }
+            .padding(.trailing, 20)
+        } else {
+            EmptyView()
+        }
+    }
+    
+    @ViewBuilder
+    /// 공격중인지 공격 결과인지
+    var attackOrResult: some View {
+        // 공격중
+        if !showAttackResult {
+            if viewModel.gameType == .attacker {
+                bugsView
+            } else {
+                bugAndCard
+            }
+        } else {
+            // 공격 결과
+            if let selectBug = selectBug {
+                CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
+                    .rotationEffect(startRotation ? Angle(degrees: 360) : Angle(degrees: 0))
             }
         }
     }
@@ -207,6 +223,10 @@ struct GamePlayAttackDefenceView: View {
                 .font(.sea(50))
                 .foregroundStyle(Color.white)
             defenderProfileView
+            if showAttackResult {
+                Text(viewModel.showAttackResult.1 ? "공격 성공" : "공격 실패")
+                    .font(.sea(50))
+            }
         }
     }
     
