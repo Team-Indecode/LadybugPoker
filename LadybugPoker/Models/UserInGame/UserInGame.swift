@@ -31,7 +31,7 @@ struct UserInGame: Codable, Hashable {
             "displayName": displayName,
             "profileUrl": profileUrl,
             "idx": idx,
-            "chat": chat
+            "chat": chat?.toJson
         ]
     }
     
@@ -78,5 +78,12 @@ struct Chat: Equatable, Hashable, Codable {
     init?(data: [String: Any]) {
         self.msg = data["msg"] as? String
         self.time = data["time"] as? String
+    }
+    
+    var toJson: [String: Any] {
+        [
+            "msg": msg,
+            "time": time
+        ]
     }
 }
