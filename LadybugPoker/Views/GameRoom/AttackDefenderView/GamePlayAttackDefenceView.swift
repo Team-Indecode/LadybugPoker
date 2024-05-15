@@ -7,11 +7,13 @@
 
 import SwiftUI
 import NukeUI
+import Combine
 
 struct GamePlayAttackDefenceView: View {
     @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
+    @StateObject var attackDefenceVM = AttackDefenceViewModel()
+    
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     /// 플레이어 역할
     @State private var player: Player = .attacker
     /// 남은 타이머
@@ -31,7 +33,8 @@ struct GamePlayAttackDefenceView: View {
     @State private var showAttackResult: Bool = false
     /// 공격 결과 나타나고 0.3초 뒤에 실제 공격자가 선택한 카드가 돌아갈지
     @State private var startRotation = false
-    @State private var dots: Int = 0
+    
+    var cancellables = Set<AnyCancellable>()
     
     /// 스크린 높이에서 top부분이 차지하는 비율
     let screenHeightTop: CGFloat = 0.683
@@ -88,12 +91,8 @@ struct GamePlayAttackDefenceView: View {
                     othersView
                 }
             }
-            .onReceive(timer, perform: { value in
-                dots += 1
-                print(#fileID, #function, #line, "- dots: \(dots)")
-                print(#fileID, #function, #line, "- value: \(value)")
-            })
             .onAppear(perform: {
+                attackDefenceVM.gameTimer()
                 screenHeight = proxy.size.height
                 defenderChooseAnswer = nil
                 startRotation = false
@@ -165,14 +164,7 @@ struct GamePlayAttackDefenceView: View {
                     realSelectCard
                 }
             }
-            HStack(spacing: 0) {
-                Text("이 카드는?")
-                    .font(.sea(50))
-                    .foregroundStyle(Color.white)
-                ForEach(0..<dots % 5, id: \.self) { _ in
-                    Text(".")
-                }
-            }
+            thisCard
             attackOrResult
             Text("입니다.")
                 .font(.sea(50))
@@ -225,14 +217,7 @@ struct GamePlayAttackDefenceView: View {
     var playerNotAttackerTopView: some View {
         VStack(spacing: 0) {
             attackerProfileView
-            HStack(spacing: 0) {
-                Text("이 카드는?")
-                    .font(.sea(50))
-                    .foregroundStyle(Color.white)
-                ForEach(0..<dots % 5, id: \.self) { _ in
-                    Text(".")
-                }
-            }
+            thisCard
 //            Text("이 카드는....")
 //                .font(.sea(50))
 //                .foregroundStyle(Color.white)
@@ -251,6 +236,19 @@ struct GamePlayAttackDefenceView: View {
             if showAttackResult {
                 Text(viewModel.showAttackResult.1 ? "공격 성공" : "공격 실패")
                     .font(.sea(50))
+            }
+        }
+    }
+    
+    var thisCard: some View {
+        HStack(spacing: 0) {
+            Text("이 카드는")
+                .font(.sea(50))
+                .foregroundStyle(Color.white)
+            ForEach(0..<attackDefenceVM.dots % 5, id: \.self) { _ in
+                Text(".")
+                    .font(.sea(50))
+                    .foregroundStyle(Color.white)
             }
         }
     }
