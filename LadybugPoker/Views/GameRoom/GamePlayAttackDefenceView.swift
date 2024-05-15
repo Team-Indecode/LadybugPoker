@@ -11,24 +11,31 @@ import NukeUI
 struct GamePlayAttackDefenceView: View {
     @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     /// 플레이어 역할
     @State private var player: Player = .attacker
     /// 남은 타이머
-    @State private var timer: Int = 48
+    @State private var gameTimer: Int = 48
     /// 공격자가 공격한 벌레
     @State private var attackBug: Bugs? = nil
+    /// 공격자가 실제로 선택한 벌레
     @State private var selectBug: Bugs? = nil
+    /// 핸드폰 화면 사이즈
     @State private var screenHeight: CGFloat = 700
     @Binding var showView: Bool
     /// 수비자가 선택한 대답
     @State private var defenderChooseAnswer: String? = nil
     /// 수비자가 선택한 대답만 보여주는 애니메이션
     @State private var showDefenderChooseAnser: Bool = false
+    /// 공격 결과 나타내줄지
     @State private var showAttackResult: Bool = false
-    @State private var attackeResult: Bool = false
+    /// 공격 결과 나타나고 0.3초 뒤에 실제 공격자가 선택한 카드가 돌아갈지
     @State private var startRotation = false
+    @State private var dots: Int = 0
+    
+    /// 스크린 높이에서 top부분이 차지하는 비율
     let screenHeightTop: CGFloat = 0.683
+    /// 스크린 높이에서 bottom부분이 차지하는 비율
     let screenHeightBottom: CGFloat = 0.317
     
     var body: some View {
@@ -43,7 +50,7 @@ struct GamePlayAttackDefenceView: View {
                     withAnimation {
                         showAttackResult = true
                     }
-                    attackeResult = viewModel.showAttackResult.1
+                    
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
                         withAnimation {
                             startRotation = true
@@ -81,6 +88,11 @@ struct GamePlayAttackDefenceView: View {
                     othersView
                 }
             }
+            .onReceive(timer, perform: { value in
+                dots += 1
+                print(#fileID, #function, #line, "- dots: \(dots)")
+                print(#fileID, #function, #line, "- value: \(value)")
+            })
             .onAppear(perform: {
                 screenHeight = proxy.size.height
                 defenderChooseAnswer = nil
@@ -153,9 +165,14 @@ struct GamePlayAttackDefenceView: View {
                     realSelectCard
                 }
             }
-            Text("이 카드는....")
-                .font(.sea(50))
-                .foregroundStyle(Color.white)
+            HStack(spacing: 0) {
+                Text("이 카드는?")
+                    .font(.sea(50))
+                    .foregroundStyle(Color.white)
+                ForEach(0..<dots % 5, id: \.self) { _ in
+                    Text(".")
+                }
+            }
             attackOrResult
             Text("입니다.")
                 .font(.sea(50))
@@ -208,9 +225,17 @@ struct GamePlayAttackDefenceView: View {
     var playerNotAttackerTopView: some View {
         VStack(spacing: 0) {
             attackerProfileView
-            Text("이 카드는....")
-                .font(.sea(50))
-                .foregroundStyle(Color.white)
+            HStack(spacing: 0) {
+                Text("이 카드는?")
+                    .font(.sea(50))
+                    .foregroundStyle(Color.white)
+                ForEach(0..<dots % 5, id: \.self) { _ in
+                    Text(".")
+                }
+            }
+//            Text("이 카드는....")
+//                .font(.sea(50))
+//                .foregroundStyle(Color.white)
             if showAttackResult {
                 if let selectBug = selectBug {
                     CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)

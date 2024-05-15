@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GameRoomDetailView: View {
     @StateObject var viewModel = GameRoomDetailViewViewModel()
+    @StateObject var keyboardHeightHelper = KeyboardHeightHelper()
     @State private var showCardSelectedPopup: Bool = false
     @State private var amIReadied: Bool = false
     @State private var isHost: Bool = false
@@ -19,10 +20,13 @@ struct GameRoomDetailView: View {
     /// 이 게임방 퇴장
     @State private var showExistThisRoom: Bool = false
     @State var gameRoomId: String
+    @State var chat: String = ""
+    @State var safeareaBottomSize: CGFloat = 0
     
     var body: some View {
         if #available(iOS 17, *) {
             allContent
+                .ignoresSafeArea(.keyboard)
                 .onChange(of: viewModel.gameRoomData.value.usersInGame) { oldValue, newValue in
                     myCards = viewModel.getUserCard(true)
                     print(#fileID, #function, #line, "- myCards: \(myCards)")
@@ -64,10 +68,27 @@ struct GameRoomDetailView: View {
                 GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame, usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                     .frame(height: proxy.size.height * 0.6706)
                     .environmentObject(viewModel)
-                GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType)
+                GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, safeareaBottomSize: $safeareaBottomSize)
                     .frame(height: proxy.size.height * 0.3294)
                     .environmentObject(viewModel)
+                    .environmentObject(keyboardHeightHelper)
             }
+            .overlay(content: {
+//                if showKeyboard {
+//                    VStack {
+//                        Spacer()
+//                            .frame(height: proxy.size.height - self.keyboardHeightHelper.keyboardHeight - 300)
+//                        chatTextField
+//                            .background(Color.bugLight)
+//                    }
+//                }
+            })
+            .onAppear(perform: {
+                safeareaBottomSize = proxy.safeAreaInsets.bottom
+            })
+            .onChange(of: self.keyboardHeightHelper.keyboardHeight, perform: { newValue in
+                print(#fileID, #function, #line, "- keyboardHeight: \(newValue)")
+            })
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(viewModel.gameRoomData.value.title)
             .toolbarBackground(Color.bugDarkMedium, for: .navigationBar)
@@ -78,7 +99,6 @@ struct GameRoomDetailView: View {
                         navigationBackButton
                     }
                 }
-                
             })
             .transparentFullScreenCover(isPresented: $viewModel.showAttackerAndDefenderView, content: {
                 GamePlayAttackDefenceView(showView: $viewModel.showAttackerAndDefenderView)
