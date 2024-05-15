@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GameRoomDetailBottomView: View {
     @EnvironmentObject private var viewModel: GameRoomDetailViewViewModel
+    @EnvironmentObject private var keyboardHeightHelper: KeyboardHeightHelper
     
     private let beforeGameText = "게임시작 전 입니다."
     private let allPlayerReadied = "모든 플레이어가 준비되었습니다."
@@ -33,6 +34,8 @@ struct GameRoomDetailBottomView: View {
     /// 카드 선택 시 확인 팝업
     @Binding var showCardSelectedPopup: Bool
     @Binding var gameType: GameType?
+    @Binding var safeareaBottomSize: CGFloat
+    @State private var chatTextFieldOffset: CGFloat = 0
     
     var body: some View {
         VStack(spacing: 0) {
@@ -60,6 +63,7 @@ struct GameRoomDetailBottomView: View {
                     if let userId = viewModel.gameRoomData.value.whoseTurn {
                         self.userDisplayName = viewModel.gameRoomData.value.usersInGame[userId]?.displayName
                     }
+                    
                 }
             } else {
                 // 게임시작 전입니다., 게임 중입니다, 모든 플레이어가 준비되었습니다 Text
@@ -155,8 +159,17 @@ struct GameRoomDetailBottomView: View {
                 .padding(.bottom, 5)
             }
             Spacer()
-            chatTextField
+            withAnimation {
+                chatTextField
+                    .offset(y: -self.keyboardHeightHelper.keyboardHeight)
+            }
         }
+        .onChange(of: self.keyboardHeightHelper.keyboardHeight, perform: { keyboardHeight in
+            withAnimation {
+                self.chatTextFieldOffset = keyboardHeight - safeareaBottomSize
+            }
+        })
+        .ignoresSafeArea(.keyboard)
         .frame(maxHeight: .infinity)
         .background(Color.bugLight)
     }
@@ -182,6 +195,7 @@ struct GameRoomDetailBottomView: View {
                 .padding(.trailing, 6)
             }
             .padding(.horizontal, 6)
+            .background(Color.bugLight)
     }
     
     /// 채팅 보내기 로직
@@ -227,6 +241,7 @@ struct GameRoomDetailBottomView: View {
              Card(bug: .frog, cardCnt: 2),
              Card(bug: .ladybug, cardCnt: 3)]),
         showCardSelectedPopup: .constant(false),
-        gameType: .constant(.defender)
+        gameType: .constant(.defender),
+        safeareaBottomSize: .constant(0)
     )
 }

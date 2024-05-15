@@ -650,7 +650,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                     self.cardIsSame(attackResult)
                 }
             } else if decision == DefenderAnswer.cardSkip.rawValue {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
                     self.cardSkip()
                 })
                 
