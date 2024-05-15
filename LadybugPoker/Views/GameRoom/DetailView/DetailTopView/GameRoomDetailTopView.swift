@@ -16,7 +16,6 @@ struct GameRoomDetailTopView: View {
     @Binding var existUserId: String
     @Binding var existUserDisplayName: String
     @State var userBoardCard: [Card] = []
-    
 
     var body: some View {
         GeometryReader { proxy in
