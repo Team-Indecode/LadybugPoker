@@ -92,7 +92,7 @@ struct MainView: View {
                     if let gameId = user.currentUserId {
                         service.path.append(.gameRoom(gameRoomId: gameId))
                     } else {
-                        service.path.append(.guide)
+//                        service.path.append(.guide)
                     }
                 }
             }
