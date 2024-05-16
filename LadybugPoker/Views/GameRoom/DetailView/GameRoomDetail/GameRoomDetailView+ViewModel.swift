@@ -184,11 +184,29 @@ class GameRoomDetailViewViewModel: ObservableObject {
         let userCnt = self.gameRoomData.value.usersInGame.count
         /// 한 유저 당 가지는 카드 개수
         let oneUserCardCount = allCards.count / self.gameRoomData.value.usersInGame.count
-        userCard(oneUserCardCount, allCards, userCnt)
+//        userCard(oneUserCardCount, allCards, userCnt)
+        userFirstCardTwo(allCards, userCnt)
     }
     
     
-    /// 한 유저가 처음에 손에 가지고 있는 카드
+    /// 처음에 유저에게 카드 분배하는 로직 2
+    /// - Parameters:
+    ///   - allCards: 전체 벌레 카드
+    ///   - userCnt: 게임에 참가한 총 유저 수
+    func userFirstCardTwo(_ allCards: [Bugs], _ userCnt: Int) {
+        var usersCard: [[Bugs]] = Array(repeating: [], count: userCnt)
+        var usersCardString: [String] = []
+        
+        for (index, bug) in allCards.enumerated() {
+            let num = index % userCnt
+            usersCard[num].append(bug)
+        }
+        
+        usersCardString = bugsTocardString(usersCard)
+        usersHandCardSetting(usersCardString)
+    }
+    
+    /// 한 유저가 처음에 손에 가지고 있는 카드(로직1)
     /// - Parameters:
     ///   - userCardCnt: 유저가 처음에 가질 최소 카드 수
     ///   - allCards: 전체 벌레 카드들
@@ -196,10 +214,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func userCard(_ userCardCnt: Int, _ allCards: [Bugs], _ userCnt: Int) {
         var usersCard: [[Bugs]] = []
         var usersCardString: [String] = []
-        
-        for (index, bug) in allCards.enumerated() {
-            
-        }
         
         // 카드 분배
         for i in stride(from: 0, to: userCnt * userCardCnt, by: userCardCnt) {
