@@ -123,6 +123,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 공격자인지, 수비자인지, 그 외인지 판단
     /// - Parameter data: GameRoom
     func userTypeChecking(_ data: GameRoom) {
+        print(#fileID, #function, #line, "- showAttackerAndDefender: \(data)")
         if data.whoseTurn != nil && data.whoseGetting != nil {
             
             if data.whoseTurn == Service.shared.myUserModel.id {
@@ -134,6 +135,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
             
             self.showAttackerAndDefenderView = true
+            print(#fileID, #function, #line, "- self.showAttackerAndDefender:\(showAttackerAndDefenderView)")
         } else {
             self.showAttackResult = (false, true)
             self.showAttackerAndDefenderView = false
@@ -147,7 +149,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         usersInGame.forEach { (key: String, value: UserInGame) in
             usersId[value.idx] = key
             usersChat[value.idx] = value.chat
-            print(#fileID, #function, #line, "- value.chat⭐️: \(value)")
+            print(#fileID, #function, #line, "- usersId⭐️: \(usersId)")
         }
     }
     
@@ -194,6 +196,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func userCard(_ userCardCnt: Int, _ allCards: [Bugs], _ userCnt: Int) {
         var usersCard: [[Bugs]] = []
         var usersCardString: [String] = []
+        
+        for (index, bug) in allCards.enumerated() {
+            
+        }
         
         // 카드 분배
         for i in stride(from: 0, to: userCnt * userCardCnt, by: userCardCnt) {

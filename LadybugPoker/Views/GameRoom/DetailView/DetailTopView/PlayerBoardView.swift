@@ -46,6 +46,7 @@ struct PlayerBoardView: View {
         .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)
         .frame(width: boardWidth, height: boardHeight)
         .onChange(of: self.cardsString) { newValue in
+            print(#fileID, #function, #line, "- self.cardsString⭐️: \(newValue)")
             self.cards = viewModel.stringToCards(newValue)
         }
         .onChange(of: self.handCardString) { newValue in
@@ -74,7 +75,6 @@ struct PlayerBoardView: View {
     }
     
     var playerBoard: some View {
-
         VStack(spacing: 10) {
             profile
             if viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished {
@@ -83,11 +83,9 @@ struct PlayerBoardView: View {
                 if viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id {
                     hostUserIsNotPlayGame
                         .frame(height: boardHeight - 80)
-                        .background(Color.red)
                 } else {
                     userIsNotPlayGame
                         .frame(height: boardHeight - 80)
-                        .background(Color.red)
                 }
             }
             if (viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished) && cards.count <= 4 {

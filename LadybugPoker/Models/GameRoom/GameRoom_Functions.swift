@@ -70,6 +70,7 @@ extension GameRoom {
         }
         
         var newData = currentData
+        
         newData[myUserModel.id] = UserInGame(id: myUserModel.id,
                                  readyOrNot: false,
                                  handCard: nil,
@@ -78,6 +79,7 @@ extension GameRoom {
                                  profileUrl: myUserModel.profileUrl,
                                  idx: indexes.first ?? 0,
                                  chat: nil)
+        
         print(#fileID, #function, #line, "- newData: \(newData)")
         
         var newJsonData = [String: Any]()

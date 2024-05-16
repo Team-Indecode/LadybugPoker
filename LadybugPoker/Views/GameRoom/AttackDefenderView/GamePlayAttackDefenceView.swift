@@ -14,6 +14,7 @@ struct GamePlayAttackDefenceView: View {
     @StateObject var attackDefenceVM = AttackDefenceViewModel()
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+    
     /// 플레이어 역할
     @State private var player: Player = .attacker
     /// 남은 타이머
@@ -155,10 +156,13 @@ struct GamePlayAttackDefenceView: View {
     /// 플레이어가 공격자일떄 벌레 선택하는 뷰
     var playerAttackTopView: some View {
         VStack(spacing: 0) {
-            HStack {
+            HStack(spacing: 5) {
                 if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
                     makeUserView(userData)
                 }
+                Image("attacker")
+                    .resizable()
+                    .frame(width: 40, height: 40)
                 Spacer()
                 if !showAttackResult {
                     realSelectCard
@@ -218,9 +222,6 @@ struct GamePlayAttackDefenceView: View {
         VStack(spacing: 0) {
             attackerProfileView
             thisCard
-//            Text("이 카드는....")
-//                .font(.sea(50))
-//                .foregroundStyle(Color.white)
             if showAttackResult {
                 if let selectBug = selectBug {
                     CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
@@ -369,7 +370,7 @@ struct GamePlayAttackDefenceView: View {
     }
     
     var defenderProfileView: some View {
-        HStack {
+        HStack(spacing: 5) {
             Spacer()
             if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
 //                    makeUserView(userData)
@@ -384,7 +385,6 @@ struct GamePlayAttackDefenceView: View {
             timerView
             if isDefender && viewModel.gameRoomData.value.questionCard != nil {
                 cardGuessChooseView
-                
             } else if viewModel.gameRoomData.value.decision != nil && viewModel.gameRoomData.value.questionCard != nil && !isDefender {
                 if let decision = viewModel.gameRoomData.value.decision {
                     Spacer()
@@ -443,6 +443,7 @@ struct GamePlayAttackDefenceView: View {
             }
         }
         .padding(.top, 30)
+        .padding(.horizontal, 10)
     }
     
     /// 수비자가 선택할 text
