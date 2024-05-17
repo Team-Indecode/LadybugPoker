@@ -433,7 +433,7 @@ struct GamePlayAttackDefenceView: View {
                 }
             }
             .padding(.bottom, 26)
-            if viewModel.gameRoomData.value.attackers.count != viewModel.gameRoomData.value.usersInGame.count - 1 {
+            if viewModel.gameRoomData.value.attackers.count != viewModel.gameRoomData.value.usersInGame.count {
                 if (showDefenderChooseAnser && defenderChooseAnswer == "p") || !showDefenderChooseAnser {
                     guessText(DefenderAnswer.cardSkip.rawValue)
                 }

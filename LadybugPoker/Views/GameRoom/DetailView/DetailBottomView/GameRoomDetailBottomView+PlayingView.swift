@@ -38,6 +38,7 @@ extension GameRoomDetailBottomView {
                                     .font(.sea(12))
                                     .foregroundStyle(Color.red)
                                     .frame(maxWidth: .infinity, alignment: .leading)
+                                    .blinking()
                             } else if bottomGameType == .selectUser {
                                 Text("카드를 누구에게 전달할까요?")
                                     .font(.sea(12))

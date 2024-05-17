@@ -35,6 +35,10 @@ extension View {
             transaction.animation = .linear(duration: 0.1)
         }
     }
+    
+    func blinking() -> some View {
+        self.modifier(BlinkViewModifier())
+    }
 }
 
 struct TransparentBackground: UIViewRepresentable {
@@ -48,4 +52,5 @@ struct TransparentBackground: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIView, context: Context) {}
 }
+
 

@@ -217,7 +217,6 @@ struct GameRoomDetailBottomView: View {
     
     func cancelReady() {
         withAnimation {
-//            amIReadied = false
             viewModel.sendIamReady(false)
         }
     }

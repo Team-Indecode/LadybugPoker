@@ -107,11 +107,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
                 guard let decision = data.decision else { return }
+                guard let attackResult = self.defenderSuccessCheck(DefenderAnswer.same.rawValue) else { return }
                 if decision == "yes" {
-                    guard let attackResult = self.defenderSuccessCheck(DefenderAnswer.same.rawValue) else { return }
                     self.showAttackResult = (true, attackResult)
                 } else if decision == "no" {
-                    guard let attackResult = self.defenderSuccessCheck(DefenderAnswer.different.rawValue) else { return }
                     self.showAttackResult = (true, attackResult)
                 } else {
                     return
