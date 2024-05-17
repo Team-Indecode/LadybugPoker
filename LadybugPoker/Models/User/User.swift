@@ -26,3 +26,23 @@ enum Player {
     /// 그 외
     case others
 }
+
+struct History: Codable, Identifiable {
+    static let path = "HISTORY"
+    
+    let id: String
+    let title: String
+    let isWinner: Bool
+    let maxUserCount: Int
+    let userCount: Int
+    
+    var toJson: [String: Any] {
+        [
+            "id": id,
+            "title": title,
+            "isWinner": isWinner,
+            "maxUserCount": maxUserCount,
+            "userCount": userCount
+        ]
+    }
+}
