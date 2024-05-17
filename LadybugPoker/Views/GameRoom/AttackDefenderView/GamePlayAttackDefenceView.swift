@@ -35,7 +35,7 @@ struct GamePlayAttackDefenceView: View {
     /// 공격 결과 나타나고 0.3초 뒤에 실제 공격자가 선택한 카드가 돌아갈지
     @State private var startRotation = false
     
-    var cancellables = Set<AnyCancellable>()
+    @State private var circleSize = [7.0, 7.0, 7.0]
     
     /// 스크린 높이에서 top부분이 차지하는 비율
     let screenHeightTop: CGFloat = 0.683
@@ -45,6 +45,12 @@ struct GamePlayAttackDefenceView: View {
     var body: some View {
         if #available(iOS 17, *) {
             allContent
+                .onChange(of: attackDefenceVM.circleDots, { oldValue, newValue in
+                    withAnimation {
+                        circleSize = [7.0, 7.0, 7.0]
+                        circleSize[newValue % 3] = 12.0
+                    }
+                })
                 .onChange(of: viewModel.userType, { oldValue, userType in
                     if let userType = userType {
                         player = userType
@@ -60,7 +66,6 @@ struct GamePlayAttackDefenceView: View {
                             startRotation = true
                         }
                     })
-                    
                 })
                 .onChange(of: viewModel.gameRoomData.value.selectedCard, { oldValue, newValue in
                     switch newValue {
@@ -94,6 +99,7 @@ struct GamePlayAttackDefenceView: View {
             }
             .onAppear(perform: {
                 attackDefenceVM.gameTimer()
+                attackDefenceVM.circle()
                 screenHeight = proxy.size.height
                 defenderChooseAnswer = nil
                 startRotation = false
@@ -319,18 +325,38 @@ struct GamePlayAttackDefenceView: View {
                 }
                
             } else {
-                Image(systemName: "ellipsis.circle.fill")
-                    .resizable()
-                    .padding(6)
-                    .foregroundStyle(Color(hex: "D9D9D9"))
-                    .frame(width: 70, height: 70)
-                    .scaledToFit()
-                    .clipShape(Circle())
+                dotsInCircle
+//                Image(systemName: "ellipsis.circle.fill")
+//                    .resizable()
+//                    .padding(6)
+//                    .foregroundStyle(Color(hex: "D9D9D9"))
+//                    .frame(width: 70, height: 70)
+//                    .scaledToFit()
+//                    .clipShape(Circle())
             }
             
         }
         .padding(.horizontal, 80)
         .padding(.vertical)
+    }
+    
+    var dotsInCircle: some View {
+        Circle()
+            .fill(Color(hex: "D9D9D9"))
+            .frame(width: 70, height: 70)
+            .overlay {
+                HStack {
+                    Circle()
+                        .fill(Color.black)
+                        .frame(width: circleSize[0], height: circleSize[0])
+                    Circle()
+                        .fill(Color.black)
+                        .frame(width: circleSize[1], height: circleSize[1])
+                    Circle()
+                        .fill(Color.black)
+                        .frame(width: circleSize[2], height: circleSize[2])
+                }
+            }
     }
     
     /// 벌레 뷰 만들기
