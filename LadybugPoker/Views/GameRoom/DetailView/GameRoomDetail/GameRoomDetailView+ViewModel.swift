@@ -85,6 +85,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         case GameStatus.onAir.rawValue:
             self.gameStatus = .onAir
             self.gameType = .selectCard
+            
+//            let whoseTurnIdx = self.gameRoomData.value.usersInGame[]
 //                                self.secondsLeft = data.turnTime
             self.gameTimer(turnTime)
         default: self.gameStatus = .notStarted
@@ -276,6 +278,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             userInGame.handCard = usersCardString[userInGame.id] ?? ""
             userInGameUpdate(userInGame, userInGame.id, .gameStart)
         }
+        
     }
     
     /// 유저의 준비완료 여부
@@ -316,8 +319,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
-    func cardIsSame(_ defenderLose: Bool) {
+    func cardIsSame(_ isDefenderLose: Bool) {
         var bugs: Bugs = .bee
+        var attackers: [Int] = []
         
         switch self.gameRoomData.value.selectedCard {
         case Bugs.bee.cardString: bugs = Bugs.bee
@@ -332,12 +336,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         
         // 공격성공, 수비실패 -> 수비자의 boardCard에 추가 / whoseTurn -> whoseGetting으로 변경
-        if defenderLose {
+        if isDefenderLose {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
                     let boardCards = self.stringToCards(userInGame.boardCard ?? "")
+                    attackers.append(userInGame.idx)
                     self.userCardChange(bugs, boardCards, false, userInGame.id)
-                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
+                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id, attackers)
                 })
             }
         }
@@ -346,8 +351,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
                     let boardCards = self.stringToCards(userInGame.boardCard ?? "")
+                    attackers.append(userInGame.idx)
                     self.userCardChange(bugs, boardCards, false, userInGame.id)
-                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id)
+                    self.gameroomDataUpdate(.gameAttackFinish, userInGame.id, attackers)
                 })
             }
         }
@@ -568,6 +574,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             if updateType == .gameStart {
                 if self.gameRoomData.value.hostId != "" {
                     self.gameroomDataUpdate(.whoseTurn, self.gameRoomData.value.hostId)
+                    guard let whoseTurnIdx = self.gameRoomData.value.usersInGame[self.gameRoomData.value.hostId]?.idx else { return }
+                    self.attackersUpdate([whoseTurnIdx])
                 }
             }
         }
@@ -599,7 +607,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             updateDataDic["decision"] = nil as String?
             // 다음턴은 공격/수비에서 진 사람이 정해진다
             updateDataDic["whoseTurn"] = updateStringData
-            attackersUpdate([])
+            guard let updateDatas = updateIntDatas else { return }
+            attackersUpdate(updateDatas)
         } else if updateDataType == .cardSkip {
             updateDataDic = [:]
             guard let updateDatas = updateIntDatas else { return }

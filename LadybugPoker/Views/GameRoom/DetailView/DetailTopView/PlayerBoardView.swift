@@ -161,16 +161,17 @@ struct PlayerBoardView: View {
         Button {
             var attackers: [Int] = viewModel.gameRoomData.value.attackers
             
+            // 수비자의 idx를 attackers에 넣어준다
             if !attackers.contains(userBoardIndex) {
                 attackers.append(userBoardIndex)
             }
             
-            if let whoseTurnIndex = viewModel.usersId.firstIndex(of: viewModel.gameRoomData.value.whoseTurn ?? "") {
-                if !attackers.contains(whoseTurnIndex) {
-                    attackers.append(whoseTurnIndex)
-                }
-            }
-            
+//            if let whoseTurnIndex = viewModel.usersId.firstIndex(of: viewModel.gameRoomData.value.whoseTurn ?? "") {
+//                if !attackers.contains(whoseTurnIndex) {
+//                    attackers.append(whoseTurnIndex)
+//                }
+//            }
+//            
             viewModel.gameroomDataUpdate(.whoseGetting, user.id, attackers)
         } label: {
             Image(systemName: self.isOdd ? "arrowshape.left.fill" : "arrowshape.right.fill")
