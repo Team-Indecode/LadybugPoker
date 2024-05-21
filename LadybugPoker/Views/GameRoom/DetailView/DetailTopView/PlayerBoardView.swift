@@ -46,6 +46,7 @@ struct PlayerBoardView: View {
         .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)
         .frame(width: boardWidth, height: boardHeight)
         .onChange(of: self.cardsString) { newValue in
+            print(#fileID, #function, #line, "- self.cardsString⭐️: \(newValue)")
             self.cards = viewModel.stringToCards(newValue)
         }
         .onChange(of: self.handCardString) { newValue in
@@ -74,7 +75,6 @@ struct PlayerBoardView: View {
     }
     
     var playerBoard: some View {
-
         VStack(spacing: 10) {
             profile
             if viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished {
@@ -83,11 +83,9 @@ struct PlayerBoardView: View {
                 if viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id {
                     hostUserIsNotPlayGame
                         .frame(height: boardHeight - 80)
-                        .background(Color.red)
                 } else {
                     userIsNotPlayGame
                         .frame(height: boardHeight - 80)
-                        .background(Color.red)
                 }
             }
             if (viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished) && cards.count <= 4 {
@@ -143,6 +141,7 @@ struct PlayerBoardView: View {
                 // 유저 선택일 경우인 경우 & whoseTurn인 유저 제외 & attackers에 담겨져 있는 유저 제외
                 if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
                     arrowView
+//                        .blinking()
                 }
             })
         } else {
@@ -150,6 +149,7 @@ struct PlayerBoardView: View {
                 // 유저 선택일 경우인 경우 & whoseTurn인 유저 제외 & attackers에 담겨져 있는 유저 제외
                 if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
                     arrowView
+//                        .blinking()
                 }
                 Spacer()
                 BoardUserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd)
@@ -161,22 +161,24 @@ struct PlayerBoardView: View {
         Button {
             var attackers: [Int] = viewModel.gameRoomData.value.attackers
             
+            // 수비자의 idx를 attackers에 넣어준다
             if !attackers.contains(userBoardIndex) {
                 attackers.append(userBoardIndex)
             }
             
-            if let whoseTurnIndex = viewModel.usersId.firstIndex(of: viewModel.gameRoomData.value.whoseTurn ?? "") {
-                if !attackers.contains(whoseTurnIndex) {
-                    attackers.append(whoseTurnIndex)
-                }
-            }
-            
+//            if let whoseTurnIndex = viewModel.usersId.firstIndex(of: viewModel.gameRoomData.value.whoseTurn ?? "") {
+//                if !attackers.contains(whoseTurnIndex) {
+//                    attackers.append(whoseTurnIndex)
+//                }
+//            }
+//            
             viewModel.gameroomDataUpdate(.whoseGetting, user.id, attackers)
         } label: {
             Image(systemName: self.isOdd ? "arrowshape.left.fill" : "arrowshape.right.fill")
                 .resizable()
                 .foregroundStyle(Color.orange)
                 .frame(width: 56, height: 32)
+                .blinking()
         }
         .disabled(viewModel.gameType != .selectUser)
         .disabled(viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id ? false : true)

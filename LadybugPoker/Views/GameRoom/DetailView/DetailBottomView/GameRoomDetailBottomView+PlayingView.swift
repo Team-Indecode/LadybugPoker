@@ -23,6 +23,7 @@ extension GameRoomDetailBottomView {
         
         @Binding var showCardSelectedPopup: Bool
         @Binding var bottomGameType: GameType?
+        @State private var selectedCard: Card? = nil
         
         var body: some View {
             VStack(spacing: 0) {
@@ -37,6 +38,7 @@ extension GameRoomDetailBottomView {
                                     .font(.sea(12))
                                     .foregroundStyle(Color.red)
                                     .frame(maxWidth: .infinity, alignment: .leading)
+                                    .blinking()
                             } else if bottomGameType == .selectUser {
                                 Text("카드를 누구에게 전달할까요?")
                                     .font(.sea(12))
@@ -72,19 +74,25 @@ extension GameRoomDetailBottomView {
                         HStack {
                             ForEach(myCards) { card in
                                 Button {
-//                                    if bottomGameType == .selectUser {
-//                                        withAnimation {
-//                                            showCardSelectedPopup.toggle()
-//                                        }
-//                                    }
                                     guard let whoseTurn = viewModel.gameRoomData.value.whoseTurn else { return }
+                                    selectedCard = card
                                     viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
-                                    viewModel.userCardChange(card.bug, myCards, true, whoseTurn)
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                                        viewModel.userCardChange(card.bug, myCards, true, whoseTurn)
+                                        selectedCard = nil
+                                    })
                                 } label: {
                                     if card.cardCnt != 0 {
-                                        CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: true)
+                                        if selectedCard == nil {
+                                            CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: true)
+                                        } else {
+                                            withAnimation(.easeInOut(duration: 0.5)) {
+                                                CardView(card: card, cardWidthSize: 60, cardHeightSize: 90, isBottomViewCard: true)
+                                                    .opacity(card == selectedCard ? 1 : 0.5)
+                                            }
+                                        }
+                                        
                                     }
-
                                 }
                                 .disabled(viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id ? false : true)
                                 .padding(.leading, card == myCards.first ? 20 : 0)

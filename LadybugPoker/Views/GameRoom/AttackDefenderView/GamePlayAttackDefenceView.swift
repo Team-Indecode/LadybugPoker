@@ -14,6 +14,7 @@ struct GamePlayAttackDefenceView: View {
     @StateObject var attackDefenceVM = AttackDefenceViewModel()
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+    
     /// 플레이어 역할
     @State private var player: Player = .attacker
     /// 남은 타이머
@@ -34,7 +35,7 @@ struct GamePlayAttackDefenceView: View {
     /// 공격 결과 나타나고 0.3초 뒤에 실제 공격자가 선택한 카드가 돌아갈지
     @State private var startRotation = false
     
-    var cancellables = Set<AnyCancellable>()
+    @State private var circleSize = [7.0, 7.0, 7.0]
     
     /// 스크린 높이에서 top부분이 차지하는 비율
     let screenHeightTop: CGFloat = 0.683
@@ -44,6 +45,12 @@ struct GamePlayAttackDefenceView: View {
     var body: some View {
         if #available(iOS 17, *) {
             allContent
+                .onChange(of: attackDefenceVM.circleDots, { oldValue, newValue in
+                    withAnimation {
+                        circleSize = [7.0, 7.0, 7.0]
+                        circleSize[newValue % 3] = 12.0
+                    }
+                })
                 .onChange(of: viewModel.userType, { oldValue, userType in
                     if let userType = userType {
                         player = userType
@@ -59,7 +66,6 @@ struct GamePlayAttackDefenceView: View {
                             startRotation = true
                         }
                     })
-                    
                 })
                 .onChange(of: viewModel.gameRoomData.value.selectedCard, { oldValue, newValue in
                     switch newValue {
@@ -93,6 +99,7 @@ struct GamePlayAttackDefenceView: View {
             }
             .onAppear(perform: {
                 attackDefenceVM.gameTimer()
+                attackDefenceVM.circle()
                 screenHeight = proxy.size.height
                 defenderChooseAnswer = nil
                 startRotation = false
@@ -155,10 +162,13 @@ struct GamePlayAttackDefenceView: View {
     /// 플레이어가 공격자일떄 벌레 선택하는 뷰
     var playerAttackTopView: some View {
         VStack(spacing: 0) {
-            HStack {
+            HStack(spacing: 5) {
                 if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
                     makeUserView(userData)
                 }
+                Image("attacker")
+                    .resizable()
+                    .frame(width: 40, height: 40)
                 Spacer()
                 if !showAttackResult {
                     realSelectCard
@@ -218,9 +228,6 @@ struct GamePlayAttackDefenceView: View {
         VStack(spacing: 0) {
             attackerProfileView
             thisCard
-//            Text("이 카드는....")
-//                .font(.sea(50))
-//                .foregroundStyle(Color.white)
             if showAttackResult {
                 if let selectBug = selectBug {
                     CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
@@ -318,18 +325,38 @@ struct GamePlayAttackDefenceView: View {
                 }
                
             } else {
-                Image(systemName: "ellipsis.circle.fill")
-                    .resizable()
-                    .padding(6)
-                    .foregroundStyle(Color(hex: "D9D9D9"))
-                    .frame(width: 70, height: 70)
-                    .scaledToFit()
-                    .clipShape(Circle())
+                dotsInCircle
+//                Image(systemName: "ellipsis.circle.fill")
+//                    .resizable()
+//                    .padding(6)
+//                    .foregroundStyle(Color(hex: "D9D9D9"))
+//                    .frame(width: 70, height: 70)
+//                    .scaledToFit()
+//                    .clipShape(Circle())
             }
             
         }
         .padding(.horizontal, 80)
         .padding(.vertical)
+    }
+    
+    var dotsInCircle: some View {
+        Circle()
+            .fill(Color(hex: "D9D9D9"))
+            .frame(width: 70, height: 70)
+            .overlay {
+                HStack {
+                    Circle()
+                        .fill(Color.black)
+                        .frame(width: circleSize[0], height: circleSize[0])
+                    Circle()
+                        .fill(Color.black)
+                        .frame(width: circleSize[1], height: circleSize[1])
+                    Circle()
+                        .fill(Color.black)
+                        .frame(width: circleSize[2], height: circleSize[2])
+                }
+            }
     }
     
     /// 벌레 뷰 만들기
@@ -369,7 +396,7 @@ struct GamePlayAttackDefenceView: View {
     }
     
     var defenderProfileView: some View {
-        HStack {
+        HStack(spacing: 5) {
             Spacer()
             if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
 //                    makeUserView(userData)
@@ -384,7 +411,6 @@ struct GamePlayAttackDefenceView: View {
             timerView
             if isDefender && viewModel.gameRoomData.value.questionCard != nil {
                 cardGuessChooseView
-                
             } else if viewModel.gameRoomData.value.decision != nil && viewModel.gameRoomData.value.questionCard != nil && !isDefender {
                 if let decision = viewModel.gameRoomData.value.decision {
                     Spacer()
@@ -433,7 +459,7 @@ struct GamePlayAttackDefenceView: View {
                 }
             }
             .padding(.bottom, 26)
-            if viewModel.gameRoomData.value.attackers.count != viewModel.gameRoomData.value.usersInGame.count - 1 {
+            if viewModel.gameRoomData.value.attackers.count != viewModel.gameRoomData.value.usersInGame.count {
                 if (showDefenderChooseAnser && defenderChooseAnswer == "p") || !showDefenderChooseAnser {
                     guessText(DefenderAnswer.cardSkip.rawValue)
                 }
@@ -443,6 +469,7 @@ struct GamePlayAttackDefenceView: View {
             }
         }
         .padding(.top, 30)
+        .padding(.horizontal, 10)
     }
     
     /// 수비자가 선택할 text

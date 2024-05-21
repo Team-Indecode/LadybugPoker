@@ -144,7 +144,8 @@ struct GameRoomCreateView: View {
                                          turnTime: 0,
                                          gameStatus: GameStatus.notStarted.rawValue,
                                          loser: nil,
-                                         decision: nil
+                                         decision: nil,
+                                         newGameId: nil
                                          )
                     
                     try await GameRoom.create(model: model)
