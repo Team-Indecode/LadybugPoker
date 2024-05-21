@@ -77,7 +77,7 @@ extension GameRoomDetailBottomView {
                                     guard let whoseTurn = viewModel.gameRoomData.value.whoseTurn else { return }
                                     selectedCard = card
                                     viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                                         viewModel.userCardChange(card.bug, myCards, true, whoseTurn)
                                         selectedCard = nil
                                     })
