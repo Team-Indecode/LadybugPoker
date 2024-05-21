@@ -17,12 +17,16 @@ struct GameRoomCreateView: View {
     var body: some View {
         VStack {
             HStack {
+                Spacer()
+                
                 Button {
                     service.path.removeLast()
                 } label: {
                     Image(systemName: "chevron.left")
                 }
                 .foregroundStyle(Color.black)
+                
+                Spacer()
             }
             .padding(.horizontal, 15)
             .padding(.vertical, 20)

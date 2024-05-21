@@ -13,9 +13,9 @@ struct GuideView: View {
     
     @State private var users: [User] = []
     
-    @State private var level = 26
+    @State private var level = 0
     
-    @State private var gameStatus: GameStatus = .onAir
+    @State private var gameStatus: GameStatus = .notStarted
     
     @State private var backgroundOpacity = 0.8
     @State private var showAnswer = false

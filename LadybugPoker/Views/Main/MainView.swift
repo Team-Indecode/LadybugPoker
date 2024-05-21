@@ -97,7 +97,11 @@ struct MainView: View {
                 }
             }
         }
-        
+        .refreshable {
+            Task {
+                gameRooms = try await GameRoom.fetchList()
+            }
+        }
     }
 }
 
