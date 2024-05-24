@@ -165,7 +165,6 @@
 			children = (
 				D1418E132BD62FBC00421904 /* GameRoomDetailView.swift */,
 				4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */,
-				4D7583182BC588B4009B6489 /* BoardUserProfileView.swift */,
 			);
 			path = GameRoomDetail;
 			sourceTree = "<group>";
@@ -173,6 +172,7 @@
 		4D7583132BC56E73009B6489 /* DetailTopView */ = {
 			isa = PBXGroup;
 			children = (
+				4D7583182BC588B4009B6489 /* BoardUserProfileView.swift */,
 				4D02FA092BE6053C00E743F3 /* GameRoomDetailTopView.swift */,
 				4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */,
 			);
