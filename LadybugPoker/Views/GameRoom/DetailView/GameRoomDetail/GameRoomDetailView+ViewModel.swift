@@ -14,7 +14,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var gameRoomId: String = ""
     @Published var gameStatus: GameStatus = .notStarted
     
-    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGameId: nil))
+    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil))
 
     /// userIdx와 userId
     @Published var usersId: [String] = Array(repeating: "", count: 6)
@@ -61,8 +61,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
                             self.timer?.invalidate()
                             self.showLoserView = true
                             self.updateUserGameHistory(self.gameRoomData.value)
-                            if data.newGameId != nil && data.hostId != Service.shared.myUserModel.id {
-                                guard let newGameId = data.newGameId else { return }
+                            if data.newGame != nil && data.hostId != Service.shared.myUserModel.id {
+                                guard let newGameId = data.newGame else { return }
                                 self.updateUserCurrentGameId(newGameId)
                             }
                         } else {
@@ -725,7 +725,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             settingUser[key] = afterValue
         }
         
-        let model = GameRoom(id: newGameId, hostId: self.gameRoomData.value.hostId, title: self.gameRoomData.value.title, password: self.gameRoomData.value.password, maxUserCount: self.gameRoomData.value.maxUserCount, code: self.gameRoomData.value.code, usersInGame: settingUser, whoseGetting: nil, turnStartTime: nil, attackers: [], createdAt: Date().toString, turnTime: self.gameRoomData.value.turnTime, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGameId: nil)
+        let model = GameRoom(id: newGameId, hostId: self.gameRoomData.value.hostId, title: self.gameRoomData.value.title, password: self.gameRoomData.value.password, maxUserCount: self.gameRoomData.value.maxUserCount, code: self.gameRoomData.value.code, usersInGame: settingUser, whoseGetting: nil, turnStartTime: nil, attackers: [], createdAt: Date().toString, turnTime: self.gameRoomData.value.turnTime, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil)
         
         do {
             try await GameRoom.create(model: model)
