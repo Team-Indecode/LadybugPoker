@@ -115,7 +115,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
                 guard let decision = data.decision else { return }
-                guard let attackResult = self.defenderSuccessCheck(DefenderAnswer.same.rawValue) else { return }
+                guard let attackResult = self.defenderSuccessCheck(decision) else { return }
+                print(#fileID, #function, #line, "- showAttackResult decision: \(decision)")
+                print(#fileID, #function, #line, "- showAttackResult attackResult: \(attackResult)")
+                print(#fileID, #function, #line, "- showAttackResult questionCard: \(data.questionCard)")
+                print(#fileID, #function, #line, "- showAttackResult selectedCard: \(data.selectedCard)")
                 if decision == "yes" {
                     self.showAttackResult = (true, attackResult)
                 } else if decision == "no" {
@@ -300,12 +304,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     func defenderSuccessCheck(_ text: String) -> Bool? {
         let same = self.gameRoomData.value.selectedCard == self.gameRoomData.value.questionCard
-        print(#fileID, #function, #line, "- durldudlafkjdfjlakj")
+        print(#fileID, #function, #line, "- showAttackResult same: \(same)")
+        print(#fileID, #function, #line, "- showAttackResult text: \(text)")
         if same {
-            if text == "맞습니다." {
+            if text == "맞습니다." || text == "yes" {
                 //수비성공 -> 공격자에 boardCard에 추가, whoseTurn -> 계속 공격자(즉, whoseTurn유지)
                 return false
-            } else if text == "아닙니다." {
+            } else if text == "아닙니다." || text == "no"{
                 // 공격성공(수비실패) -> 수비자 boardCard에 추가, whoseTurn -> whoseGetting
                 return true
             } else {
@@ -314,10 +319,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
         } else {
             // 둘이 다른 카드일떄
-            if text == "맞습니다." {
+            if text == "맞습니다." || text == "yes" {
                 // 공격성공 -> 수비자 boardCard에 추가, whoseTurn: whoseGetting
                 return true
-            } else if text == "아닙니다." {
+            } else if text == "아닙니다." || text == "no"{
                 return false
             } else {
                 return nil
@@ -619,6 +624,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
             updateDataDic["whoseTurn"] = nextTurn
             updateDataDic["whoseGetting"] = nil as String?
+            updateDataDic["questionCard"] = nil as String?
             updateDataDic["turnStartTime"] = Date().toString
         }
         
