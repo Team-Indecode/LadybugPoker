@@ -36,6 +36,7 @@ struct GameRoomDetailBottomView: View {
     @Binding var gameType: GameType?
     @Binding var safeareaBottomSize: CGFloat
     @State private var chatTextFieldOffset: CGFloat = 0
+    var focusField: FocusState<Bool>.Binding
     
     var body: some View {
         VStack(spacing: 0) {
@@ -163,11 +164,13 @@ struct GameRoomDetailBottomView: View {
                 chatTextField
                     .offset(y: -self.keyboardHeightHelper.keyboardHeight)
             }
+            
         }
         .onChange(of: self.keyboardHeightHelper.keyboardHeight, perform: { keyboardHeight in
-            withAnimation {
-                self.chatTextFieldOffset = keyboardHeight - safeareaBottomSize
-            }
+//            withAnimation {
+//                self.chatTextFieldOffset = keyboardHeight - safeareaBottomSize
+//            }
+            self.chatTextFieldOffset = keyboardHeight - safeareaBottomSize
         })
         .ignoresSafeArea(.keyboard)
         .frame(maxHeight: .infinity)
@@ -176,6 +179,7 @@ struct GameRoomDetailBottomView: View {
     
     var chatTextField: some View {
         TextField("메세지를 입력해주세요.", text: $chat)
+            .focused(focusField)
             .font(.sea(15))
             .frame(height: 38)
             .padding(.leading, 17)
@@ -231,16 +235,17 @@ struct GameRoomDetailBottomView: View {
     
 }
 
-#Preview {
-    GameRoomDetailBottomView(
-        amIReadied: .constant(false),
-        isHost: .constant(false),
-        myCards: .constant(
-            [Card(bug: .bee, cardCnt: 3),
-             Card(bug: .frog, cardCnt: 2),
-             Card(bug: .ladybug, cardCnt: 3)]),
-        showCardSelectedPopup: .constant(false),
-        gameType: .constant(.defender),
-        safeareaBottomSize: .constant(0)
-    )
-}
+//#Preview {
+//    GameRoomDetailBottomView(
+//        amIReadied: .constant(false),
+//        isHost: .constant(false),
+//        myCards: .constant(
+//            [Card(bug: .bee, cardCnt: 3),
+//             Card(bug: .frog, cardCnt: 2),
+//             Card(bug: .ladybug, cardCnt: 3)]),
+//        showCardSelectedPopup: .constant(false),
+//        gameType: .constant(.defender),
+//        safeareaBottomSize: .constant(0),
+//        focusField: .constant(false)
+//    )
+//}
