@@ -296,11 +296,6 @@ struct GamePlayAttackDefenceView: View {
                         viewModel.gameroomDataUpdate(.questionCard, bug.cardString)
                     })
                 }, label: {
-//                    if questionCard == nil {
-//                        makeBug(bug)
-//                    } else {
-//
-//                    }
                     withAnimation(.easeInOut(duration: 0.5)) {
                         makeBug(bug)
                             .opacity((bug == questionCard && questionCard != nil) || questionCard == nil ? 1 : 0.5)
