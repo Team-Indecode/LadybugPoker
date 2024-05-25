@@ -38,8 +38,19 @@ struct MyPageView: View {
                 }
             }
             
+            HStack {
+                Text("게임 히스토리")
+                    .font(.sea(18))
+                
+                Spacer()
+            }
+            .padding(.horizontal, 25)
+            
+            
+            
             Spacer()
         }
+        .background(Color.bugLight)
     }
 }
 

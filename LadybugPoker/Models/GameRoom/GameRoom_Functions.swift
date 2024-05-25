@@ -13,6 +13,12 @@ extension GameRoom {
         try await Firestore.firestore().collection(path)
             .document(model.id)
             .setData(model.toJson)
+        
+        try await Firestore.firestore().collection(User.path)
+            .document(Service.shared.myUserModel.id)
+            .setData(["currentGameId": model.id], merge: true)
+        
+        Service.shared.myUserModel.currentUserId = model.id
     }
     
     /// id로 GameRoom 불러옴
