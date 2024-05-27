@@ -121,7 +121,7 @@ struct GameFinishView: View {
     
     var outRoom: some View {
         Button {
-            print(#fileID, #function, #line, "- 방 나가기")
+            viewModel.updateUserCurrentGameId(nil)
             viewModel.showLoserView = false
             service.path.removeLast()
         } label: {
@@ -142,7 +142,6 @@ struct GameFinishView: View {
     
     var newGame: some View {
         Button {
-            print(#fileID, #function, #line, "- 새 게임")
             Task {
                 await viewModel.makeNewGameRoom()
             }

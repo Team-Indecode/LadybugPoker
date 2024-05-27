@@ -8,13 +8,14 @@
 import Foundation
 import Combine
 import FirebaseFirestore
+import AVFoundation
 
 class GameRoomDetailViewViewModel: ObservableObject {
     let db = Firestore.firestore()
     @Published var gameRoomId: String = ""
     @Published var gameStatus: GameStatus = .notStarted
     
-    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGameId: nil))
+    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil))
 
     /// userIdx와 userId
     @Published var usersId: [String] = Array(repeating: "", count: 6)
@@ -35,6 +36,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 패배한 유저가 누구인지 보여줌(게임 끝날때)
     @Published var showLoserView: Bool = false
     var timer: Timer?
+    var musicPlayer: AVQueuePlayer = AVQueuePlayer()
+    var currentMusicIndex : Int = 0
     
     /// 해당 게임방의 데이터를 가지고 온다
     func getGameData(_ gameRoomId: String) async throws {
@@ -61,8 +64,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
                             self.timer?.invalidate()
                             self.showLoserView = true
                             self.updateUserGameHistory(self.gameRoomData.value)
-                            if data.newGameId != nil && data.hostId != Service.shared.myUserModel.id {
-                                guard let newGameId = data.newGameId else { return }
+                            if data.newGame != nil && data.hostId != Service.shared.myUserModel.id {
+                                guard let newGameId = data.newGame else { return }
                                 self.updateUserCurrentGameId(newGameId)
                             }
                         } else {
@@ -115,7 +118,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
                 guard let decision = data.decision else { return }
-                guard let attackResult = self.defenderSuccessCheck(DefenderAnswer.same.rawValue) else { return }
+                guard let attackResult = self.defenderSuccessCheck(decision) else { return }
+                print(#fileID, #function, #line, "- showAttackResult decision: \(decision)")
+                print(#fileID, #function, #line, "- showAttackResult attackResult: \(attackResult)")
+                print(#fileID, #function, #line, "- showAttackResult questionCard: \(data.questionCard)")
+                print(#fileID, #function, #line, "- showAttackResult selectedCard: \(data.selectedCard)")
                 if decision == "yes" {
                     self.showAttackResult = (true, attackResult)
                 } else if decision == "no" {
@@ -300,12 +307,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     func defenderSuccessCheck(_ text: String) -> Bool? {
         let same = self.gameRoomData.value.selectedCard == self.gameRoomData.value.questionCard
-        print(#fileID, #function, #line, "- durldudlafkjdfjlakj")
+        print(#fileID, #function, #line, "- showAttackResult same: \(same)")
+        print(#fileID, #function, #line, "- showAttackResult text: \(text)")
         if same {
-            if text == "맞습니다." {
+            if text == "맞습니다." || text == "yes" {
                 //수비성공 -> 공격자에 boardCard에 추가, whoseTurn -> 계속 공격자(즉, whoseTurn유지)
                 return false
-            } else if text == "아닙니다." {
+            } else if text == "아닙니다." || text == "no"{
                 // 공격성공(수비실패) -> 수비자 boardCard에 추가, whoseTurn -> whoseGetting
                 return true
             } else {
@@ -314,10 +322,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
         } else {
             // 둘이 다른 카드일떄
-            if text == "맞습니다." {
+            if text == "맞습니다." || text == "yes" {
                 // 공격성공 -> 수비자 boardCard에 추가, whoseTurn: whoseGetting
                 return true
-            } else if text == "아닙니다." {
+            } else if text == "아닙니다." || text == "no"{
                 return false
             } else {
                 return nil
@@ -619,6 +627,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             guard let nextTurn = self.gameRoomData.value.whoseGetting else { return }
             updateDataDic["whoseTurn"] = nextTurn
             updateDataDic["whoseGetting"] = nil as String?
+            updateDataDic["questionCard"] = nil as String?
             updateDataDic["turnStartTime"] = Date().toString
         }
         
@@ -710,7 +719,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
-    // 다른 사람들은 어떻게 옮기지 다른 게임으로 
+    // 새로운 게임룸 만들기
     func makeNewGameRoom() async {
         let newGameId: String = UUID().uuidString
         
@@ -725,7 +734,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             settingUser[key] = afterValue
         }
         
-        let model = GameRoom(id: newGameId, hostId: self.gameRoomData.value.hostId, title: self.gameRoomData.value.title, password: self.gameRoomData.value.password, maxUserCount: self.gameRoomData.value.maxUserCount, code: self.gameRoomData.value.code, usersInGame: settingUser, whoseGetting: nil, turnStartTime: nil, attackers: [], createdAt: Date().toString, turnTime: self.gameRoomData.value.turnTime, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGameId: nil)
+        let model = GameRoom(id: newGameId, hostId: self.gameRoomData.value.hostId, title: self.gameRoomData.value.title, password: self.gameRoomData.value.password, maxUserCount: self.gameRoomData.value.maxUserCount, code: self.gameRoomData.value.code, usersInGame: settingUser, whoseGetting: nil, turnStartTime: nil, attackers: [], createdAt: Date().toString, turnTime: self.gameRoomData.value.turnTime, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil)
         
         do {
             try await GameRoom.create(model: model)
@@ -743,22 +752,71 @@ class GameRoomDetailViewViewModel: ObservableObject {
         guard let myUserInGameData = gameRoomData.usersInGame[Service.shared.myUserModel.id] else { return }
         guard let loserIdx = gameRoomData.loser else { return }
         
-        let gameRoomResultData = History(id: gameRoomData.id, title: gameRoomData.title, isWinner: myUserInGameData.idx != loserIdx, maxUserCount: gameRoomData.maxUserCount, userCount: gameRoomData.usersInGame.count)
+        let gameRoomResultData = History(id: gameRoomData.id, title: gameRoomData.title, isWinner: myUserInGameData.idx != loserIdx, maxUserCount: gameRoomData.maxUserCount, userCount: gameRoomData.usersInGame.count, createdAt: gameRoomData.createdAt)
         
         userRef.collection(History.path).document(gameRoomData.id)
             .setData(gameRoomResultData.toJson)
     }
     
-    func updateUserCurrentGameId(_ newGameId: String) {
-        DispatchQueue.main.async {
-            self.gameRoomId = newGameId
-            self.showLoserView = false
+    
+    /// 새로운 게임 아이디 업데이트
+    /// - Parameter newGameId: 새로운 게임아이디
+    func updateUserCurrentGameId(_ newGameId: String?) {
+        if let newGameId = newGameId {
+            DispatchQueue.main.async {
+                self.gameRoomId = newGameId
+                self.showLoserView = false
+            }
         }
         
         // userRef에 새로운 게임 아이디 업데이트
         let userRef  = db.collection(User.path).document(Service.shared.myUserModel.id)
         
-        let currentGameId: [String : String] = ["currentGameId" : newGameId]
+        let currentGameId: [String : String?] = ["currentGameId" : newGameId]
         userRef.updateData(currentGameId)
+    }
+    
+    func addTrack(_ musicName: String, _ musicType: String = "mp3") -> AVPlayerItem? {
+        guard let url = Bundle.main.url(forResource: musicName, withExtension: musicType) else { return nil }
+        let musicItem = AVPlayerItem(url: url)
+        return musicItem
+    }
+    
+    func preparePlayMusic() {
+        musicPlayer.removeAllItems()
+//        let musicList: [String] = ["Funky_NET", "Love_It", "Hopscotch", "CHONKLAP", "DABOOMJIGGLE"]
+        let musicList: [String] = ["sample1", "sample2", "sample3"]
+        let musicItems = musicList.compactMap { musicName in
+            return addTrack(musicName, "wav")
+        }
+        
+        // 플레이어 큐에 아이템 추가
+        for musicItem in musicItems {
+            musicPlayer.insert(musicItem, after: nil)
+        }
+        
+    }
+    
+    func playMusic() {
+        musicPlayer.play()
+    }
+    
+    func stop() {
+        musicPlayer.pause()
+        musicPlayer.removeAllItems()
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func musicPlayerDidReachEnd(notication: Notification) {
+        currentMusicIndex += 1
+        if currentMusicIndex >= 3 {
+            currentMusicIndex = 0
+            preparePlayMusic()
+            playMusic()
+        }
+    }
+    
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(musicPlayerDidReachEnd(notication:)), name: AVPlayerItem.didPlayToEndTimeNotification, object: nil)
     }
 }

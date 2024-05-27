@@ -16,6 +16,7 @@ struct GameRoomDetailTopView: View {
     @Binding var existUserId: String
     @Binding var existUserDisplayName: String
     @State var userBoardCard: [Card] = []
+    @Binding var isHost: Bool
 
     var body: some View {
         GeometryReader { proxy in
@@ -23,12 +24,13 @@ struct GameRoomDetailTopView: View {
                 ForEach(usersId, id: \.self) { userId in
                     if userId != "" {
                         if let userData = usersInGame[userId] {
-                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], currentUserId: nil), userBoardIndex: userData.idx, cardsString: userData.boardCard ?? "", handCardString: userData.handCard ?? "", boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, userReadyOrNot: userData.readyOrNot, isOdd: userData.idx % 2 == 0 ? true : false, showExitAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
+                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], win: 0, lose: 0, currentUserId: nil), userBoardIndex: userData.idx, cardsString: userData.boardCard ?? "", handCardString: userData.handCard ?? "", boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, userReadyOrNot: userData.readyOrNot, isOdd: userData.idx % 2 == 0 ? true : false, showExitAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName, isHost: $isHost)
                                 .environmentObject(viewModel)
+                                
                         } else {
                             Rectangle()
                                 .fill(Color.bugLight)
-                                .frame(width: (proxy.size.width) / 2, height: proxy.size.height / 3 - 60)
+                                .frame(width: (proxy.size.width) / 2, height: proxy.size.height / 3)
                         }
                     } else {
                         Rectangle()
@@ -45,7 +47,7 @@ struct GameRoomDetailTopView: View {
 
 #Preview {
 //    GameRoomDetailTopView(usersInGame: .constant([:]), usersId: .constant([]), showExistAlert: .constant(false))
-    GameRoomDetailTopView(usersInGame: .constant([:]), usersId: .constant([]), showExistAlert: .constant(false), existUserId: .constant(""), existUserDisplayName: .constant(""))
+    GameRoomDetailTopView(usersInGame: .constant([:]), usersId: .constant([]), showExistAlert: .constant(false), existUserId: .constant(""), existUserDisplayName: .constant(""), isHost: .constant(false))
 }
 
 

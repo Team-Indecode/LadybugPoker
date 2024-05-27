@@ -37,7 +37,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
     var loser: Int?
     /// 수비자의 맞,틀 선택(yes -> 맞습니다, no -> 아닙니다, pass: 카드 넘기기)
     let decision: String?
-    let newGameId: String?
+    let newGame: String?
     
     var toJson: [String: Any] {
         var userGameData: [String: Any] = [:]
@@ -64,11 +64,11 @@ struct GameRoom: Codable, Identifiable, Equatable {
             "loser" : loser,
             "decision" : decision,
             "gameStatus": gameStatus,
-            "newGameId": newGameId
+            "newGame": newGame
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: Int?, decision: String?, newGameId: String?) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: Int?, decision: String?, newGame: String?) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -87,7 +87,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.gameStatus = gameStatus
         self.loser = loser
         self.decision = decision
-        self.newGameId = newGameId
+        self.newGame = newGame
     }
     
     init?(data: [String: Any]) {
@@ -164,7 +164,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.gameStatus = gameStatus
         self.loser = data["loser"] as? Int
         self.decision = data["decision"] as? String
-        self.newGameId = data["newGameId"] as? String
+        self.newGame = data["newGame"] as? String
     }
 }
 

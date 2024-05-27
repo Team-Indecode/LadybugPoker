@@ -36,6 +36,7 @@ struct GamePlayAttackDefenceView: View {
     @State private var startRotation = false
     
     @State private var circleSize = [7.0, 7.0, 7.0]
+    @State private var questionCard: Bugs? = nil
     
     /// 스크린 높이에서 top부분이 차지하는 비율
     let screenHeightTop: CGFloat = 0.683
@@ -290,9 +291,15 @@ struct GamePlayAttackDefenceView: View {
         LazyVGrid(columns: columns) {
             ForEach(Bugs.allCases, id: \.self) { bug in
                 Button(action: {
-                    viewModel.gameroomDataUpdate(.questionCard, bug.cardString)
+                    questionCard = bug
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                        viewModel.gameroomDataUpdate(.questionCard, bug.cardString)
+                    })
                 }, label: {
-                    makeBug(bug)
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        makeBug(bug)
+                            .opacity((bug == questionCard && questionCard != nil) || questionCard == nil ? 1 : 0.5)
+                    }
                 })
             }
         }
