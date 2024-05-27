@@ -17,6 +17,19 @@
 		4D83BFAC2BF4A3DC00DDFD74 /* KeyboardHeightHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D83BFAB2BF4A3DC00DDFD74 /* KeyboardHeightHelper.swift */; };
 		4D83BFB32BF4C32500DDFD74 /* AttackDefenderView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D83BFB22BF4C32500DDFD74 /* AttackDefenderView+ViewModel.swift */; };
 		4D83BFB52BF7037500DDFD74 /* BlinkViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D83BFB42BF7037500DDFD74 /* BlinkViewModifier.swift */; };
+		4D83BFC32C04C4DB00DDFD74 /* Rex Banner - Modern Disco.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFB92C04C4DA00DDFD74 /* Rex Banner - Modern Disco.mp3 */; };
+		4D83BFC42C04C4DB00DDFD74 /* Rex Banner - New Car.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFBA2C04C4DA00DDFD74 /* Rex Banner - New Car.mp3 */; };
+		4D83BFC52C04C4DB00DDFD74 /* Love_It.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFBB2C04C4DA00DDFD74 /* Love_It.mp3 */; };
+		4D83BFC62C04C4DB00DDFD74 /* DABOOMJIGGLE.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFBC2C04C4DA00DDFD74 /* DABOOMJIGGLE.mp3 */; };
+		4D83BFC72C04C4DB00DDFD74 /* Randy Sharp - Just Try Me - Instrumental Version.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFBD2C04C4DA00DDFD74 /* Randy Sharp - Just Try Me - Instrumental Version.mp3 */; };
+		4D83BFC82C04C4DB00DDFD74 /* Out of Flux - Sunnydance - Sped Up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFBE2C04C4DA00DDFD74 /* Out of Flux - Sunnydance - Sped Up.mp3 */; };
+		4D83BFC92C04C4DB00DDFD74 /* Funky_NET.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFBF2C04C4DA00DDFD74 /* Funky_NET.mp3 */; };
+		4D83BFCA2C04C4DB00DDFD74 /* Hopscotch.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFC02C04C4DB00DDFD74 /* Hopscotch.mp3 */; };
+		4D83BFCB2C04C4DB00DDFD74 /* CHONKLAP.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFC12C04C4DB00DDFD74 /* CHONKLAP.mp3 */; };
+		4D83BFCC2C04C4DB00DDFD74 /* Rex Banner - So Fresh.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFC22C04C4DB00DDFD74 /* Rex Banner - So Fresh.mp3 */; };
+		4D83BFD02C04DA5A00DDFD74 /* sample1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFCD2C04DA5A00DDFD74 /* sample1.wav */; };
+		4D83BFD12C04DA5A00DDFD74 /* sample2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFCE2C04DA5A00DDFD74 /* sample2.wav */; };
+		4D83BFD22C04DA5A00DDFD74 /* sample3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4D83BFCF2C04DA5A00DDFD74 /* sample3.wav */; };
 		4D9CB90A2BDF59AC00BBD679 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9CB9092BDF59AC00BBD679 /* View+.swift */; };
 		4DC5035A2BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */; };
 		4DF375B92BD161CC008AC415 /* GamePlayAttackDefenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF375B82BD161CC008AC415 /* GamePlayAttackDefenceView.swift */; };
@@ -88,6 +101,19 @@
 		4D83BFAB2BF4A3DC00DDFD74 /* KeyboardHeightHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHeightHelper.swift; sourceTree = "<group>"; };
 		4D83BFB22BF4C32500DDFD74 /* AttackDefenderView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttackDefenderView+ViewModel.swift"; sourceTree = "<group>"; };
 		4D83BFB42BF7037500DDFD74 /* BlinkViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkViewModifier.swift; sourceTree = "<group>"; };
+		4D83BFB92C04C4DA00DDFD74 /* Rex Banner - Modern Disco.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Rex Banner - Modern Disco.mp3"; sourceTree = "<group>"; };
+		4D83BFBA2C04C4DA00DDFD74 /* Rex Banner - New Car.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Rex Banner - New Car.mp3"; sourceTree = "<group>"; };
+		4D83BFBB2C04C4DA00DDFD74 /* Love_It.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Love_It.mp3; sourceTree = "<group>"; };
+		4D83BFBC2C04C4DA00DDFD74 /* DABOOMJIGGLE.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = DABOOMJIGGLE.mp3; sourceTree = "<group>"; };
+		4D83BFBD2C04C4DA00DDFD74 /* Randy Sharp - Just Try Me - Instrumental Version.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Randy Sharp - Just Try Me - Instrumental Version.mp3"; sourceTree = "<group>"; };
+		4D83BFBE2C04C4DA00DDFD74 /* Out of Flux - Sunnydance - Sped Up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Out of Flux - Sunnydance - Sped Up.mp3"; sourceTree = "<group>"; };
+		4D83BFBF2C04C4DA00DDFD74 /* Funky_NET.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Funky_NET.mp3; sourceTree = "<group>"; };
+		4D83BFC02C04C4DB00DDFD74 /* Hopscotch.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Hopscotch.mp3; sourceTree = "<group>"; };
+		4D83BFC12C04C4DB00DDFD74 /* CHONKLAP.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = CHONKLAP.mp3; sourceTree = "<group>"; };
+		4D83BFC22C04C4DB00DDFD74 /* Rex Banner - So Fresh.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Rex Banner - So Fresh.mp3"; sourceTree = "<group>"; };
+		4D83BFCD2C04DA5A00DDFD74 /* sample1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample1.wav; sourceTree = "<group>"; };
+		4D83BFCE2C04DA5A00DDFD74 /* sample2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample2.wav; sourceTree = "<group>"; };
+		4D83BFCF2C04DA5A00DDFD74 /* sample3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample3.wav; sourceTree = "<group>"; };
 		4D9CB9092BDF59AC00BBD679 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		4DC503592BD630DB00DF4F6B /* GameRoomDetailView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameRoomDetailView+ViewModel.swift"; sourceTree = "<group>"; };
 		4DF375B82BD161CC008AC415 /* GamePlayAttackDefenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamePlayAttackDefenceView.swift; sourceTree = "<group>"; };
@@ -188,6 +214,26 @@
 				4D83BFB22BF4C32500DDFD74 /* AttackDefenderView+ViewModel.swift */,
 			);
 			path = AttackDefenderView;
+			sourceTree = "<group>";
+		};
+		4D83BFB82C04C4CB00DDFD74 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				4D83BFCD2C04DA5A00DDFD74 /* sample1.wav */,
+				4D83BFCE2C04DA5A00DDFD74 /* sample2.wav */,
+				4D83BFCF2C04DA5A00DDFD74 /* sample3.wav */,
+				4D83BFBF2C04C4DA00DDFD74 /* Funky_NET.mp3 */,
+				4D83BFBB2C04C4DA00DDFD74 /* Love_It.mp3 */,
+				4D83BFC02C04C4DB00DDFD74 /* Hopscotch.mp3 */,
+				4D83BFC12C04C4DB00DDFD74 /* CHONKLAP.mp3 */,
+				4D83BFBC2C04C4DA00DDFD74 /* DABOOMJIGGLE.mp3 */,
+				4D83BFBE2C04C4DA00DDFD74 /* Out of Flux - Sunnydance - Sped Up.mp3 */,
+				4D83BFBD2C04C4DA00DDFD74 /* Randy Sharp - Just Try Me - Instrumental Version.mp3 */,
+				4D83BFB92C04C4DA00DDFD74 /* Rex Banner - Modern Disco.mp3 */,
+				4D83BFBA2C04C4DA00DDFD74 /* Rex Banner - New Car.mp3 */,
+				4D83BFC22C04C4DB00DDFD74 /* Rex Banner - So Fresh.mp3 */,
+			);
+			path = Music;
 			sourceTree = "<group>";
 		};
 		D10942572C01C5030018BCAE /* History */ = {
@@ -421,6 +467,7 @@
 		D19AFD632BBF9BB0008F9297 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4D83BFB82C04C4CB00DDFD74 /* Music */,
 				D19AFD642BBF9BB5008F9297 /* Font.swift */,
 				D19AFD702BBF9FB4008F9297 /* Color.swift */,
 			);
@@ -560,12 +607,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D83BFD22C04DA5A00DDFD74 /* sample3.wav in Resources */,
+				4D83BFC42C04C4DB00DDFD74 /* Rex Banner - New Car.mp3 in Resources */,
 				D19AFD582BBF9B7D008F9297 /* Preview Assets.xcassets in Resources */,
 				D19AFD552BBF9B7D008F9297 /* Assets.xcassets in Resources */,
+				4D83BFCC2C04C4DB00DDFD74 /* Rex Banner - So Fresh.mp3 in Resources */,
+				4D83BFC82C04C4DB00DDFD74 /* Out of Flux - Sunnydance - Sped Up.mp3 in Resources */,
+				4D83BFC92C04C4DB00DDFD74 /* Funky_NET.mp3 in Resources */,
+				4D83BFC62C04C4DB00DDFD74 /* DABOOMJIGGLE.mp3 in Resources */,
+				4D83BFC32C04C4DB00DDFD74 /* Rex Banner - Modern Disco.mp3 in Resources */,
 				D125B9D92BC1503600A5AE03 /* GoogleService-Info.plist in Resources */,
 				D19AFD682BBF9DDF008F9297 /* SnowCrab.ttf in Resources */,
+				4D83BFCA2C04C4DB00DDFD74 /* Hopscotch.mp3 in Resources */,
+				4D83BFD12C04DA5A00DDFD74 /* sample2.wav in Resources */,
 				D19AFD6A2BBF9E52008F9297 /* Yeongdeok Sea.ttf in Resources */,
+				4D83BFCB2C04C4DB00DDFD74 /* CHONKLAP.mp3 in Resources */,
+				4D83BFC52C04C4DB00DDFD74 /* Love_It.mp3 in Resources */,
 				D152E9AD2BC4D1AD005535F1 /* send.png in Resources */,
+				4D83BFC72C04C4DB00DDFD74 /* Randy Sharp - Just Try Me - Instrumental Version.mp3 in Resources */,
+				4D83BFD02C04DA5A00DDFD74 /* sample1.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

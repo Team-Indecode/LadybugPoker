@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct GameRoomDetailView: View {
     @StateObject var viewModel = GameRoomDetailViewViewModel()
@@ -66,7 +67,7 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame, usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName, isHost: $isHost)
+                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame,  usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName, isHost: $isHost)
                     .frame(height: proxy.size.height * 0.6706)
                     .environmentObject(viewModel)
                 GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, safeareaBottomSize: $safeareaBottomSize, focusField: $focusField)
@@ -87,6 +88,8 @@ struct GameRoomDetailView: View {
             })
             .onAppear(perform: {
                 safeareaBottomSize = proxy.safeAreaInsets.bottom
+                viewModel.preparePlayMusic()
+                viewModel.playMusic()
             })
             .onChange(of: self.keyboardHeightHelper.keyboardHeight, perform: { newValue in
                 print(#fileID, #function, #line, "- keyboardHeight: \(newValue)")

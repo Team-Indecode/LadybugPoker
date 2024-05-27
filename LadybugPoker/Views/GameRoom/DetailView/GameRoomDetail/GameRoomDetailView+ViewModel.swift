@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import FirebaseFirestore
+import AVFoundation
 
 class GameRoomDetailViewViewModel: ObservableObject {
     let db = Firestore.firestore()
@@ -35,6 +36,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 패배한 유저가 누구인지 보여줌(게임 끝날때)
     @Published var showLoserView: Bool = false
     var timer: Timer?
+    var musicPlayer: AVQueuePlayer = AVQueuePlayer()
+    var currentMusicIndex : Int = 0
     
     /// 해당 게임방의 데이터를 가지고 온다
     func getGameData(_ gameRoomId: String) async throws {
@@ -749,7 +752,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         guard let myUserInGameData = gameRoomData.usersInGame[Service.shared.myUserModel.id] else { return }
         guard let loserIdx = gameRoomData.loser else { return }
         
-        let gameRoomResultData = History(id: gameRoomData.id, title: gameRoomData.title, isWinner: myUserInGameData.idx != loserIdx, maxUserCount: gameRoomData.maxUserCount, userCount: gameRoomData.usersInGame.count)
+        let gameRoomResultData = History(id: gameRoomData.id, title: gameRoomData.title, isWinner: myUserInGameData.idx != loserIdx, maxUserCount: gameRoomData.maxUserCount, userCount: gameRoomData.usersInGame.count, createdAt: gameRoomData.createdAt)
         
         userRef.collection(History.path).document(gameRoomData.id)
             .setData(gameRoomResultData.toJson)
@@ -771,5 +774,52 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         let currentGameId: [String : String?] = ["currentGameId" : newGameId]
         userRef.updateData(currentGameId)
+    }
+    
+    func addTrack(_ musicName: String, _ musicType: String = "mp3") -> AVPlayerItem? {
+        guard let url = Bundle.main.url(forResource: musicName, withExtension: musicType) else { return nil }
+        let musicItem = AVPlayerItem(url: url)
+        return musicItem
+    }
+    
+    func preparePlayMusic() {
+        musicPlayer.removeAllItems()
+//        let musicList: [String] = ["Funky_NET", "Love_It", "Hopscotch", "CHONKLAP", "DABOOMJIGGLE"]
+        let musicList: [String] = ["sample1", "sample2", "sample3"]
+        let musicItems = musicList.compactMap { musicName in
+            return addTrack(musicName, "wav")
+        }
+        
+        // 플레이어 큐에 아이템 추가
+        for musicItem in musicItems {
+            musicPlayer.insert(musicItem, after: nil)
+        }
+        
+    }
+    
+    func playMusic() {
+        musicPlayer.play()
+    }
+    
+    func stop() {
+        musicPlayer.pause()
+        musicPlayer.removeAllItems()
+//        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func musicPlayerDidReachEnd(notication: Notification) {
+        currentMusicIndex += 1
+        if currentMusicIndex >= 3 {
+            currentMusicIndex = 0
+            preparePlayMusic()
+            playMusic()
+        }
+//        if let item = notication.object as? AVPlayerItem {
+//            musicPlayer.insert(item, after: nil)
+//        }
+    }
+    
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(musicPlayerDidReachEnd(notication:)), name: AVPlayerItem.didPlayToEndTimeNotification, object: nil)
     }
 }

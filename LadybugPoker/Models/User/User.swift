@@ -28,3 +28,4 @@ enum Player {
     /// 그 외
     case others
 }
+

@@ -24,12 +24,13 @@ struct GameRoomDetailTopView: View {
                 ForEach(usersId, id: \.self) { userId in
                     if userId != "" {
                         if let userData = usersInGame[userId] {
-                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], currentUserId: nil), userBoardIndex: userData.idx, cardsString: userData.boardCard ?? "", handCardString: userData.handCard ?? "", boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, userReadyOrNot: userData.readyOrNot, isOdd: userData.idx % 2 == 0 ? true : false, showExitAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName, isHost: $isHost)
+                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], win: 0, lose: 0, currentUserId: nil), userBoardIndex: userData.idx, cardsString: userData.boardCard ?? "", handCardString: userData.handCard ?? "", boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, userReadyOrNot: userData.readyOrNot, isOdd: userData.idx % 2 == 0 ? true : false, showExitAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName, isHost: $isHost)
                                 .environmentObject(viewModel)
+                                
                         } else {
                             Rectangle()
                                 .fill(Color.bugLight)
-                                .frame(width: (proxy.size.width) / 2, height: proxy.size.height / 3 - 60)
+                                .frame(width: (proxy.size.width) / 2, height: proxy.size.height / 3)
                         }
                     } else {
                         Rectangle()

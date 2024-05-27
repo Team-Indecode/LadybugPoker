@@ -16,6 +16,7 @@ struct History: Codable, Identifiable {
     let isWinner: Bool
     let maxUserCount: Int
     let userCount: Int
+    let createdAt: String
     
     var toJson: [String: Any] {
         [
@@ -23,16 +24,18 @@ struct History: Codable, Identifiable {
             "title": title,
             "isWinner": isWinner,
             "maxUserCount": maxUserCount,
-            "userCount": userCount
+            "userCount": userCount,
+            "createdAt": createdAt
         ]
     }
     
-    init(id: String, title: String, isWinner: Bool, maxUserCount: Int, userCount: Int) {
+    init(id: String, title: String, isWinner: Bool, maxUserCount: Int, userCount: Int, createdAt: String) {
         self.id = id
         self.title = title
         self.isWinner = isWinner
         self.maxUserCount = maxUserCount
         self.userCount = userCount
+        self.createdAt = createdAt
     }
     
     init?(data: [String: Any]) {
@@ -40,7 +43,8 @@ struct History: Codable, Identifiable {
               let title = data["title"] as? String,
               let isWinner = data["isWinner"] as? Bool,
               let maxUserCount = data["maxUserCount"] as? Int,
-              let userCount = data["userCount"] as? Int else {
+              let userCount = data["userCount"] as? Int,
+              let createdAt = data["createdAt"] as? String else {
             return nil
         }
         
@@ -49,6 +53,7 @@ struct History: Codable, Identifiable {
         self.isWinner = isWinner
         self.maxUserCount = maxUserCount
         self.userCount = userCount
+        self.createdAt = createdAt
     }
 }
 
