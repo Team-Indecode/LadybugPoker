@@ -31,6 +31,8 @@ extension User {
         
         guard let displayName = data["displayName"] as? String,
               let id = data["id"] as? String,
+              let win = data["win"] as? Int,
+              let lose = data["lose"] as? Int,
               let history = data["history"] as? [String] else {
                   throw UserError.invalidData
               }
@@ -42,6 +44,8 @@ extension User {
                     displayName: displayName,
                     profileUrl: profileUrl,
                     history: history,
+                    win: win,
+                    lose: lose,
                     currentUserId: currentGameId)
     }
     
@@ -82,6 +86,6 @@ extension User {
             "https://cdn.pixabay.com/photo/2019/07/17/15/08/ladybug-4344164_1280.jpg"
         ]
         
-        return User(id: "testId\(randomNumber)", displayName: names.randomElement() ?? "", profileUrl: images.randomElement(), history: [])
+        return User(id: "testId\(randomNumber)", displayName: names.randomElement() ?? "", profileUrl: images.randomElement(), history: [], win: 0, lose: 0)
     }
 }

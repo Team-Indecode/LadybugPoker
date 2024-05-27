@@ -14,6 +14,8 @@ struct User: Codable, Identifiable {
     let displayName: String
     let profileUrl: String?
     let history: [String]
+    let win: Int
+    let lose: Int
     var currentUserId: String?
 }
 

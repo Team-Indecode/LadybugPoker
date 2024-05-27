@@ -239,5 +239,5 @@ struct PlayerBoardView: View {
 //    PlayerBoardView(user: User(id: "", displayName: "rayoung", profileUrl: "https://picsum.photos/200"), userCardCnt: 2, boardWidth: 250, boardHeight: 250, cards: [Card(bug: .bee, cardCnt: 3), Card(bug: .frog, cardCnt: 4), Card(bug: .ladybug, cardCnt: 5), Card(bug: .rat, cardCnt: 5), Card(bug: .snail, cardCnt: 5), Card(bug: .snake, cardCnt: 5)])
     
 //    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil), userBoardIndex: 1, cardsString: "", boardWidth: 250, boardHeight: 250, userReadyOrNot: false, isOdd: false, showExitAlert: .constant(false))
-    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], currentUserId: nil), userBoardIndex: 1, cardsString: "", handCardString: "", boardWidth: 250, boardHeight: 250, userReadyOrNot: false, isOdd: false, showExitAlert: .constant(false), existUserId: .constant(""), existUserDisplayName: .constant(""))
+    PlayerBoardView(user: User(id: "dd", displayName: "dd", profileUrl: "", history: [], win: 0, lose: 0, currentUserId: nil), userBoardIndex: 1, cardsString: "", handCardString: "", boardWidth: 250, boardHeight: 250, userReadyOrNot: false, isOdd: false, showExitAlert: .constant(false), existUserId: .constant(""), existUserDisplayName: .constant(""))
 }

@@ -27,6 +27,14 @@ struct History: Codable, Identifiable {
         ]
     }
     
+    init(id: String, title: String, isWinner: Bool, maxUserCount: Int, userCount: Int) {
+        self.id = id
+        self.title = title
+        self.isWinner = isWinner
+        self.maxUserCount = maxUserCount
+        self.userCount = userCount
+    }
+    
     init?(data: [String: Any]) {
         guard let id = data["id"] as? String,
               let title = data["title"] as? String,

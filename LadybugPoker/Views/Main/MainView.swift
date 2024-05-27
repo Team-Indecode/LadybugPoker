@@ -34,7 +34,9 @@ struct MainView: View {
                             .font(.sea(15))
                         
                         if let url = service.myUserModel.profileUrl {
-                            LazyImage(source: url)
+                            LazyImage(source: url, resizingMode: .aspectFill)
+                                .frame(width: 30, height: 30)
+                                .clipShape(Circle())
                         }
                     }
                 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct MyPageView: View {
     @EnvironmentObject private var service: Service
@@ -35,6 +36,29 @@ struct MyPageView: View {
                     
                     Text("무당벌레 포커")
                         .font(.sea(15))
+                }
+            }
+            
+            HStack {
+                Circle()
+                    .fill(Color.bugLightMedium)
+                    .frame(width: 100, height: 100)
+                    .overlay {
+                        if let url = service.myUserModel.profileUrl {
+                            LazyImage(source: url, resizingMode: .aspectFill)
+                                .clipShape(Circle())
+                                .padding(1)
+                        } else {
+                            Image("ladybug")
+                                .resizable()
+                                .padding(1)
+                        }
+                    }
+                
+                VStack {
+                    Text(service.myUserModel.displayName)
+                    
+                    Text("\(service.myUserModel.win)")
                 }
             }
             
