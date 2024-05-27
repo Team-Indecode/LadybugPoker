@@ -804,7 +804,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func stop() {
         musicPlayer.pause()
         musicPlayer.removeAllItems()
-//        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     @objc private func musicPlayerDidReachEnd(notication: Notification) {
@@ -814,9 +814,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
             preparePlayMusic()
             playMusic()
         }
-//        if let item = notication.object as? AVPlayerItem {
-//            musicPlayer.insert(item, after: nil)
-//        }
     }
     
     init() {
