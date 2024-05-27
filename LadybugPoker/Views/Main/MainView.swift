@@ -34,7 +34,9 @@ struct MainView: View {
                             .font(.sea(15))
                         
                         if let url = service.myUserModel.profileUrl {
-                            LazyImage(source: url)
+                            LazyImage(source: url, resizingMode: .aspectFill)
+                                .frame(width: 30, height: 30)
+                                .clipShape(Circle())
                         }
                     }
                 }
@@ -45,23 +47,31 @@ struct MainView: View {
             .background(Color.bugDarkMedium)
             
             ScrollView {
-                ForEach(gameRooms) { gameRoom in
-                    Button {
-                        Task {
-                            do {
-                                try await GameRoom.join(id: gameRoom.id)
-                                service.path.append(.gameRoom(gameRoomId: gameRoom.id))
-                            } catch {
-                                print("JOINING ERROR")
-                                print(error)
+                LazyVStack {
+                    ForEach(gameRooms) { gameRoom in
+                        Button {
+                            Task {
+                                do {
+                                    try await GameRoom.join(id: gameRoom.id)
+                                    service.path.append(.gameRoom(gameRoomId: gameRoom.id))
+                                } catch {
+                                    print("JOINING ERROR")
+                                    print(error)
+                                }
                             }
+                        } label: {
+                            GameRoomView(gameRoom: gameRoom)
+                                .onAppear {
+                                    if gameRoom == gameRooms.last {
+                                        Task {
+                                            gameRooms.append(contentsOf: try await GameRoom.fetchList(gameRoom))
+                                        }
+                                    }
+                                }
                         }
-                    } label: {
-                        GameRoomView(gameRoom: gameRoom)
                     }
+                    .padding(.top, 1)
                 }
-                .padding(.top, 1)
-                
             }
             
             Button {
@@ -84,7 +94,7 @@ struct MainView: View {
         }
         .onAppear {
             Task {
-                gameRooms = try await GameRoom.fetchList()
+                gameRooms = try await GameRoom.fetchList(nil)
 //                gameRooms = GameRoom.listPreview
                 try await Task.sleep(nanoseconds: 1_000_000_000)
                 
@@ -99,7 +109,7 @@ struct MainView: View {
         }
         .refreshable {
             Task {
-                gameRooms = try await GameRoom.fetchList()
+                gameRooms = try await GameRoom.fetchList(nil)
             }
         }
     }

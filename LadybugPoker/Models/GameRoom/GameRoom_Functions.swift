@@ -13,6 +13,12 @@ extension GameRoom {
         try await Firestore.firestore().collection(path)
             .document(model.id)
             .setData(model.toJson)
+        
+        try await Firestore.firestore().collection(User.path)
+            .document(Service.shared.myUserModel.id)
+            .setData(["currentGameId": model.id], merge: true)
+        
+        Service.shared.myUserModel.currentUserId = model.id
     }
     
     /// id로 GameRoom 불러옴
@@ -29,12 +35,24 @@ extension GameRoom {
     }
     
     /// 게임방 리스트 불러옴
-    static func fetchList() async throws -> GameRooms {
-        let documents = try await Firestore.firestore().collection(path)
-            .order(by: "createdAt", descending: true)
-            .limit(to: 30)
-            .getDocuments()
-            .documents
+    static func fetchList(_ last: GameRoom?) async throws -> GameRooms {
+        var documents = [QueryDocumentSnapshot]()
+        if let last {
+            print(last.createdAt, last.title)
+            
+            documents = try await Firestore.firestore().collection(path)
+                .whereField("createdAt", isLessThan: last.createdAt)
+                .order(by: "createdAt", descending: true)
+                .limit(to: 10)
+                .getDocuments()
+                .documents
+        } else {
+            documents = try await Firestore.firestore().collection(path)
+                .order(by: "createdAt", descending: true)
+                .limit(to: 10)
+                .getDocuments()
+                .documents
+        }
         
         print(#fileID, #function, #line, "- doccousnt: \(documents.count)")
         var rooms = [GameRoom]()
@@ -43,7 +61,7 @@ extension GameRoom {
             print(#fileID, #function, #line, "- document: \(document)")
             if let room = GameRoom(data: document.data()) {
 //            if let room = try? document.data(as: GameRoom.self) {
-                print(room.id)
+                print(room.id, room.createdAt)
                 rooms.append(room)
             } else {
 //                throw FirestoreError.parseError

@@ -16,9 +16,7 @@ struct GameRoomCreateView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Spacer()
-                
+            HStack {                
                 Button {
                     service.path.removeLast()
                 } label: {
@@ -125,7 +123,7 @@ struct GameRoomCreateView: View {
                                          title: title,
                                          password: password,
                                          maxUserCount: maxCount,
-                                         code: "ABCDEF",
+                                         code: (String(Int.random(in: 0..<256), radix: 16) + String(Int.random(in: 0..<256), radix: 16) + String(Int.random(in: 0..<256), radix: 16)).uppercased(),
                                          usersInGame: [service.myUserModel.id:
                                                         
                                                         UserInGame(id: service.myUserModel.id,
@@ -140,7 +138,7 @@ struct GameRoomCreateView: View {
                                          turnStartTime: nil,
                                          questionCard: nil,
                                          attackers: [],
-                                         createdAt: "",
+                                         createdAt: Date.now.toString,
                                          turnTime: 0,
                                          gameStatus: GameStatus.notStarted.rawValue,
                                          loser: nil,
@@ -149,6 +147,8 @@ struct GameRoomCreateView: View {
                                          )
                     
                     try await GameRoom.create(model: model)
+                    service.path.removeLast()
+                    service.path.append(.gameRoom(gameRoomId: model.id))
                 }
             } label: {
                 Color.bugDark

@@ -14,6 +14,8 @@ struct User: Codable, Identifiable {
     let displayName: String
     let profileUrl: String?
     let history: [String]
+    let win: Int
+    let lose: Int
     var currentUserId: String?
 }
 
@@ -25,24 +27,4 @@ enum Player {
     case defender
     /// 그 외
     case others
-}
-
-struct History: Codable, Identifiable {
-    static let path = "HISTORY"
-    
-    let id: String
-    let title: String
-    let isWinner: Bool
-    let maxUserCount: Int
-    let userCount: Int
-    
-    var toJson: [String: Any] {
-        [
-            "id": id,
-            "title": title,
-            "isWinner": isWinner,
-            "maxUserCount": maxUserCount,
-            "userCount": userCount
-        ]
-    }
 }
