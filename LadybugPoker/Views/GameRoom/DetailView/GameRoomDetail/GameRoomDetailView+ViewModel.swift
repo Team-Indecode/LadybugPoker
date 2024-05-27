@@ -716,7 +716,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
-    // 다른 사람들은 어떻게 옮기지 다른 게임으로 
+    // 새로운 게임룸 만들기
     func makeNewGameRoom() async {
         let newGameId: String = UUID().uuidString
         
@@ -755,16 +755,21 @@ class GameRoomDetailViewViewModel: ObservableObject {
             .setData(gameRoomResultData.toJson)
     }
     
-    func updateUserCurrentGameId(_ newGameId: String) {
-        DispatchQueue.main.async {
-            self.gameRoomId = newGameId
-            self.showLoserView = false
+    
+    /// 새로운 게임 아이디 업데이트
+    /// - Parameter newGameId: 새로운 게임아이디
+    func updateUserCurrentGameId(_ newGameId: String?) {
+        if let newGameId = newGameId {
+            DispatchQueue.main.async {
+                self.gameRoomId = newGameId
+                self.showLoserView = false
+            }
         }
         
         // userRef에 새로운 게임 아이디 업데이트
         let userRef  = db.collection(User.path).document(Service.shared.myUserModel.id)
         
-        let currentGameId: [String : String] = ["currentGameId" : newGameId]
+        let currentGameId: [String : String?] = ["currentGameId" : newGameId]
         userRef.updateData(currentGameId)
     }
 }
