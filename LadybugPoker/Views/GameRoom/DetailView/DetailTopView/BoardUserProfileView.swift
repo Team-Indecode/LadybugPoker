@@ -17,12 +17,16 @@ struct BoardUserProfileView: View {
     let isHost: Bool
     
     var body: some View {
-        VStack {
-//            if isHost {
-//                Image("crown")
-//                    .resizable()
-//                    .frame(width: 22, height: 22)
-//            }
+        VStack(spacing: 2) {
+            if isHost {
+                HStack(spacing: 0) {
+                    Text("HOST")
+                        .font(.sea(4))
+                        .foregroundStyle(Color.black)
+                        .frame(width: 30)
+                    Spacer()
+                }
+            }
             // 프로필 이미지
             HStack(spacing: 8) {
                 if let userImageUrl = userImageUrl {
@@ -30,12 +34,20 @@ struct BoardUserProfileView: View {
                         .scaledToFit()
                         .frame(width: 30, height: 30)
                         .clipShape(Circle())
+                        .overlay {
+                            Circle()
+                                .stroke(isHost ? Color.orange : Color(hex: "D1BB9E"), lineWidth: isHost ? 2 : 1)
+                        }
                 } else {
                     Image(Bugs.ladybug.rawValue)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 30, height: 30)
                         .clipShape(Circle())
+                        .overlay {
+                            Circle()
+                                .stroke(isHost ? Color.orange : Color(hex: "D1BB9E"), lineWidth: isHost ? 2 : 1)
+                        }
                 }
                 
                 // 유저 이름,
@@ -53,11 +65,11 @@ struct BoardUserProfileView: View {
                 }
             }
         }
-        
         .frame(width: 100)
         .frame(maxWidth: .infinity, alignment: isOdd ? .leading : .trailing)
-        
     }
+    
+    
 }
 
 #Preview {

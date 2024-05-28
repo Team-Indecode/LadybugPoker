@@ -42,9 +42,6 @@ struct GameRoomDetailView: View {
                         }
                     }
                 }
-                .onChange(of: viewModel.gameRoomData.value.hostId) { oldValue, newValue in
-                    isHost = Service.shared.myUserModel.id == newValue
-                }
                 .onChange(of: viewModel.gameRoomId) { _, viewGameRoomId in
                     gameRoomId = viewGameRoomId
                     Task {
@@ -67,7 +64,7 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame,  usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName, isHost: $isHost)
+                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame,  usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                     .frame(height: proxy.size.height * 0.6706)
                     .environmentObject(viewModel)
                 GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, safeareaBottomSize: $safeareaBottomSize, focusField: $focusField)
