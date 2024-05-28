@@ -455,13 +455,22 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 guard let autoSelectCard = whoseGettingsHandCard.randomElement() else { return }
                 self.gameroomDataUpdate(.selectedCard, autoSelectCard.bug.cardString)
                 self.userCardChange(autoSelectCard.bug, whoseGettingsHandCard, true, whoseTurn)
-                print(#fileID, #function, #line, "- whoseGettingHandCard⭐️: \(whoseGettingsHandCard)")
-                print(#fileID, #function, #line, "- whoseGettingHandCard randomElemen: \(whoseGettingsHandCard.randomElement())")
             } else if self.gameType == .selectUser {
-                
+                // 수비자 선택
+                // attackers에서 있는애는 빼고 선택
+                // 그리고 랜덤으로 선택된 애를 attackers에 넣어줘야 한다
+                let whoseGetting = "?"
+                var attackers = self.gameRoomData.value.attackers
+                self.gameroomDataUpdate(.whoseGetting, whoseGetting, attackers)
             } else if self.gameType == .attacker {
-                
+                // questionCard선택
+                let bugs = Bugs.allCases
+                let questionBug = bugs.randomElement() ?? Bugs.bee
+                self.gameroomDataUpdate(.questionCard, questionBug.cardString)
             } else if self.gameType == .defender {
+                // 맞습니다, 아닙니다 선택
+                let yesOrNoBool = Bool.random()
+                let yesOrNo = yesOrNoBool ? "yes" : "no"
                 
             }
         }
