@@ -185,6 +185,8 @@ enum GameRoomUpdateType: String {
     case gameAttackFinish
     case cardSkip
     case newGameId
+    /// host 변경
+    case hostId
 }
 
 enum GameType {

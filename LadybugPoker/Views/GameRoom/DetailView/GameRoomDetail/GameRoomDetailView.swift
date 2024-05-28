@@ -50,10 +50,13 @@ struct GameRoomDetailView: View {
                     }
                 }
                 .onChange(of: viewModel.gameStatus) { old, new in
-                    if new == .notStarted || (new == .onAir && old == .notStarted) {
+                    if  viewModel.isMusicPlaying && (new == .notStarted || (new == .onAir && old == .notStarted)) {
                         viewModel.preparePlayMusic()
                         viewModel.playMusic()
-                    } 
+                    }
+                }
+                .onChange(of: viewModel.gameRoomData.value.hostId) { _, hostId in
+                    isHost = Service.shared.myUserModel.id == hostId
                 }
 
         } else {
@@ -94,7 +97,6 @@ struct GameRoomDetailView: View {
                 viewModel.preparePlayMusic()
                 viewModel.playMusic()
             })
-            
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(viewModel.gameRoomData.value.title)
             .toolbarBackground(Color.bugDarkMedium, for: .navigationBar)
@@ -118,6 +120,7 @@ struct GameRoomDetailView: View {
                     .environmentObject(Service.shared)
                 
             })
+            
             .customAlert(title: "\(existUserDisplayName)를 퇴장 시키시겠습니까?", subTitle: "이 행동은 되돌릴 수 없습니다.", isPresented: $showExistAlert, yesButtonHandler: {
                 viewModel.deleteUserInGameRoom(existUserId)
             })

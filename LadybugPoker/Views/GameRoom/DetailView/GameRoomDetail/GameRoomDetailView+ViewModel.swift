@@ -36,6 +36,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 패배한 유저가 누구인지 보여줌(게임 끝날때)
     @Published var showLoserView: Bool = false
     @Published var isMusicPlaying: Bool = false
+    @Published var hostChange: Bool = false
     var timer: Timer?
     var musicPlayer: AVQueuePlayer = AVQueuePlayer()
     var currentMusicIndex : Int = 0
@@ -410,16 +411,69 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     @objc func timerCallBack() {
         self.secondsLeft -= 1
+        
+        if self.secondsLeft == 0 {
+            timeOverAutoSelect()
+        }
+    }
+    
+    func timeOverAutoSelect() {
+        print(#fileID, #function, #line, "- gameType: \(self.gameType)")
+        // 방장 퇴장
+        if self.gameStatus == .notStarted && self.allPlayerReadied && self.gameRoomData.value.usersInGame.count > 2 {
+            print(#fileID, #function, #line, "- self.usersId: \(self.usersId)")
+            // 방장 퇴장 로직 삽입
+            // 그리고 USERS의 currentGameId업데이트
+            guard let hostIdx = usersId.firstIndex(of: self.gameRoomData.value.hostId) else { return }
+            var newHostId: String = ""
+            for index in hostIdx + 1..<usersId.count {
+                print(#fileID, #function, #line, "- usersId: \(usersId[index])")
+                if usersId[index] != "" {
+                    newHostId = usersId[index]
+                    break
+                }
+            }
+            
+            if newHostId == "" {
+                for index in 0..<hostIdx {
+                    print(#fileID, #function, #line, "- usersId: \(usersId[index])")
+                    if usersId[index] != "" {
+                        newHostId = usersId[index]
+                        break
+                    }
+                }
+            }
+            print(#fileID, #function, #line, "- self.usersId newHostId: \(newHostId)")
+            self.deleteUserInGameRoom(self.gameRoomData.value.hostId)
+            self.gameroomDataUpdate(.hostId, newHostId)
+            
+        } else {
+            // 공격자 selectCard선택
+            if self.gameType == .selectCard {
+                guard let whoseTurn = self.gameRoomData.value.whoseTurn else { return }
+                let whoseGettingsHandCard = getUserCard(true, whoseTurn)
+                guard let autoSelectCard = whoseGettingsHandCard.randomElement() else { return }
+                self.gameroomDataUpdate(.selectedCard, autoSelectCard.bug.cardString)
+                self.userCardChange(autoSelectCard.bug, whoseGettingsHandCard, true, whoseTurn)
+                print(#fileID, #function, #line, "- whoseGettingHandCard⭐️: \(whoseGettingsHandCard)")
+                print(#fileID, #function, #line, "- whoseGettingHandCard randomElemen: \(whoseGettingsHandCard.randomElement())")
+            } else if self.gameType == .selectUser {
+                
+            } else if self.gameType == .attacker {
+                
+            } else if self.gameType == .defender {
+                
+            }
+        }
     }
     
     /// 유저의 카드 가지고 오기(손에 가지고 있는 카드, 게임판에 깔려있는 카드)
-    func getUserCard(_ isHandCard: Bool) -> [Card] {
+    func getUserCard(_ isHandCard: Bool, _ sendUserId: String = "") -> [Card] {
 //        guard let userId = Service.shared.myUserModel.id else { return [] }
-        let userId = Service.shared.myUserModel.id
+        let userId = sendUserId == "" ? Service.shared.myUserModel.id : sendUserId
         
         if let cardString = gameRoomData.value.usersInGame.first(where: { $0.key == userId }) {
             if isHandCard {
-                print(#fileID, #function, #line, "- handCard⭐️: \(self.stringToCards(cardString.value.handCard ?? ""))")
                 return self.stringToCards(cardString.value.handCard ?? "")
             } else {
                 return self.stringToCards(cardString.value.boardCard ?? "")
@@ -704,8 +758,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
         gameRoomDataRef.updateData(["usersInGame.\(userId)" : FieldValue.delete()] ) { error in
             if let error = error {
                 print(#fileID, #function, #line, "- delete \(userId) error: \(error.localizedDescription)")
+                // USERS db에서도 currentGameId삭제
+                
             }
             print(#fileID, #function, #line, "- delete UserSuccess⭐️: \(userId)")
+            self.updateUserCurrentGameId(nil, userId)
         }
     }
     
@@ -717,6 +774,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 print(#fileID, #function, #line, "- delete해당 게임방 에러: \(error)")
             }
             print(#fileID, #function, #line, "- 게임 룸 삭제 success")
+            self.updateUserCurrentGameId(nil)
         }
     }
     
@@ -762,7 +820,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// 새로운 게임 아이디 업데이트
     /// - Parameter newGameId: 새로운 게임아이디
-    func updateUserCurrentGameId(_ newGameId: String?) {
+    func updateUserCurrentGameId(_ newGameId: String?, _ changeUserId: String? = nil) {
         if let newGameId = newGameId {
             DispatchQueue.main.async {
                 self.gameRoomId = newGameId
@@ -771,10 +829,21 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         
         // userRef에 새로운 게임 아이디 업데이트
-        let userRef  = db.collection(User.path).document(Service.shared.myUserModel.id)
+        print(#fileID, #function, #line, "- ChangeUserId: \(changeUserId)")
+        guard let userId = changeUserId == nil ? Service.shared.myUserModel.id : changeUserId else { return }
         
-        let currentGameId: [String : String?] = ["currentGameId" : newGameId]
+        let userRef = db.collection(User.path).document(userId)
+        var currentGameId: [String : String?] = [:]
+        if newGameId == nil {
+           currentGameId["currentGameId"] = nil as String?
+        } else {
+            currentGameId["currentGameId"] = newGameId
+        }
+        
         userRef.updateData(currentGameId)
+        if changeUserId == Service.shared.myUserModel.id {
+            Service.shared.myUserModel.currentUserId = newGameId
+        }
     }
     
     func addTrack(_ musicName: String, _ musicType: String = "mp3") -> AVPlayerItem? {
