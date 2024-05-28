@@ -49,6 +49,12 @@ struct GameRoomDetailView: View {
                         try? await viewModel.getGameData(gameRoomId)
                     }
                 }
+                .onChange(of: viewModel.gameStatus) { old, new in
+                    if new == .notStarted || (new == .onAir && old == .notStarted) {
+                        viewModel.preparePlayMusic()
+                        viewModel.playMusic()
+                    } 
+                }
 
         } else {
             allContent
@@ -88,9 +94,7 @@ struct GameRoomDetailView: View {
                 viewModel.preparePlayMusic()
                 viewModel.playMusic()
             })
-            .onChange(of: self.keyboardHeightHelper.keyboardHeight, perform: { newValue in
-                print(#fileID, #function, #line, "- keyboardHeight: \(newValue)")
-            })
+            
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(viewModel.gameRoomData.value.title)
             .toolbarBackground(Color.bugDarkMedium, for: .navigationBar)

@@ -785,7 +785,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func preparePlayMusic() {
         musicPlayer.removeAllItems()
 //        let musicList: [String] = ["Funky_NET", "Love_It", "Hopscotch", "CHONKLAP", "DABOOMJIGGLE"]
-        let musicList: [String] = ["sample1", "sample2", "sample3"]
+        let musicList: [String] = gameStatus == .notStarted ? ["sample1", "sample4"] : ["sample2", "sample3"]
         let musicItems = musicList.compactMap { musicName in
             return addTrack(musicName, "wav")
         }
@@ -809,7 +809,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     @objc private func musicPlayerDidReachEnd(notication: Notification) {
         currentMusicIndex += 1
-        if currentMusicIndex >= 3 {
+        if currentMusicIndex >= 2 {
             currentMusicIndex = 0
             preparePlayMusic()
             playMusic()
