@@ -145,21 +145,21 @@ struct GameRoomDetailBottomView: View {
                 .font(.sea(15))
                 .padding(.top, 20)
                 
-                HStack(spacing: 5) {
-                    Spacer()
-                    
-                    Image("ladybug")
-                        .resizable()
-                        .frame(width: 27, height: 27)
-                    
-                    Text("무당벌레 포커")
-                        .font(.sea(15))
-                }
-                .padding(.trailing, 16)
-                .padding(.top, 5)
-                .padding(.bottom, 5)
+//                ladyBugLogoText
             }
-            Spacer()
+//            Spacer()
+            Button {
+                if viewModel.isMusicPlaying {
+                    viewModel.stopMusic()
+                } else {
+                    viewModel.preparePlayMusic()
+                    viewModel.playMusic()
+                }
+            } label: {
+                Image(viewModel.isMusicPlaying ? "musicOn" : "musicOff")
+            }
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding([.trailing, .bottom])
             withAnimation {
                 chatTextField
                     .offset(y: -self.keyboardHeightHelper.keyboardHeight)
@@ -231,6 +231,22 @@ struct GameRoomDetailBottomView: View {
         case .notEnoughUsers, .notStarted: return Text(beforeGameText)
         case .onAir: return Text("게임중 입니다.")
         }
+    }
+    
+    var ladyBugLogoText: some View {
+        HStack(spacing: 5) {
+            Spacer()
+            
+            Image("ladybug")
+                .resizable()
+                .frame(width: 27, height: 27)
+            
+            Text("무당벌레 포커")
+                .font(.sea(15))
+        }
+        .padding(.trailing, 16)
+        .padding(.top, 5)
+        .padding(.bottom, 5)
     }
     
 }

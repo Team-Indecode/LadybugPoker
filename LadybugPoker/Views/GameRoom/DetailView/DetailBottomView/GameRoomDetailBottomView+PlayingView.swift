@@ -101,7 +101,6 @@ extension GameRoomDetailBottomView {
                         .padding(.bottom, 15)
                     }
                 }
-                .padding(.bottom, 15)
                 .opacity(bottomGameType == .defender ? 0.7 : 1.0)
             }
         }

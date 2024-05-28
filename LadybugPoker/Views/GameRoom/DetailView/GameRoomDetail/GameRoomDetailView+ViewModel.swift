@@ -35,6 +35,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var showAttackResult: (Bool, Bool) = (false, false)
     /// 패배한 유저가 누구인지 보여줌(게임 끝날때)
     @Published var showLoserView: Bool = false
+    @Published var isMusicPlaying: Bool = false
     var timer: Timer?
     var musicPlayer: AVQueuePlayer = AVQueuePlayer()
     var currentMusicIndex : Int = 0
@@ -794,14 +795,15 @@ class GameRoomDetailViewViewModel: ObservableObject {
         for musicItem in musicItems {
             musicPlayer.insert(musicItem, after: nil)
         }
-        
     }
     
     func playMusic() {
+        isMusicPlaying = true
         musicPlayer.play()
     }
     
-    func stop() {
+    func stopMusic() {
+        isMusicPlaying = false
         musicPlayer.pause()
         musicPlayer.removeAllItems()
         NotificationCenter.default.removeObserver(self)
