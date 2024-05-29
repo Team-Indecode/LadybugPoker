@@ -32,6 +32,7 @@ struct GamePlayAttackDefenceView: View {
     @State private var showDefenderChooseAnser: Bool = false
     /// 공격 결과 나타내줄지
     @State private var showAttackResult: Bool = false
+    @State private var disappearBugView: Bool = false
     /// 공격 결과 나타나고 0.3초 뒤에 실제 공격자가 선택한 카드가 돌아갈지
     @State private var startRotation = false
     
@@ -58,11 +59,16 @@ struct GamePlayAttackDefenceView: View {
                     }
                 })
                 .onChange(of: viewModel.showAttackResult.0, { oldValue, newValue in
-                    withAnimation(.linear(duration: 1.0)) {
-                        showAttackResult = true
-                    }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-                        withAnimation(.linear(duration: 0.4)) {
+                        withAnimation(.linear(duration: 1.0)) {
+                            disappearBugView = true
+                        }
+                        
+                    })
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                        showAttackResult = true
+                        withAnimation(.linear(duration: 0.7)) {
                             startRotation = true
                         }
                     })
@@ -310,7 +316,7 @@ struct GamePlayAttackDefenceView: View {
     var bugAndCard: some View {
         HStack {
             cardView
-            if !showAttackResult {
+            if !disappearBugView {
                 Spacer()
                 if let attackBug = viewModel.gameRoomData.value.questionCard {
                     if attackBug == Bugs.bee.cardString{
