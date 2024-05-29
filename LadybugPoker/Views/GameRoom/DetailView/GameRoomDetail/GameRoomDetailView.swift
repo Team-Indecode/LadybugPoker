@@ -42,15 +42,21 @@ struct GameRoomDetailView: View {
                         }
                     }
                 }
-                .onChange(of: viewModel.gameRoomData.value.hostId) { oldValue, newValue in
-                    isHost = Service.shared.myUserModel.id == newValue
-                }
                 .onChange(of: viewModel.gameRoomId) { _, viewGameRoomId in
                     gameRoomId = viewGameRoomId
                     Task {
                         print(#fileID, #function, #line, "- new gameRoomId⭐️: \(gameRoomId)")
                         try? await viewModel.getGameData(gameRoomId)
                     }
+                }
+                .onChange(of: viewModel.gameStatus) { old, new in
+                    if  viewModel.isMusicPlaying && (new == .notStarted || (new == .onAir && old == .notStarted)) {
+                        viewModel.preparePlayMusic()
+                        viewModel.playMusic()
+                    }
+                }
+                .onChange(of: viewModel.gameRoomData.value.hostId) { _, hostId in
+                    isHost = Service.shared.myUserModel.id == hostId
                 }
 
         } else {
@@ -67,7 +73,7 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame,  usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName, isHost: $isHost)
+                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame,  usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                     .frame(height: proxy.size.height * 0.6706)
                     .environmentObject(viewModel)
                 GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, safeareaBottomSize: $safeareaBottomSize, focusField: $focusField)
@@ -90,9 +96,6 @@ struct GameRoomDetailView: View {
                 safeareaBottomSize = proxy.safeAreaInsets.bottom
                 viewModel.preparePlayMusic()
                 viewModel.playMusic()
-            })
-            .onChange(of: self.keyboardHeightHelper.keyboardHeight, perform: { newValue in
-                print(#fileID, #function, #line, "- keyboardHeight: \(newValue)")
             })
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(viewModel.gameRoomData.value.title)
@@ -117,6 +120,7 @@ struct GameRoomDetailView: View {
                     .environmentObject(Service.shared)
                 
             })
+            
             .customAlert(title: "\(existUserDisplayName)를 퇴장 시키시겠습니까?", subTitle: "이 행동은 되돌릴 수 없습니다.", isPresented: $showExistAlert, yesButtonHandler: {
                 viewModel.deleteUserInGameRoom(existUserId)
             })

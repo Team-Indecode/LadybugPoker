@@ -16,7 +16,6 @@ struct GameRoomDetailTopView: View {
     @Binding var existUserId: String
     @Binding var existUserDisplayName: String
     @State var userBoardCard: [Card] = []
-    @Binding var isHost: Bool
 
     var body: some View {
         GeometryReader { proxy in
@@ -24,7 +23,7 @@ struct GameRoomDetailTopView: View {
                 ForEach(usersId, id: \.self) { userId in
                     if userId != "" {
                         if let userData = usersInGame[userId] {
-                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], win: 0, lose: 0, currentUserId: nil), userBoardIndex: userData.idx, cardsString: userData.boardCard ?? "", handCardString: userData.handCard ?? "", boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, userReadyOrNot: userData.readyOrNot, isOdd: userData.idx % 2 == 0 ? true : false, showExitAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName, isHost: $isHost)
+                            PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], win: 0, lose: 0, currentUserId: nil), userBoardIndex: userData.idx, cardsString: userData.boardCard ?? "", handCardString: userData.handCard ?? "", boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, userReadyOrNot: userData.readyOrNot, isOdd: userData.idx % 2 == 0 ? true : false, showExitAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                                 .environmentObject(viewModel)
                                 
                         } else {
@@ -47,7 +46,7 @@ struct GameRoomDetailTopView: View {
 
 #Preview {
 //    GameRoomDetailTopView(usersInGame: .constant([:]), usersId: .constant([]), showExistAlert: .constant(false))
-    GameRoomDetailTopView(usersInGame: .constant([:]), usersId: .constant([]), showExistAlert: .constant(false), existUserId: .constant(""), existUserDisplayName: .constant(""), isHost: .constant(false))
+    GameRoomDetailTopView(usersInGame: .constant([:]), usersId: .constant([]), showExistAlert: .constant(false), existUserId: .constant(""), existUserDisplayName: .constant(""))
 }
 
 
