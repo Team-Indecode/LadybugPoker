@@ -33,7 +33,6 @@ struct PlayerBoardView: View {
     @Binding var showExitAlert: Bool
     @Binding var existUserId: String
     @Binding var existUserDisplayName: String
-    @Binding var isHost: Bool
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
@@ -137,7 +136,7 @@ struct PlayerBoardView: View {
     var profile: some View {
         if isOdd {
             return AnyView(HStack {
-                BoardUserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd, isHost: isHost)
+                BoardUserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd, isHost: user.id == viewModel.gameRoomData.value.hostId)
                 Spacer()
                 // 유저 선택일 경우인 경우 & whoseTurn인 유저 제외 & attackers에 담겨져 있는 유저 제외
                 if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
@@ -153,7 +152,7 @@ struct PlayerBoardView: View {
 //                        .blinking()
                 }
                 Spacer()
-                BoardUserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd, isHost: isHost)
+                BoardUserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd, isHost: user.id == viewModel.gameRoomData.value.hostId)
             })
         }
     }

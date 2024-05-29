@@ -10,6 +10,7 @@
 		4D02FA0A2BE6053C00E743F3 /* GameRoomDetailTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02FA092BE6053C00E743F3 /* GameRoomDetailTopView.swift */; };
 		4D02FA0C2BE6056E00E743F3 /* GameFinishView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02FA0B2BE6056E00E743F3 /* GameFinishView.swift */; };
 		4D02FA0E2BE6070000E743F3 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02FA0D2BE6070000E743F3 /* UserProfileView.swift */; };
+		4D2FB9672C05AF2A00959316 /* sample4.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4D2FB9662C05AF2A00959316 /* sample4.wav */; };
 		4D7583172BC572A0009B6489 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7583162BC572A0009B6489 /* CardView.swift */; };
 		4D7583192BC588B4009B6489 /* BoardUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7583182BC588B4009B6489 /* BoardUserProfileView.swift */; };
 		4D75831F2BC83D4A009B6489 /* PlayerBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */; };
@@ -95,6 +96,7 @@
 		4D02FA092BE6053C00E743F3 /* GameRoomDetailTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameRoomDetailTopView.swift; sourceTree = "<group>"; };
 		4D02FA0B2BE6056E00E743F3 /* GameFinishView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFinishView.swift; sourceTree = "<group>"; };
 		4D02FA0D2BE6070000E743F3 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		4D2FB9662C05AF2A00959316 /* sample4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample4.wav; sourceTree = "<group>"; };
 		4D7583162BC572A0009B6489 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		4D7583182BC588B4009B6489 /* BoardUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardUserProfileView.swift; sourceTree = "<group>"; };
 		4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBoardView.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				4D83BFCD2C04DA5A00DDFD74 /* sample1.wav */,
 				4D83BFCE2C04DA5A00DDFD74 /* sample2.wav */,
 				4D83BFCF2C04DA5A00DDFD74 /* sample3.wav */,
+				4D2FB9662C05AF2A00959316 /* sample4.wav */,
 				4D83BFBF2C04C4DA00DDFD74 /* Funky_NET.mp3 */,
 				4D83BFBB2C04C4DA00DDFD74 /* Love_It.mp3 */,
 				4D83BFC02C04C4DB00DDFD74 /* Hopscotch.mp3 */,
@@ -623,6 +626,7 @@
 				D19AFD682BBF9DDF008F9297 /* SnowCrab.ttf in Resources */,
 				4D83BFCA2C04C4DB00DDFD74 /* Hopscotch.mp3 in Resources */,
 				4D83BFD12C04DA5A00DDFD74 /* sample2.wav in Resources */,
+				4D2FB9672C05AF2A00959316 /* sample4.wav in Resources */,
 				D19AFD6A2BBF9E52008F9297 /* Yeongdeok Sea.ttf in Resources */,
 				4D83BFCB2C04C4DB00DDFD74 /* CHONKLAP.mp3 in Resources */,
 				4D83BFC52C04C4DB00DDFD74 /* Love_It.mp3 in Resources */,

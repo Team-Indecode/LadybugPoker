@@ -74,13 +74,14 @@ extension GameRoomDetailBottomView {
                         HStack {
                             ForEach(myCards) { card in
                                 Button {
-                                    guard let whoseTurn = viewModel.gameRoomData.value.whoseTurn else { return }
-                                    selectedCard = card
-                                    viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                                        viewModel.userCardChange(card.bug, myCards, true, whoseTurn)
-                                        selectedCard = nil
-                                    })
+                                    self.selectCardLogic(card)
+//                                    guard let whoseTurn = viewModel.gameRoomData.value.whoseTurn else { return }
+//                                    selectedCard = card
+//                                    viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
+//                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+//                                        viewModel.userCardChange(card.bug, myCards, true, whoseTurn)
+//                                        selectedCard = nil
+//                                    })
                                 } label: {
                                     if card.cardCnt != 0 {
                                         if selectedCard == nil {
@@ -101,9 +102,18 @@ extension GameRoomDetailBottomView {
                         .padding(.bottom, 15)
                     }
                 }
-                .padding(.bottom, 15)
                 .opacity(bottomGameType == .defender ? 0.7 : 1.0)
             }
+        }
+        
+        func selectCardLogic(_ card: Card) {
+            guard let whoseTurn = viewModel.gameRoomData.value.whoseTurn else { return }
+            selectedCard = card
+            viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                viewModel.userCardChange(card.bug, myCards, true, whoseTurn)
+                selectedCard = nil
+            })
         }
     }
 }
