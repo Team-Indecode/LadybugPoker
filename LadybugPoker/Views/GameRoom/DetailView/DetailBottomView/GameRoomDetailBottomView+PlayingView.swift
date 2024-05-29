@@ -86,13 +86,6 @@ extension GameRoomDetailBottomView {
                             ForEach(myCards) { card in
                                 Button {
                                     self.selectCardLogic(card)
-//                                    guard let whoseTurn = viewModel.gameRoomData.value.whoseTurn else { return }
-//                                    selectedCard = card
-//                                    viewModel.gameroomDataUpdate(.selectedCard, card.bug.cardString)
-//                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-//                                        viewModel.userCardChange(card.bug, myCards, true, whoseTurn)
-//                                        selectedCard = nil
-//                                    })
                                 } label: {
                                     if card.cardCnt != 0 {
                                         if selectedCard == nil {

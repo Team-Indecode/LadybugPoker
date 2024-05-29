@@ -36,7 +36,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 패배한 유저가 누구인지 보여줌(게임 끝날때)
     @Published var showLoserView: Bool = false
     @Published var isMusicPlaying: Bool = false
-    @Published var hostChange: Bool = false
+    @Published var showHostChange: Bool = false
     var timer: Timer?
     var musicPlayer: AVQueuePlayer = AVQueuePlayer()
     var currentMusicIndex : Int = 0
@@ -417,32 +417,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         print(#fileID, #function, #line, "- gameType: \(gameType)")
         // 방장 퇴장
         if self.gameStatus == .notStarted && self.allPlayerReadied && self.gameRoomData.value.usersInGame.count > 2 {
-            print(#fileID, #function, #line, "- self.usersId: \(self.usersId)")
-            // 방장 퇴장 로직 삽입
-            // 그리고 USERS의 currentGameId업데이트
-            guard let hostIdx = usersId.firstIndex(of: self.gameRoomData.value.hostId) else { return }
-            var newHostId: String = ""
-            for index in hostIdx + 1..<usersId.count {
-                print(#fileID, #function, #line, "- usersId: \(usersId[index])")
-                if usersId[index] != "" {
-                    newHostId = usersId[index]
-                    break
-                }
-            }
-            
-            if newHostId == "" {
-                for index in 0..<hostIdx {
-                    print(#fileID, #function, #line, "- usersId: \(usersId[index])")
-                    if usersId[index] != "" {
-                        newHostId = usersId[index]
-                        break
-                    }
-                }
-            }
-            print(#fileID, #function, #line, "- self.usersId newHostId: \(newHostId)")
-            self.deleteUserInGameRoom(self.gameRoomData.value.hostId)
-            self.gameroomDataUpdate(.hostId, newHostId)
-            
+            changeHost()
         } else {
             // 공격자 selectCard선택
             if self.gameType == .selectCard {
@@ -469,6 +444,37 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 let yesOrNo = yesOrNoBool ? "yes" : "no"
                 
             }
+        }
+    }
+    
+    func changeHost() {
+        print(#fileID, #function, #line, "- self.usersId: \(self.usersId)")
+        // 방장 퇴장 로직 삽입
+        // 그리고 USERS의 currentGameId업데이트
+        guard let hostIdx = usersId.firstIndex(of: self.gameRoomData.value.hostId) else { return }
+        var newHostId: String = ""
+        for index in hostIdx + 1..<usersId.count {
+            print(#fileID, #function, #line, "- usersId: \(usersId[index])")
+            if usersId[index] != "" {
+                newHostId = usersId[index]
+                break
+            }
+        }
+        
+        if newHostId == "" {
+            for index in 0..<hostIdx {
+                print(#fileID, #function, #line, "- usersId: \(usersId[index])")
+                if usersId[index] != "" {
+                    newHostId = usersId[index]
+                    break
+                }
+            }
+        }
+        print(#fileID, #function, #line, "- self.usersId newHostId: \(newHostId)")
+        self.deleteUserInGameRoom(self.gameRoomData.value.hostId)
+        self.gameroomDataUpdate(.hostId, newHostId)
+        if Service.shared.myUserModel.id == newHostId {
+            showHostChange = true
         }
     }
     
