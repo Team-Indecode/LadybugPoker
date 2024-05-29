@@ -58,12 +58,11 @@ struct GamePlayAttackDefenceView: View {
                     }
                 })
                 .onChange(of: viewModel.showAttackResult.0, { oldValue, newValue in
-                    withAnimation {
+                    withAnimation(.linear(duration: 1.0)) {
                         showAttackResult = true
                     }
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
-                        withAnimation {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                        withAnimation(.linear(duration: 0.4)) {
                             startRotation = true
                         }
                     })
@@ -311,36 +310,32 @@ struct GamePlayAttackDefenceView: View {
     var bugAndCard: some View {
         HStack {
             cardView
-            Spacer()
-            if let attackBug = viewModel.gameRoomData.value.questionCard {
-                if attackBug == Bugs.bee.cardString{
-                    makeBug(Bugs.bee)
-                } else if attackBug == Bugs.frog.cardString {
-                    makeBug(Bugs.frog)
-                } else if attackBug == Bugs.ladybug.cardString {
-                    makeBug(Bugs.ladybug)
-                } else if attackBug == Bugs.rat.cardString {
-                    makeBug(Bugs.rat)
-                } else if attackBug == Bugs.snake.cardString {
-                    makeBug(Bugs.snake)
-                } else if attackBug == Bugs.snail.cardString {
-                    makeBug(Bugs.snail)
-                } else if attackBug == Bugs.spider.cardString {
-                    makeBug(Bugs.spider)
-                } else if attackBug == Bugs.worm.cardString {
-                    makeBug(Bugs.worm)
+            if !showAttackResult {
+                Spacer()
+                if let attackBug = viewModel.gameRoomData.value.questionCard {
+                    if attackBug == Bugs.bee.cardString{
+                        makeBug(Bugs.bee)
+                    } else if attackBug == Bugs.frog.cardString {
+                        makeBug(Bugs.frog)
+                    } else if attackBug == Bugs.ladybug.cardString {
+                        makeBug(Bugs.ladybug)
+                    } else if attackBug == Bugs.rat.cardString {
+                        makeBug(Bugs.rat)
+                    } else if attackBug == Bugs.snake.cardString {
+                        makeBug(Bugs.snake)
+                    } else if attackBug == Bugs.snail.cardString {
+                        makeBug(Bugs.snail)
+                    } else if attackBug == Bugs.spider.cardString {
+                        makeBug(Bugs.spider)
+                    } else if attackBug == Bugs.worm.cardString {
+                        makeBug(Bugs.worm)
+                    }
+                   
+                } else {
+                    dotsInCircle
                 }
-               
-            } else {
-                dotsInCircle
-//                Image(systemName: "ellipsis.circle.fill")
-//                    .resizable()
-//                    .padding(6)
-//                    .foregroundStyle(Color(hex: "D9D9D9"))
-//                    .frame(width: 70, height: 70)
-//                    .scaledToFit()
-//                    .clipShape(Circle())
             }
+            
             
         }
         .padding(.horizontal, 80)
@@ -484,7 +479,7 @@ struct GamePlayAttackDefenceView: View {
         return Button(action: {
 //            viewModel.defenderSuccessCheck(text)
             Task {
-                withAnimation {
+                withAnimation(.linear(duration: 1.0)) {
                     if text == DefenderAnswer.same.rawValue {
                         defenderChooseAnswer = "y"
                     } else if text == DefenderAnswer.different.rawValue {
