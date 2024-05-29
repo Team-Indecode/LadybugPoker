@@ -120,7 +120,6 @@ struct GameRoomDetailView: View {
                     .environmentObject(Service.shared)
                 
             })
-            
             .customAlert(title: "\(existUserDisplayName)를 퇴장 시키시겠습니까?", subTitle: "이 행동은 되돌릴 수 없습니다.", isPresented: $showExistAlert, yesButtonHandler: {
                 viewModel.deleteUserInGameRoom(existUserId)
             })
@@ -131,6 +130,7 @@ struct GameRoomDetailView: View {
                     viewModel.deleteGameRoom()
                 }
             })
+            .customCheckAlert(title: "방장이 되었습니다.", subTitle: "", isPresented: $viewModel.showHostChange)
             .task {
                 print(#fileID, #function, #line, "- gameId gameRoomId: \(gameRoomId)")
                 viewModel.gameRoomId = gameRoomId

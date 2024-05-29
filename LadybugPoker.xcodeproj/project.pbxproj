@@ -12,6 +12,7 @@
 		4D02FA0E2BE6070000E743F3 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02FA0D2BE6070000E743F3 /* UserProfileView.swift */; };
 		4D2FB9672C05AF2A00959316 /* sample4.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4D2FB9662C05AF2A00959316 /* sample4.wav */; };
 		4D2FB9692C070C8300959316 /* GameRoomBottomView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2FB9682C070C8300959316 /* GameRoomBottomView+ViewModel.swift */; };
+		4D2FB96B2C0722E700959316 /* CommonCheckPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2FB96A2C0722E700959316 /* CommonCheckPopupView.swift */; };
 		4D7583172BC572A0009B6489 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7583162BC572A0009B6489 /* CardView.swift */; };
 		4D7583192BC588B4009B6489 /* BoardUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7583182BC588B4009B6489 /* BoardUserProfileView.swift */; };
 		4D75831F2BC83D4A009B6489 /* PlayerBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */; };
@@ -98,6 +99,7 @@
 		4D02FA0D2BE6070000E743F3 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		4D2FB9662C05AF2A00959316 /* sample4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample4.wav; sourceTree = "<group>"; };
 		4D2FB9682C070C8300959316 /* GameRoomBottomView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameRoomBottomView+ViewModel.swift"; sourceTree = "<group>"; };
+		4D2FB96A2C0722E700959316 /* CommonCheckPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonCheckPopupView.swift; sourceTree = "<group>"; };
 		4D7583162BC572A0009B6489 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		4D7583182BC588B4009B6489 /* BoardUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardUserProfileView.swift; sourceTree = "<group>"; };
 		4D75831E2BC83D4A009B6489 /* PlayerBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBoardView.swift; sourceTree = "<group>"; };
@@ -392,6 +394,7 @@
 			isa = PBXGroup;
 			children = (
 				D16AFC7E2BCFAD4400AEC3B2 /* CommonPopupView.swift */,
+				4D2FB96A2C0722E700959316 /* CommonCheckPopupView.swift */,
 			);
 			path = Popup;
 			sourceTree = "<group>";
@@ -653,6 +656,7 @@
 				D1418E2E2BD64BDE00421904 /* User_Errors.swift in Sources */,
 				4D83BFAC2BF4A3DC00DDFD74 /* KeyboardHeightHelper.swift in Sources */,
 				D19AFD7C2BBFA238008F9297 /* GameRoom_Preview.swift in Sources */,
+				4D2FB96B2C0722E700959316 /* CommonCheckPopupView.swift in Sources */,
 				D1AD227D2BDB6D6B0030EC56 /* MyPageView.swift in Sources */,
 				D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */,
 				D125B9DC2BC1504300A5AE03 /* AppDelegate.swift in Sources */,
