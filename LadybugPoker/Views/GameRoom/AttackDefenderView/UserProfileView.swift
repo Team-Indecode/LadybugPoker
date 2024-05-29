@@ -28,13 +28,13 @@ struct UserProfileView: View {
                     .scaledToFit()
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())
-                    .padding(.leading, 2)
+                    .padding(.leading, 10)
             } else {
                 Image(Bugs.ladybug.rawValue)
                     .resizable()
                     .frame(width: 30, height: 30)
                     .clipShape(Circle())
-                    .padding(.leading, 2)
+                    .padding(.leading, 10)
             }
             Text(user.displayName)
                 .font(.sea(profileFontSize))

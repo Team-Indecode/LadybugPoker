@@ -11,6 +11,7 @@ extension GameRoomDetailBottomView {
     
     struct PlayingView: View {
         @EnvironmentObject private var viewModel: GameRoomDetailViewViewModel
+        @EnvironmentObject private var bottomViewModel: GameRoomBottomViewModel
         /// 현재 턴인 유저id
         @Binding var userInTurn: String?
         /// 현재 턴인 유저 별명
@@ -58,13 +59,23 @@ extension GameRoomDetailBottomView {
                     }
                 } else {
                     if let userDisplayName = userDisplayName {
-                        Text(userDisplayName + " 턴 입니다.")
-                            .font(.sea(15))
-                            .frame(maxWidth: .infinity)
-                            .overlay(alignment: .trailing) {
-                                Text("남은 시간: \(viewModel.secondsLeft)초")
+                        ZStack {
+                            HStack(spacing: 0) {
+                                Text(userDisplayName + " 턴 입니다")
                                     .font(.sea(15))
+                                ForEach(0..<bottomViewModel.dots % 5, id:\.self) { _ in
+                                    Text(".")
+                                        .font(.sea(15))
+                                        .foregroundStyle(Color.black)
+                                }
                             }
+                            Text("남은 시간: \(viewModel.secondsLeft)초")
+                                .font(.sea(15))
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .padding(.trailing, 5)
+                        }
+                        
+                        
                     }
                         
                 }
@@ -103,6 +114,9 @@ extension GameRoomDetailBottomView {
                     }
                 }
                 .opacity(bottomGameType == .defender ? 0.7 : 1.0)
+            }
+            .onChange(of: bottomViewModel.dots) { newValue in
+                print(#fileID, #function, #line, "- dots: \(newValue)")
             }
         }
         

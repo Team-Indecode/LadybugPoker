@@ -67,7 +67,9 @@ struct GamePlayAttackDefenceView: View {
                     })
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                        showAttackResult = true
+                        withAnimation {
+                            showAttackResult = true
+                        }
                         withAnimation(.linear(duration: 0.7)) {
                             startRotation = true
                         }
@@ -169,12 +171,7 @@ struct GamePlayAttackDefenceView: View {
     var playerAttackTopView: some View {
         VStack(spacing: 0) {
             HStack(spacing: 5) {
-                if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
-                    makeUserView(userData)
-                }
-                Image("attacker")
-                    .resizable()
-                    .frame(width: 40, height: 40)
+                attackerProfileView
                 Spacer()
                 if !showAttackResult {
                     realSelectCard
@@ -249,6 +246,7 @@ struct GamePlayAttackDefenceView: View {
             if showAttackResult {
                 Text(viewModel.showAttackResult.1 ? "공격 성공" : "공격 실패")
                     .font(.sea(50))
+                    .foregroundStyle(Color.white)
             }
         }
     }
@@ -264,31 +262,6 @@ struct GamePlayAttackDefenceView: View {
                     .foregroundStyle(Color.white)
             }
         }
-    }
-    
-    @MainActor
-    /// 유저 프로필 뷰 제작
-    func makeUserView(_ user: UserInGame) -> some View {
-        return HStack {
-            if let profileUrl = user.profileUrl {
-                LazyImage(source: URL(string: profileUrl))
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .padding(.leading, 10)
-            } else {
-                Image(Bugs.ladybug.rawValue)
-                    .scaledToFit()
-                    .frame(width: 30, height: 30)
-                    .clipShape(Circle())
-            }
-            Text(user.displayName)
-                .font(.sea(20))
-        }
-        .frame(width: 171, height: 69, alignment: .leading)
-        .background(Color.white)
-        .clipShape(Capsule())
-        .padding(.horizontal, 10)
     }
     
     /// 전체 벌레(공격자가 벌레 선택하는 뷰)
@@ -395,10 +368,13 @@ struct GamePlayAttackDefenceView: View {
     }
     
     var attackerProfileView: some View {
-        HStack {
+        HStack(spacing: 0) {
             if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
                 UserProfileView(user: userData)
             }
+            Image("attacker")
+                .resizable()
+                .frame(width: 40, height: 40)
             Spacer()
         }
     }
@@ -407,7 +383,6 @@ struct GamePlayAttackDefenceView: View {
         HStack(spacing: 5) {
             Spacer()
             if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
-//                    makeUserView(userData)
                 UserProfileView(user: userData)
             }
         }
@@ -477,7 +452,7 @@ struct GamePlayAttackDefenceView: View {
             }
         }
         .padding(.top, 30)
-        .padding(.horizontal, 10)
+        .padding(.horizontal, 31)
     }
     
     /// 수비자가 선택할 text
@@ -500,7 +475,9 @@ struct GamePlayAttackDefenceView: View {
         }, label: {
             Text(text)
                 .font(.sea(20))
-                .padding(.horizontal, 30)
+                .padding(.horizontal,30)
+                .padding(.vertical, 6)
+                .foregroundStyle(Color.black)
                 .background(Color(hex: "F1F1F1"))
                 .clipShape(Capsule())
         })

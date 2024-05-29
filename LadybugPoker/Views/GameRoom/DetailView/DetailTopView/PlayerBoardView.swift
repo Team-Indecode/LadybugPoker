@@ -189,20 +189,15 @@ struct PlayerBoardView: View {
     var userIsPlayGame: some View {
         LazyVGrid(columns: columns) {
             ForEach(bugsArray, id: \.self) { bug in
-                let bugCnt = bugCnt(bug)
-                if bugCnt == 0 {
+                let cardCnt = bugCnt(bug)
+                if cardCnt == 0 {
                     Rectangle()
                         .fill(Color.bugLight)
                         .frame(width: boardWidth / 4 - 4, height: (boardHeight - 60) / 2)
                 } else {
-                    CardView(card: Card(bug: bug, cardCnt: bugCnt), cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
+                    CardView(card: Card(bug: bug, cardCnt: cardCnt), cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
                 }
             }
-//            ForEach(self.cards, id: \.self) { card in
-//                if card.cardCnt != 0 {
-                    
-//                }
-//            }
         }
     }
     

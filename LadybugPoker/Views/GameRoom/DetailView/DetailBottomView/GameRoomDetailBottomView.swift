@@ -10,6 +10,7 @@ import SwiftUI
 struct GameRoomDetailBottomView: View {
     @EnvironmentObject private var viewModel: GameRoomDetailViewViewModel
     @EnvironmentObject private var keyboardHeightHelper: KeyboardHeightHelper
+    @StateObject private var bottomViewModel = GameRoomBottomViewModel()
     
     private let beforeGameText = "게임시작 전 입니다."
     private let allPlayerReadied = "모든 플레이어가 준비되었습니다."
@@ -54,6 +55,7 @@ struct GameRoomDetailBottomView: View {
                             bottomGameType: $gameType
                 )
                 .environmentObject(viewModel)
+                .environmentObject(bottomViewModel)
                 .onChange(of: viewModel.gameRoomData.value.whoseTurn) { newValue in
                     if let userId = newValue {
                         let userInGame = viewModel.gameRoomData.value.usersInGame[userId]
@@ -166,6 +168,9 @@ struct GameRoomDetailBottomView: View {
             }
             
         }
+        .onAppear(perform: {
+            bottomViewModel.gameTimer()
+        })
         .onChange(of: self.keyboardHeightHelper.keyboardHeight, perform: { keyboardHeight in
 //            withAnimation {
 //                self.chatTextFieldOffset = keyboardHeight - safeareaBottomSize
