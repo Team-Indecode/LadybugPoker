@@ -53,7 +53,7 @@ extension GameRoomDetailBottomView {
                     }
                     .padding(.horizontal, 20)
                     .overlay(alignment: .top) {
-                        Text("남은 시간: \(viewModel.secondsLeft)초")
+                        Text("남은 시간: \(self.viewModel.secondsLeft > 0 ? self.viewModel.secondsLeft : 0)초")
                             .font(.sea(15))
                             .padding(.trailing)
                     }
@@ -69,7 +69,7 @@ extension GameRoomDetailBottomView {
                                         .foregroundStyle(Color.black)
                                 }
                             }
-                            Text("남은 시간: \(viewModel.secondsLeft)초")
+                            Text("남은 시간: \(self.viewModel.secondsLeft > 0 ? self.viewModel.secondsLeft : 0)초")
                                 .font(.sea(15))
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                                 .padding(.trailing, 5)

@@ -76,7 +76,7 @@ struct GameRoomDetailBottomView: View {
                             Text(allPlayerReadied)
                                 .font(.sea(15))
                                 .padding(.bottom, 20)
-                            Text("시작하지 않으면 \(self.viewModel.secondsLeft)초 뒤에 강퇴됩니다.")
+                            Text("시작하지 않으면 \(self.viewModel.secondsLeft > 0 ? self.viewModel.secondsLeft : 0)초 뒤에 강퇴됩니다.")
                                 .font(.sea(15))
                                 .padding(.bottom, 20)
                         } else {

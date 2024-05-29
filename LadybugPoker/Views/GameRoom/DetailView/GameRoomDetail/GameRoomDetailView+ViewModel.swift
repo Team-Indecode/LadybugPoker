@@ -113,8 +113,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting == nil {
                 self.gameType = .selectUser
+                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard == nil {
                 self.gameType = .attacker
+                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard != nil && data.decision == nil {
                 self.gameType = .defender
                 self.gameTimer(data.turnTime)
@@ -350,7 +352,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         // 공격성공, 수비실패 -> 수비자의 boardCard에 추가 / whoseTurn -> whoseGetting으로 변경
         if isDefenderLose {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
                     let boardCards = self.stringToCards(userInGame.boardCard ?? "")
                     attackers.append(userInGame.idx)
                     self.userCardChange(bugs, boardCards, false, userInGame.id)
@@ -361,7 +363,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         // 공격실패, 수비성공 -> 공격자의 boardCard에 추가 / whoseTurn -> 계속 공격지
         else {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
                     let boardCards = self.stringToCards(userInGame.boardCard ?? "")
                     attackers.append(userInGame.idx)
                     self.userCardChange(bugs, boardCards, false, userInGame.id)
@@ -419,8 +421,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         if self.gameStatus == .notStarted && self.allPlayerReadied && self.gameRoomData.value.usersInGame.count > 2 {
             changeHost()
         } else {
-            // 공격자 selectCard선택
             if self.gameType == .selectCard {
+                // 공격자 selectCard선택
                 guard let whoseTurn = self.gameRoomData.value.whoseTurn else { return }
                 let whoseGettingsHandCard = getUserCard(true, whoseTurn)
                 guard let autoSelectCard = whoseGettingsHandCard.randomElement() else { return }
@@ -428,11 +430,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.userCardChange(autoSelectCard.bug, whoseGettingsHandCard, true, whoseTurn)
             } else if self.gameType == .selectUser {
                 // 수비자 선택
-                // attackers에서 있는애는 빼고 선택
-                // 그리고 랜덤으로 선택된 애를 attackers에 넣어줘야 한다
-//                let whoseGetting = "?"
-//                var attackers = self.gameRoomData.value.attackers
-//                self.gameroomDataUpdate(.whoseGetting, whoseGetting, attackers)
+                let (whoseGettingId, whoseGettingIdx) = self.selectWhoseGetting()
+                var attackers = self.gameRoomData.value.attackers
+                attackers.append(whoseGettingIdx)
+                self.gameroomDataUpdate(.whoseGetting, whoseGettingId, attackers)
             } else if self.gameType == .attacker {
                 // questionCard선택
                 let bugs = Bugs.allCases
@@ -440,9 +441,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.gameroomDataUpdate(.questionCard, questionBug.cardString)
             } else if self.gameType == .defender {
                 // 맞습니다, 아닙니다 선택
-                let yesOrNoBool = Bool.random()
-                let yesOrNo = yesOrNoBool ? "yes" : "no"
-                
+                let yesOrNo = Bool.random()
+                self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
             }
         }
     }
@@ -476,6 +476,18 @@ class GameRoomDetailViewViewModel: ObservableObject {
         if Service.shared.myUserModel.id == newHostId {
             showHostChange = true
         }
+    }
+    
+    func selectWhoseGetting() -> (String, Int) {
+        var whoseGettingArray: [(String, Int)] = []
+        let attackers = self.gameRoomData.value.attackers
+        for (idx, id) in self.usersId.enumerated() {
+            if id != "" && !attackers.contains(idx) {
+                whoseGettingArray.append((id, idx))
+            }
+        }
+        print(#fileID, #function, #line, "- whoseGetting 후보 확인: \(whoseGettingArray)")
+        return whoseGettingArray.randomElement() ?? ("", -1)
     }
     
     /// 유저의 카드 가지고 오기(손에 가지고 있는 카드, 게임판에 깔려있는 카드)
