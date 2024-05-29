@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import FirebaseFirestore
 
 struct History: Codable, Identifiable {
     static let path = "HISTORY"
@@ -57,40 +56,3 @@ struct History: Codable, Identifiable {
     }
 }
 
-extension History {
-    static func fetchList(_ last: History?) async throws -> [History] {
-        var documents = [QueryDocumentSnapshot]()
-//        if let last {
-//            print(last.createdAt, last.title)
-//            
-//            documents = try await Firestore.firestore().collection(path)
-//                .whereField("createdAt", isLessThan: last.createdAt)
-//                .order(by: "createdAt", descending: true)
-//                .limit(to: 10)
-//                .getDocuments()
-//                .documents
-//        } else {
-//            documents = try await Firestore.firestore().collection(path)
-//                .order(by: "createdAt", descending: true)
-//                .limit(to: 10)
-//                .getDocuments()
-//                .documents
-//        }
-//        
-//        print(#fileID, #function, #line, "- doccousnt: \(documents.count)")
-        var histories = [History]()
-//        print(#fileID, #function, #line, "- document checking⭐️: \(documents)")
-//        for document in documents {
-//            print(#fileID, #function, #line, "- document: \(document)")
-//            if let room = GameRoom(data: document.data()) {
-////            if let room = try? document.data(as: GameRoom.self) {
-//                print(room.id, room.createdAt)
-//                histories.append(room)
-//            } else {
-////                throw FirestoreError.parseError
-//            }
-//        }
-        
-        return histories
-    }
-}
