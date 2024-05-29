@@ -28,6 +28,7 @@ struct PlayerBoardView: View {
     let userReadyOrNot: Bool
     /// 유저가 보드판에서 왼쪽인지 오른쪽에 위치하는지
     let isOdd: Bool
+    let bugsArray = [Bugs.snake, Bugs.ladybug, Bugs.frog, Bugs.rat, Bugs.spider, Bugs.snail, Bugs.worm, Bugs.bee]
     @State private var userChat: Chat = Chat(msg: "", time: "")
     @State private var userChatShow: Bool = false
     @Binding var showExitAlert: Bool
@@ -88,16 +89,16 @@ struct PlayerBoardView: View {
                         .frame(height: boardHeight - 80)
                 }
             }
-            if (viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished) && cards.count <= 4 {
-                if cards.count == 0 {
-                    Spacer()
-                        .frame(height: boardHeight - 60)
-                        .background(Color.blue)
-                } else {
-                    Spacer()
-                        .frame(height: (boardHeight - 60) / 2)
-                }
-            }
+//            if (viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished) && cards.count <= 4 {
+//                if cards.count == 0 {
+//                    Spacer()
+//                        .frame(height: boardHeight - 60)
+//                        .background(Color.blue)
+//                } else {
+//                    Spacer()
+//                        .frame(height: (boardHeight - 60) / 2)
+//                }
+//            }
         }
     }
     
@@ -187,12 +188,28 @@ struct PlayerBoardView: View {
     /// 유저 게임 중일때
     var userIsPlayGame: some View {
         LazyVGrid(columns: columns) {
-            ForEach(self.cards, id: \.self) { card in
-                if card.cardCnt != 0 {
-                    CardView(card: card, cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
+            ForEach(bugsArray, id: \.self) { bug in
+                let bugCnt = bugCnt(bug)
+                if bugCnt == 0 {
+                    Rectangle()
+                        .fill(Color.bugLight)
+                        .frame(width: boardWidth / 4 - 4, height: (boardHeight - 60) / 2)
+                } else {
+                    CardView(card: Card(bug: bug, cardCnt: bugCnt), cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
                 }
             }
+//            ForEach(self.cards, id: \.self) { card in
+//                if card.cardCnt != 0 {
+                    
+//                }
+//            }
         }
+    }
+    
+    func bugCnt(_ bug: Bugs) -> Int {
+        let filteredElements = self.cards.first(where: { $0.bug == bug })
+        
+        return filteredElements?.cardCnt ?? 0
     }
     
     /// 유저가 게임 준비중일떄
