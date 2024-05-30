@@ -89,16 +89,6 @@ struct PlayerBoardView: View {
                         .frame(height: boardHeight - 80)
                 }
             }
-//            if (viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished) && cards.count <= 4 {
-//                if cards.count == 0 {
-//                    Spacer()
-//                        .frame(height: boardHeight - 60)
-//                        .background(Color.blue)
-//                } else {
-//                    Spacer()
-//                        .frame(height: (boardHeight - 60) / 2)
-//                }
-//            }
         }
     }
     
@@ -120,10 +110,12 @@ struct PlayerBoardView: View {
                 Text(msg)
                     .multilineTextAlignment(.leading)
                     .font(.sea(10))
-                    .frame(maxWidth: 124)
+                    .padding(.horizontal)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(minWidth: 60)
                     .background(Color(hex: "EAD8C0"))
                     .clipShape(RoundedRectangle(cornerRadius: 5))
-                    .frame(maxWidth: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
             }
             
         }
@@ -189,20 +181,18 @@ struct PlayerBoardView: View {
     var userIsPlayGame: some View {
         LazyVGrid(columns: columns) {
             ForEach(bugsArray, id: \.self) { bug in
-                let bugCnt = bugCnt(bug)
-                if bugCnt == 0 {
+                let cardCnt = bugCnt(bug)
+                if cardCnt == 0 {
                     Rectangle()
                         .fill(Color.bugLight)
                         .frame(width: boardWidth / 4 - 4, height: (boardHeight - 60) / 2)
                 } else {
-                    CardView(card: Card(bug: bug, cardCnt: bugCnt), cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
+                    CardView(card: Card(bug: bug, cardCnt: cardCnt), cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
                 }
             }
-//            ForEach(self.cards, id: \.self) { card in
-//                if card.cardCnt != 0 {
-                    
-//                }
-//            }
+        }
+        .onChange(of: bugsArray) { newValue in
+            print(#fileID, #function, #line, "- bugsArray: \(bugsArray)")
         }
     }
     

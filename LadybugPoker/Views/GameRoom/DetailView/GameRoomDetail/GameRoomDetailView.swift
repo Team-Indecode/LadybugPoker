@@ -73,25 +73,32 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame,  usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
+                GameRoomDetailTopView(showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                     .frame(height: proxy.size.height * 0.6706)
+                    .overlay(content: {
+                        if viewModel.gameType == .selectCard && viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id {
+                            Rectangle()
+                                .fill(Color.black.opacity(0.5))
+                        }
+                    })
+                    .overlay(content: {
+                        if focusField {
+                            Color.clear
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    self.hideKeyboard()
+                                }
+                        } else {
+                            EmptyView()
+                        }
+                    })
                     .environmentObject(viewModel)
                 GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, safeareaBottomSize: $safeareaBottomSize, focusField: $focusField)
                     .frame(height: proxy.size.height * 0.3294)
                     .environmentObject(viewModel)
                     .environmentObject(keyboardHeightHelper)
             }
-            .overlay(content: {
-                if focusField {
-                    Color.clear
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            self.hideKeyboard()
-                        }
-                } else {
-                    EmptyView()
-                }
-            })
+            
             .onAppear(perform: {
                 safeareaBottomSize = proxy.safeAreaInsets.bottom
                 viewModel.preparePlayMusic()
@@ -120,14 +127,17 @@ struct GameRoomDetailView: View {
                     .environmentObject(Service.shared)
                 
             })
-            
             .customAlert(title: "\(existUserDisplayName)를 퇴장 시키시겠습니까?", subTitle: "이 행동은 되돌릴 수 없습니다.", isPresented: $showExistAlert, yesButtonHandler: {
                 viewModel.deleteUserInGameRoom(existUserId)
             })
-            .customAlert(title: "게임방이 삭제됩니다", subTitle: "정말로 나가시겠습니까?", isPresented: $showExistThisRoom, yesButtonHandler: {
-                print(#fileID, #function, #line, "- 방삭제")
-                viewModel.deleteGameRoom()
+            .customAlert(title: viewModel.gameRoomData.value.usersInGame.count > 1 ? "방장이 위임됩니다." : "게임방이 삭제됩니다.", subTitle: "정말로 나가시겠습니까?", isPresented: $showExistThisRoom, yesButtonHandler: {
+                if viewModel.gameRoomData.value.usersInGame.count > 1 {
+                    viewModel.changeHost()
+                } else {
+                    viewModel.deleteGameRoom()
+                }
             })
+            .customCheckAlert(title: "방장이 되었습니다.", subTitle: "", isPresented: $viewModel.showHostChange)
             .task {
                 print(#fileID, #function, #line, "- gameId gameRoomId: \(gameRoomId)")
                 viewModel.gameRoomId = gameRoomId

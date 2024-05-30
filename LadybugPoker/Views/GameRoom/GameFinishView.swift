@@ -37,7 +37,7 @@ struct GameFinishView: View {
             self.winnersProfile = []
             for idx in 0..<6 {
                 let userId = viewModel.usersId[idx]
-                if userId != "" {
+                if let userId = userId {
                     guard let userData =  viewModel.gameRoomData.value.usersInGame[userId] else {
                         return
                     }

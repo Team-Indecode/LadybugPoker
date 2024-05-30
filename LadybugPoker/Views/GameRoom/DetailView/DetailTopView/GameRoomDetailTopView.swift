@@ -9,23 +9,21 @@ import SwiftUI
 
 struct GameRoomDetailTopView: View {
     @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
+
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
-    @Binding var usersInGame: [String : UserInGame]
-    @Binding var usersId: [String]
     @Binding var showExistAlert: Bool
     @Binding var existUserId: String
     @Binding var existUserDisplayName: String
     @State var userBoardCard: [Card] = []
-
+    
     var body: some View {
         GeometryReader { proxy in
             LazyVGrid(columns: columns, spacing: 0) {
-                ForEach(usersId, id: \.self) { userId in
-                    if userId != "" {
-                        if let userData = usersInGame[userId] {
+                ForEach(0..<viewModel.usersId.count, id: \.self) { idx in
+                    if let userId = viewModel.usersId[idx] {
+                        if let userData = viewModel.gameRoomData.value.usersInGame[userId] {
                             PlayerBoardView(user: User(id: userData.id, displayName: userData.displayName, profileUrl: userData.profileUrl, history: [], win: 0, lose: 0, currentUserId: nil), userBoardIndex: userData.idx, cardsString: userData.boardCard ?? "", handCardString: userData.handCard ?? "", boardWidth: (proxy.size.width - 37) / 2, boardHeight: proxy.size.height / 3, userReadyOrNot: userData.readyOrNot, isOdd: userData.idx % 2 == 0 ? true : false, showExitAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                                 .environmentObject(viewModel)
-                                
                         } else {
                             Rectangle()
                                 .fill(Color.bugLight)
@@ -34,19 +32,20 @@ struct GameRoomDetailTopView: View {
                     } else {
                         Rectangle()
                             .fill(Color.bugLight)
-                            .frame(width: (proxy.size.width) / 2, height: proxy.size.height / 3)
+                            .frame(width: (proxy.size.width) / 2, height: (proxy.size.height / 3))
                     }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.bugLight)
+            
         }
     }
 }
 
 #Preview {
 //    GameRoomDetailTopView(usersInGame: .constant([:]), usersId: .constant([]), showExistAlert: .constant(false))
-    GameRoomDetailTopView(usersInGame: .constant([:]), usersId: .constant([]), showExistAlert: .constant(false), existUserId: .constant(""), existUserDisplayName: .constant(""))
+    GameRoomDetailTopView(showExistAlert: .constant(false), existUserId: .constant(""), existUserDisplayName: .constant(""))
 }
 
 

@@ -18,7 +18,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil))
 
     /// userIdx와 userId
-    @Published var usersId: [String] = Array(repeating: "", count: 6)
+    @Published var usersId: [String?] = Array(repeating: nil, count: 6)
     /// 남은 시간
     @Published var secondsLeft: Int = 60
     /// 모든 플레이어가 준비 되었는지
@@ -36,7 +36,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 패배한 유저가 누구인지 보여줌(게임 끝날때)
     @Published var showLoserView: Bool = false
     @Published var isMusicPlaying: Bool = false
-    @Published var hostChange: Bool = false
+    @Published var showHostChange: Bool = false
     var timer: Timer?
     var musicPlayer: AVQueuePlayer = AVQueuePlayer()
     var currentMusicIndex : Int = 0
@@ -48,8 +48,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 if let doc = doc, doc.exists {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
 //                    if let data = try? doc.data(as: GameRoom.self) {
+                        var beforeTurnStartTime = self.gameRoomData.value.turnStartTime
                         self.gameRoomData.send(data)
+                        if data.gameStatus != GameStatus.onAir.rawValue {
+                            
+                        }
                         self.getUsersId(data.usersInGame)
+                        self.getUsersChat(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
                         // 게임방의 status 체크
                         if data.gameStatus != self.gameStatus.rawValue {
@@ -58,7 +63,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         
                         if data.gameStatus == GameStatus.onAir.rawValue {
                             // 게임방의 현재 게임 진행 상황 체크(ex. 카드선택, 공격대상 선택, questionCard선택 등)
-                            self.gameTypeChecking(data)
+                            self.gameTypeChecking(data, beforeTurnStartTime)
                             // 공격자인지, 수비자인지, 그 외인지 체크
                             self.userTypeChecking(data)
                         } else if data.gameStatus == GameStatus.finished.rawValue {
@@ -106,19 +111,22 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// 현재 게임방의 게임 진행상황(카드선택인지, 공격대상 선택인지, 물음표 카드 선택인지, 맞틀 선택인지 등)
     /// - Parameter data: GameRoom
-    func gameTypeChecking(_ data: GameRoom) {
+    func gameTypeChecking(_ data: GameRoom, _ beforeTurnStartTime: String?) {
         if data.whoseTurn != nil {
             if data.selectedCard == nil {
                 self.gameType = .selectCard
-                self.gameTimer(data.turnTime)
+//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting == nil {
                 self.gameType = .selectUser
+//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard == nil {
                 self.gameType = .attacker
+//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard != nil && data.decision == nil {
                 self.gameType = .defender
-                self.gameTimer(data.turnTime)
+//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
+                self.gameType = .gameAttackFinish
                 guard let decision = data.decision else { return }
                 guard let attackResult = self.defenderSuccessCheck(decision) else { return }
                 if decision == "yes" {
@@ -129,7 +137,14 @@ class GameRoomDetailViewViewModel: ObservableObject {
                     return
                 }
             }
+
+            #warning("여기다가 이제 이전 시간과 지금 시간이 30초 이상 다르면 ")
+            if data.turnStartTime != beforeTurnStartTime {
+    //            self.gameTimer(data.turnTime)
+                self.gameTimer(10)
+            }
         }
+        print(#fileID, #function, #line, "- gameType: \(self.gameType)")
     }
 
     /// 공격자인지, 수비자인지, 그 외인지 판단
@@ -160,8 +175,12 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func getUsersId(_ usersInGame: [String : UserInGame]) {
         usersInGame.forEach { (key: String, value: UserInGame) in
             usersId[value.idx] = key
+        }
+    }
+    
+    func getUsersChat(_ usersInGame: [String : UserInGame]) {
+        usersInGame.forEach { (key: String, value: UserInGame) in
             usersChat[value.idx] = value.chat
-            print(#fileID, #function, #line, "- usersId⭐️: \(usersId)")
         }
     }
     
@@ -278,8 +297,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         var usersCardString: [String : String] = [:]
         
         for index in 0..<6 {
-            if usersId[index] != "" {
-                usersCardString[usersId[index]] = bugCardString.popLast()
+            if let index = usersId[index]{
+                usersCardString[index] = bugCardString.popLast()
             }
             
         }
@@ -305,8 +324,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     func defenderSuccessCheck(_ text: String) -> Bool? {
         let same = self.gameRoomData.value.selectedCard == self.gameRoomData.value.questionCard
-        print(#fileID, #function, #line, "- showAttackResult same: \(same)")
-        print(#fileID, #function, #line, "- showAttackResult text: \(text)")
+        
         if same {
             if text == "맞습니다." || text == "yes" {
                 //수비성공 -> 공격자에 boardCard에 추가, whoseTurn -> 계속 공격자(즉, whoseTurn유지)
@@ -350,7 +368,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         // 공격성공, 수비실패 -> 수비자의 boardCard에 추가 / whoseTurn -> whoseGetting으로 변경
         if isDefenderLose {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
                     let boardCards = self.stringToCards(userInGame.boardCard ?? "")
                     attackers.append(userInGame.idx)
                     self.userCardChange(bugs, boardCards, false, userInGame.id)
@@ -361,7 +379,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         // 공격실패, 수비성공 -> 공격자의 boardCard에 추가 / whoseTurn -> 계속 공격지
         else {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
                     let boardCards = self.stringToCards(userInGame.boardCard ?? "")
                     attackers.append(userInGame.idx)
                     self.userCardChange(bugs, boardCards, false, userInGame.id)
@@ -417,35 +435,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
         print(#fileID, #function, #line, "- gameType: \(gameType)")
         // 방장 퇴장
         if self.gameStatus == .notStarted && self.allPlayerReadied && self.gameRoomData.value.usersInGame.count > 2 {
-            print(#fileID, #function, #line, "- self.usersId: \(self.usersId)")
-            // 방장 퇴장 로직 삽입
-            // 그리고 USERS의 currentGameId업데이트
-            guard let hostIdx = usersId.firstIndex(of: self.gameRoomData.value.hostId) else { return }
-            var newHostId: String = ""
-            for index in hostIdx + 1..<usersId.count {
-                print(#fileID, #function, #line, "- usersId: \(usersId[index])")
-                if usersId[index] != "" {
-                    newHostId = usersId[index]
-                    break
-                }
-            }
-            
-            if newHostId == "" {
-                for index in 0..<hostIdx {
-                    print(#fileID, #function, #line, "- usersId: \(usersId[index])")
-                    if usersId[index] != "" {
-                        newHostId = usersId[index]
-                        break
-                    }
-                }
-            }
-            print(#fileID, #function, #line, "- self.usersId newHostId: \(newHostId)")
-            self.deleteUserInGameRoom(self.gameRoomData.value.hostId)
-            self.gameroomDataUpdate(.hostId, newHostId)
-            
+            changeHost()
         } else {
-            // 공격자 selectCard선택
             if self.gameType == .selectCard {
+                // 공격자 selectCard선택
                 guard let whoseTurn = self.gameRoomData.value.whoseTurn else { return }
                 let whoseGettingsHandCard = getUserCard(true, whoseTurn)
                 guard let autoSelectCard = whoseGettingsHandCard.randomElement() else { return }
@@ -453,11 +446,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.userCardChange(autoSelectCard.bug, whoseGettingsHandCard, true, whoseTurn)
             } else if self.gameType == .selectUser {
                 // 수비자 선택
-                // attackers에서 있는애는 빼고 선택
-                // 그리고 랜덤으로 선택된 애를 attackers에 넣어줘야 한다
-//                let whoseGetting = "?"
-//                var attackers = self.gameRoomData.value.attackers
-//                self.gameroomDataUpdate(.whoseGetting, whoseGetting, attackers)
+                let (whoseGettingId, whoseGettingIdx) = self.selectWhoseGetting()
+                var attackers = self.gameRoomData.value.attackers
+                attackers.append(whoseGettingIdx)
+                self.gameroomDataUpdate(.whoseGetting, whoseGettingId, attackers)
             } else if self.gameType == .attacker {
                 // questionCard선택
                 let bugs = Bugs.allCases
@@ -465,11 +457,60 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.gameroomDataUpdate(.questionCard, questionBug.cardString)
             } else if self.gameType == .defender {
                 // 맞습니다, 아닙니다 선택
-                let yesOrNoBool = Bool.random()
-                let yesOrNo = yesOrNoBool ? "yes" : "no"
+                let yesOrNo = Bool.random()
+                self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
+            } else if self.gameType == .gameAttackFinish {
+                if let attackResult = self.defenderSuccessCheck(self.gameRoomData.value.decision ?? "") {
+                    self.cardIsSame(attackResult)
+                }
                 
             }
         }
+    }
+    
+    func changeHost() {
+        print(#fileID, #function, #line, "- self.usersId: \(self.usersId)")
+        // 방장 퇴장 로직 삽입
+        // 그리고 USERS의 currentGameId업데이트
+        guard let hostIdx = usersId.firstIndex(of: self.gameRoomData.value.hostId) else { return }
+        var newHostId: String = ""
+        for index in hostIdx + 1..<usersId.count {
+            print(#fileID, #function, #line, "- usersId: \(usersId[index])")
+            if let id = usersId[index] {
+                newHostId = id
+                break
+            }
+        }
+        
+        if newHostId == "" {
+            for index in 0..<hostIdx {
+                print(#fileID, #function, #line, "- usersId: \(usersId[index])")
+                if let id = usersId[index] {
+                    newHostId = id
+                    break
+                }
+            }
+        }
+        print(#fileID, #function, #line, "- self.usersId newHostId: \(newHostId)")
+        self.deleteUserInGameRoom(self.gameRoomData.value.hostId)
+        self.gameroomDataUpdate(.hostId, newHostId)
+        if Service.shared.myUserModel.id == newHostId {
+            showHostChange = true
+        }
+    }
+    
+    func selectWhoseGetting() -> (String, Int) {
+        var whoseGettingArray: [(String, Int)] = []
+        let attackers = self.gameRoomData.value.attackers
+        for (idx, id) in self.usersId.enumerated() {
+            if id != nil && !attackers.contains(idx) {
+                if let id = id {
+                    whoseGettingArray.append((id, idx))
+                }
+            }
+        }
+        print(#fileID, #function, #line, "- whoseGetting 후보 확인: \(whoseGettingArray)")
+        return whoseGettingArray.randomElement() ?? ("", -1)
     }
     
     /// 유저의 카드 가지고 오기(손에 가지고 있는 카드, 게임판에 깔려있는 카드)
@@ -518,8 +559,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
         }
         
-        print(#fileID, #function, #line, "- updateCard checking⭐️ cardString: \(cardString)")
-        print(#fileID, #function, #line, "- updateCard checking⭐️ cardArray: \(updateCardArr)")
         let userInGame = gameRoomData.value.usersInGame[userId]
 
         guard var userInGame = userInGame else { return }
@@ -688,6 +727,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             updateDataDic["whoseTurn"] = nextTurn
             updateDataDic["whoseGetting"] = nil as String?
             updateDataDic["questionCard"] = nil as String?
+            updateDataDic["turnStartTime"] = Date().toString
+        } else if updateDataType == .questionCard || updateDataType == .selectedCard {
             updateDataDic["turnStartTime"] = Date().toString
         }
         

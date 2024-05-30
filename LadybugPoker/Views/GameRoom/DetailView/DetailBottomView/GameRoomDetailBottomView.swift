@@ -10,6 +10,7 @@ import SwiftUI
 struct GameRoomDetailBottomView: View {
     @EnvironmentObject private var viewModel: GameRoomDetailViewViewModel
     @EnvironmentObject private var keyboardHeightHelper: KeyboardHeightHelper
+    @StateObject private var bottomViewModel = GameRoomBottomViewModel()
     
     private let beforeGameText = "게임시작 전 입니다."
     private let allPlayerReadied = "모든 플레이어가 준비되었습니다."
@@ -20,6 +21,7 @@ struct GameRoomDetailBottomView: View {
     private let suggestStartText = "게임 시작을 눌러주세요."
     private let notAllPlayerReadiedText = "아직 모든 플레이어가 준비되지 않았습니다."
     private let startText = "게임 시작"
+    let chatMaxLength: Int = 30
     
     /// 내가 준비 했는지
     @Binding var amIReadied: Bool
@@ -54,12 +56,18 @@ struct GameRoomDetailBottomView: View {
                             bottomGameType: $gameType
                 )
                 .environmentObject(viewModel)
+                .environmentObject(bottomViewModel)
                 .onChange(of: viewModel.gameRoomData.value.whoseTurn) { newValue in
                     if let userId = newValue {
                         let userInGame = viewModel.gameRoomData.value.usersInGame[userId]
                         self.userDisplayName = userInGame?.displayName
                     }
                 }
+                .onChange(of: chat, perform: { newValue in
+                    if newValue.count > 30 {
+                        chat = String(newValue.prefix(chatMaxLength))
+                    }
+                })
                 .onAppear {
                     if let userId = viewModel.gameRoomData.value.whoseTurn {
                         self.userDisplayName = viewModel.gameRoomData.value.usersInGame[userId]?.displayName
@@ -74,7 +82,7 @@ struct GameRoomDetailBottomView: View {
                             Text(allPlayerReadied)
                                 .font(.sea(15))
                                 .padding(.bottom, 20)
-                            Text("시작하지 않으면 \(self.viewModel.secondsLeft)초 뒤에 강퇴됩니다.")
+                            Text("시작하지 않으면 \(self.viewModel.secondsLeft > 0 ? self.viewModel.secondsLeft : 0)초 뒤에 강퇴됩니다.")
                                 .font(.sea(15))
                                 .padding(.bottom, 20)
                         } else {
@@ -162,10 +170,14 @@ struct GameRoomDetailBottomView: View {
             .padding([.trailing, .bottom])
             withAnimation {
                 chatTextField
+//                chatTF
                     .offset(y: -self.keyboardHeightHelper.keyboardHeight)
             }
             
         }
+        .onAppear(perform: {
+            bottomViewModel.gameTimer()
+        })
         .onChange(of: self.keyboardHeightHelper.keyboardHeight, perform: { keyboardHeight in
 //            withAnimation {
 //                self.chatTextFieldOffset = keyboardHeight - safeareaBottomSize
@@ -178,27 +190,30 @@ struct GameRoomDetailBottomView: View {
     }
     
     var chatTextField: some View {
-        TextField("메세지를 입력해주세요.", text: $chat)
-            .focused(focusField)
-            .font(.sea(15))
-            .frame(height: 38)
-            .padding(.leading, 17)
-            .background {
-                RoundedRectangle(cornerRadius: .infinity)
-                    .stroke(Color.bugDarkMedium)
-            }
-            .onSubmit {
-                chatLogic()
-            }
-            .overlay(alignment: .trailing) {
-                Button {
-                    chatLogic()
-                } label: {
-                    Image("send")
+        ZStack {
+            TextField("메세지를 입력해주세요.(30자 제한)", text: $chat)
+                .focused(focusField)
+                .font(.sea(15))
+                .frame(height: 38)
+                .padding(.leading, 17)
+                .background {
+                    RoundedRectangle(cornerRadius: .infinity)
+                        .stroke(Color.bugDarkMedium)
                 }
-                .padding(.trailing, 6)
-            }
-            .padding(.horizontal, 6)
+                .onSubmit {
+                    chatLogic()
+                }
+                .overlay(alignment: .trailing) {
+                    Button {
+                        chatLogic()
+                    } label: {
+                        Image("send")
+                    }
+                    .padding(.trailing, 6)
+                }
+                .padding(.horizontal, 6)
+        }
+        
             .background(Color.bugLight)
     }
     

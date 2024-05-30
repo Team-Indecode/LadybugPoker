@@ -36,6 +36,25 @@ extension View {
         }
     }
     
+    func customCheckAlert(title: String, subTitle: String, isPresented: Binding<Bool>) -> some View {
+        fullScreenCover(isPresented: isPresented) {
+            if #available(iOS 16.4, *) {
+                CommonCheckPopupView(isPresented, title: title, subTitle: subTitle)
+                    .presentationBackground(.clear)
+            } else {
+                CommonCheckPopupView(isPresented, title: title, subTitle: subTitle)
+            }
+        }
+        .transaction { transaction in
+//            if isPresented.wrappedValue {
+//
+//            }
+            transaction.disablesAnimations = true
+            
+            transaction.animation = .linear(duration: 0.1)
+        }
+    }
+    
     func blinking() -> some View {
         self.modifier(BlinkViewModifier())
     }
