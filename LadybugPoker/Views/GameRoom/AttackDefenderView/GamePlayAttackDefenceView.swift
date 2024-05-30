@@ -177,11 +177,7 @@ struct GamePlayAttackDefenceView: View {
                     realSelectCard
                 }
             }
-            thisCard
             attackOrResult
-            Text("입니다.")
-                .font(.sea(50))
-                .foregroundStyle(Color.white)
             defenderProfileView
             if showAttackResult {
                 Text(viewModel.showAttackResult.1 ? "공격 성공" : "공격 실패")
@@ -212,16 +208,22 @@ struct GamePlayAttackDefenceView: View {
     var attackOrResult: some View {
         // 공격중
         if !showAttackResult {
+            thisCard
             if viewModel.gameType == .attacker {
                 bugsView
             } else {
                 bugAndCard
             }
+            Text("입니다.")
+                .font(.sea(50))
+                .foregroundStyle(Color.white)
         } else {
             // 공격 결과
             if let selectBug = selectBug {
+                
                 CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
                     .rotationEffect(startRotation ? Angle(degrees: 360) : Angle(degrees: 0))
+                    .padding(.vertical, 30)
             }
         }
     }

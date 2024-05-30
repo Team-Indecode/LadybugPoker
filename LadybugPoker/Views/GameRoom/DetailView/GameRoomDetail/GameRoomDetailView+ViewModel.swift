@@ -137,6 +137,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 }
             }
 
+            #warning("여기다가 이제 이전 시간과 지금 시간이 30초 이상 다르면 ")
             if data.turnStartTime != beforeTurnStartTime {
     //            self.gameTimer(data.turnTime)
                 self.gameTimer(10)
