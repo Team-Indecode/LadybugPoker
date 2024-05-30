@@ -164,6 +164,7 @@ struct GameRoomDetailBottomView: View {
             .padding([.trailing, .bottom])
             withAnimation {
                 chatTextField
+//                chatTF
                     .offset(y: -self.keyboardHeightHelper.keyboardHeight)
             }
             
@@ -183,27 +184,30 @@ struct GameRoomDetailBottomView: View {
     }
     
     var chatTextField: some View {
-        TextField("메세지를 입력해주세요.", text: $chat)
-            .focused(focusField)
-            .font(.sea(15))
-            .frame(height: 38)
-            .padding(.leading, 17)
-            .background {
-                RoundedRectangle(cornerRadius: .infinity)
-                    .stroke(Color.bugDarkMedium)
-            }
-            .onSubmit {
-                chatLogic()
-            }
-            .overlay(alignment: .trailing) {
-                Button {
-                    chatLogic()
-                } label: {
-                    Image("send")
+        ZStack {
+            TextField("메세지를 입력해주세요.", text: $chat)
+                .focused(focusField)
+                .font(.sea(15))
+                .frame(height: 38)
+                .padding(.leading, 17)
+                .background {
+                    RoundedRectangle(cornerRadius: .infinity)
+                        .stroke(Color.bugDarkMedium)
                 }
-                .padding(.trailing, 6)
-            }
-            .padding(.horizontal, 6)
+                .onSubmit {
+                    chatLogic()
+                }
+                .overlay(alignment: .trailing) {
+                    Button {
+                        chatLogic()
+                    } label: {
+                        Image("send")
+                    }
+                    .padding(.trailing, 6)
+                }
+                .padding(.horizontal, 6)
+        }
+        
             .background(Color.bugLight)
     }
     

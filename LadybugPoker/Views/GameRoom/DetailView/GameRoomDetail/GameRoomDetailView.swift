@@ -81,23 +81,24 @@ struct GameRoomDetailView: View {
                                 .fill(Color.black.opacity(0.5))
                         }
                     })
+                    .overlay(content: {
+                        if focusField {
+                            Color.clear
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    self.hideKeyboard()
+                                }
+                        } else {
+                            EmptyView()
+                        }
+                    })
                     .environmentObject(viewModel)
                 GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, safeareaBottomSize: $safeareaBottomSize, focusField: $focusField)
                     .frame(height: proxy.size.height * 0.3294)
                     .environmentObject(viewModel)
                     .environmentObject(keyboardHeightHelper)
             }
-            .overlay(content: {
-                if focusField {
-                    Color.clear
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            self.hideKeyboard()
-                        }
-                } else {
-                    EmptyView()
-                }
-            })
+            
             .onAppear(perform: {
                 safeareaBottomSize = proxy.safeAreaInsets.bottom
                 viewModel.preparePlayMusic()
