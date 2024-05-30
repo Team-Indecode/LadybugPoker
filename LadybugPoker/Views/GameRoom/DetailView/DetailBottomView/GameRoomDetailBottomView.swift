@@ -21,6 +21,7 @@ struct GameRoomDetailBottomView: View {
     private let suggestStartText = "게임 시작을 눌러주세요."
     private let notAllPlayerReadiedText = "아직 모든 플레이어가 준비되지 않았습니다."
     private let startText = "게임 시작"
+    let chatMaxLength: Int = 30
     
     /// 내가 준비 했는지
     @Binding var amIReadied: Bool
@@ -62,6 +63,11 @@ struct GameRoomDetailBottomView: View {
                         self.userDisplayName = userInGame?.displayName
                     }
                 }
+                .onChange(of: chat, perform: { newValue in
+                    if newValue.count > 30 {
+                        chat = String(newValue.prefix(chatMaxLength))
+                    }
+                })
                 .onAppear {
                     if let userId = viewModel.gameRoomData.value.whoseTurn {
                         self.userDisplayName = viewModel.gameRoomData.value.usersInGame[userId]?.displayName
@@ -185,7 +191,7 @@ struct GameRoomDetailBottomView: View {
     
     var chatTextField: some View {
         ZStack {
-            TextField("메세지를 입력해주세요.", text: $chat)
+            TextField("메세지를 입력해주세요.(30자 제한)", text: $chat)
                 .focused(focusField)
                 .font(.sea(15))
                 .frame(height: 38)

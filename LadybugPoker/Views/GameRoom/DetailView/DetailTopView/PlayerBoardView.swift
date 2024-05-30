@@ -111,11 +111,11 @@ struct PlayerBoardView: View {
                     .multilineTextAlignment(.leading)
                     .font(.sea(10))
                     .padding(.horizontal)
-                    .fixedSize(horizontal: true, vertical: true)
+                    .fixedSize(horizontal: false, vertical: true)
                     .frame(minWidth: 60)
                     .background(Color(hex: "EAD8C0"))
                     .clipShape(RoundedRectangle(cornerRadius: 5))
-                    .frame(maxWidth: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
             }
             
         }
