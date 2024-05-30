@@ -42,6 +42,7 @@ struct PlayerBoardView: View {
             playerBoard
             if userChatShow {
                 chatView()
+                    .padding(.trailing, isOdd ? 0 : 30)
             }
         }
         .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)
@@ -99,12 +100,13 @@ struct PlayerBoardView: View {
                 .frame(height: 37)
             HStack(spacing: 0) {
                 Spacer()
-                    .frame(width: isOdd ? 20 : boardWidth - 40)
+                    .frame(width: isOdd ? 20 : boardWidth - 90)
                 Image("triangle")
                     .resizable()
                     .frame(width: 12, height: 12)
                     .rotationEffect(.degrees(-180))
             }
+            
             .frame(maxWidth: .infinity, alignment: .topLeading)
             if let msg = self.userChat.msg {
                 Text(msg)
@@ -112,7 +114,7 @@ struct PlayerBoardView: View {
                     .font(.sea(10))
                     .padding(.horizontal)
                     .fixedSize(horizontal: false, vertical: true)
-                    .frame(minWidth: 60)
+                    .frame(minWidth: 60, alignment: .leading)
                     .background(Color(hex: "EAD8C0"))
                     .clipShape(RoundedRectangle(cornerRadius: 5))
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
@@ -122,7 +124,7 @@ struct PlayerBoardView: View {
         
         .padding(.leading, 5)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isOdd ? .topLeading : .topTrailing)
-        
+//        .padding(.trailing, isOdd ? 0 : 70)
     }
     
     /// 유저 프로필
