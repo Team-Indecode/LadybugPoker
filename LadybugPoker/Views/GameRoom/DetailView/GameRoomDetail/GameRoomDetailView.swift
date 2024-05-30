@@ -75,6 +75,12 @@ struct GameRoomDetailView: View {
             VStack(spacing: 0) {
                 GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame,  usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                     .frame(height: proxy.size.height * 0.6706)
+                    .overlay(content: {
+                        if viewModel.gameType == .selectCard && viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id {
+                            Rectangle()
+                                .fill(Color.black.opacity(0.5))
+                        }
+                    })
                     .environmentObject(viewModel)
                 GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, safeareaBottomSize: $safeareaBottomSize, focusField: $focusField)
                     .frame(height: proxy.size.height * 0.3294)

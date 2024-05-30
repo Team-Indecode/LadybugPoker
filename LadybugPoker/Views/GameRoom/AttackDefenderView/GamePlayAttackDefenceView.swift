@@ -186,6 +186,7 @@ struct GamePlayAttackDefenceView: View {
             if showAttackResult {
                 Text(viewModel.showAttackResult.1 ? "공격 성공" : "공격 실패")
                     .font(.sea(50))
+                    .foregroundStyle(Color.white)
             }
         }
     }
