@@ -108,9 +108,6 @@ extension GameRoomDetailBottomView {
                 }
                 .opacity(bottomGameType == .defender ? 0.7 : 1.0)
             }
-            .onChange(of: bottomViewModel.dots) { newValue in
-                print(#fileID, #function, #line, "- dots: \(newValue)")
-            }
         }
         
         func selectCardLogic(_ card: Card) {

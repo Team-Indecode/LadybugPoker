@@ -18,7 +18,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil))
 
     /// userIdx와 userId
-    @Published var usersId: [String] = Array(repeating: "", count: 6)
+    @Published var usersId: [String?] = Array(repeating: nil, count: 6)
     /// 남은 시간
     @Published var secondsLeft: Int = 60
     /// 모든 플레이어가 준비 되었는지
@@ -49,7 +49,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
 //                    if let data = try? doc.data(as: GameRoom.self) {
                         self.gameRoomData.send(data)
+                        if data.gameStatus != GameStatus.onAir.rawValue {
+                            
+                        }
                         self.getUsersId(data.usersInGame)
+                        self.getUsersChat(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
                         // 게임방의 status 체크
                         if data.gameStatus != self.gameStatus.rawValue {
@@ -162,6 +166,14 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func getUsersId(_ usersInGame: [String : UserInGame]) {
         usersInGame.forEach { (key: String, value: UserInGame) in
             usersId[value.idx] = key
+            
+            print(#fileID, #function, #line, "- usersId⭐️: \(usersId)")
+        }
+    }
+    
+    func getUsersChat(_ usersInGame: [String : UserInGame]) {
+        usersInGame.forEach { (key: String, value: UserInGame) in
+            
             usersChat[value.idx] = value.chat
             print(#fileID, #function, #line, "- usersId⭐️: \(usersId)")
         }
@@ -280,8 +292,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         var usersCardString: [String : String] = [:]
         
         for index in 0..<6 {
-            if usersId[index] != "" {
-                usersCardString[usersId[index]] = bugCardString.popLast()
+            if let index = usersId[index]{
+                usersCardString[index] = bugCardString.popLast()
             }
             
         }
@@ -455,8 +467,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         var newHostId: String = ""
         for index in hostIdx + 1..<usersId.count {
             print(#fileID, #function, #line, "- usersId: \(usersId[index])")
-            if usersId[index] != "" {
-                newHostId = usersId[index]
+            if let id = usersId[index] {
+                newHostId = id
                 break
             }
         }
@@ -464,8 +476,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         if newHostId == "" {
             for index in 0..<hostIdx {
                 print(#fileID, #function, #line, "- usersId: \(usersId[index])")
-                if usersId[index] != "" {
-                    newHostId = usersId[index]
+                if let id = usersId[index] {
+                    newHostId = id
                     break
                 }
             }
@@ -482,8 +494,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
         var whoseGettingArray: [(String, Int)] = []
         let attackers = self.gameRoomData.value.attackers
         for (idx, id) in self.usersId.enumerated() {
-            if id != "" && !attackers.contains(idx) {
-                whoseGettingArray.append((id, idx))
+            if id != nil && !attackers.contains(idx) {
+                if let id = id {
+                    whoseGettingArray.append((id, idx))
+                }
             }
         }
         print(#fileID, #function, #line, "- whoseGetting 후보 확인: \(whoseGettingArray)")

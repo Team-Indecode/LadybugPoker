@@ -73,7 +73,7 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(usersInGame: $viewModel.gameRoomData.value.usersInGame,  usersId: $viewModel.usersId, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
+                GameRoomDetailTopView(showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                     .frame(height: proxy.size.height * 0.6706)
                     .overlay(content: {
                         if viewModel.gameType == .selectCard && viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id {

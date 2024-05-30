@@ -89,16 +89,6 @@ struct PlayerBoardView: View {
                         .frame(height: boardHeight - 80)
                 }
             }
-//            if (viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished) && cards.count <= 4 {
-//                if cards.count == 0 {
-//                    Spacer()
-//                        .frame(height: boardHeight - 60)
-//                        .background(Color.blue)
-//                } else {
-//                    Spacer()
-//                        .frame(height: (boardHeight - 60) / 2)
-//                }
-//            }
         }
     }
     
@@ -198,6 +188,9 @@ struct PlayerBoardView: View {
                     CardView(card: Card(bug: bug, cardCnt: cardCnt), cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
                 }
             }
+        }
+        .onChange(of: bugsArray) { newValue in
+            print(#fileID, #function, #line, "- bugsArray: \(bugsArray)")
         }
     }
     
