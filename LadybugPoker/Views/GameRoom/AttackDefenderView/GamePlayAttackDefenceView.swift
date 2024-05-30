@@ -417,7 +417,7 @@ struct GamePlayAttackDefenceView: View {
                 .font(.sea(10))
                 .foregroundStyle(Color(hex: "494949"))
                 .frame(maxWidth: .infinity, alignment: .leading)
-            Text("남은 시간: \(viewModel.secondsLeft)")
+            Text("남은 시간: \(viewModel.secondsLeft > 0 ? viewModel.secondsLeft : 0)")
                 .font(.sea(15))
                 .foregroundStyle(Color(hex: "393939"))
         }

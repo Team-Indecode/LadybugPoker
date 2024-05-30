@@ -48,6 +48,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 if let doc = doc, doc.exists {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
 //                    if let data = try? doc.data(as: GameRoom.self) {
+                        var beforeTurnStartTime = self.gameRoomData.value.turnStartTime
                         self.gameRoomData.send(data)
                         if data.gameStatus != GameStatus.onAir.rawValue {
                             
@@ -62,7 +63,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         
                         if data.gameStatus == GameStatus.onAir.rawValue {
                             // 게임방의 현재 게임 진행 상황 체크(ex. 카드선택, 공격대상 선택, questionCard선택 등)
-                            self.gameTypeChecking(data)
+                            self.gameTypeChecking(data, beforeTurnStartTime)
                             // 공격자인지, 수비자인지, 그 외인지 체크
                             self.userTypeChecking(data)
                         } else if data.gameStatus == GameStatus.finished.rawValue {
@@ -110,20 +111,20 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// 현재 게임방의 게임 진행상황(카드선택인지, 공격대상 선택인지, 물음표 카드 선택인지, 맞틀 선택인지 등)
     /// - Parameter data: GameRoom
-    func gameTypeChecking(_ data: GameRoom) {
+    func gameTypeChecking(_ data: GameRoom, _ beforeTurnStartTime: String?) {
         if data.whoseTurn != nil {
             if data.selectedCard == nil {
                 self.gameType = .selectCard
-                self.gameTimer(data.turnTime)
+//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting == nil {
                 self.gameType = .selectUser
-                self.gameTimer(data.turnTime)
+//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard == nil {
                 self.gameType = .attacker
-                self.gameTimer(data.turnTime)
+//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard != nil && data.decision == nil {
                 self.gameType = .defender
-                self.gameTimer(data.turnTime)
+//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
                 guard let decision = data.decision else { return }
                 guard let attackResult = self.defenderSuccessCheck(decision) else { return }
@@ -135,7 +136,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
                     return
                 }
             }
+
+            if data.turnStartTime != beforeTurnStartTime {
+    //            self.gameTimer(data.turnTime)
+                self.gameTimer(10)
+            }
         }
+        
     }
 
     /// 공격자인지, 수비자인지, 그 외인지 판단
@@ -166,16 +173,12 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func getUsersId(_ usersInGame: [String : UserInGame]) {
         usersInGame.forEach { (key: String, value: UserInGame) in
             usersId[value.idx] = key
-            
-            print(#fileID, #function, #line, "- usersId⭐️: \(usersId)")
         }
     }
     
     func getUsersChat(_ usersInGame: [String : UserInGame]) {
         usersInGame.forEach { (key: String, value: UserInGame) in
-            
             usersChat[value.idx] = value.chat
-            print(#fileID, #function, #line, "- usersId⭐️: \(usersId)")
         }
     }
     
@@ -550,8 +553,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
         }
         
-        print(#fileID, #function, #line, "- updateCard checking⭐️ cardString: \(cardString)")
-        print(#fileID, #function, #line, "- updateCard checking⭐️ cardArray: \(updateCardArr)")
         let userInGame = gameRoomData.value.usersInGame[userId]
 
         guard var userInGame = userInGame else { return }
@@ -720,6 +721,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             updateDataDic["whoseTurn"] = nextTurn
             updateDataDic["whoseGetting"] = nil as String?
             updateDataDic["questionCard"] = nil as String?
+            updateDataDic["turnStartTime"] = Date().toString
+        } else if updateDataType == .questionCard || updateDataType == .selectedCard {
             updateDataDic["turnStartTime"] = Date().toString
         }
         

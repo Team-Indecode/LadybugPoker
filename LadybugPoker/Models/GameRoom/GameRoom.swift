@@ -175,13 +175,12 @@ enum GameUpdateType {
 }
 
 enum GameRoomUpdateType: String {
-    case attackers
     case questionCard
     case selectedCard
-    case turnStartTime
     case whoseGetting
     case whoseTurn
     case gameStatus
+    /// 한번의 공격 종료(수비자가 decision결정)
     case gameAttackFinish
     case cardSkip
     case newGameId
