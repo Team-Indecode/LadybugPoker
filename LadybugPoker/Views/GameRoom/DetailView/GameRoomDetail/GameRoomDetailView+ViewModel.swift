@@ -126,6 +126,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.gameType = .defender
 //                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
+                self.gameType = .gameAttackFinish
                 guard let decision = data.decision else { return }
                 guard let attackResult = self.defenderSuccessCheck(decision) else { return }
                 if decision == "yes" {
@@ -143,7 +144,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.gameTimer(10)
             }
         }
-        
+        print(#fileID, #function, #line, "- gameType: \(self.gameType)")
     }
 
     /// 공격자인지, 수비자인지, 그 외인지 판단
@@ -323,8 +324,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     func defenderSuccessCheck(_ text: String) -> Bool? {
         let same = self.gameRoomData.value.selectedCard == self.gameRoomData.value.questionCard
-        print(#fileID, #function, #line, "- showAttackResult same: \(same)")
-        print(#fileID, #function, #line, "- showAttackResult text: \(text)")
+        
         if same {
             if text == "맞습니다." || text == "yes" {
                 //수비성공 -> 공격자에 boardCard에 추가, whoseTurn -> 계속 공격자(즉, whoseTurn유지)
@@ -427,7 +427,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         self.secondsLeft -= 1
         
         if self.secondsLeft == 0 {
-//            timeOverAutoSelect()
+            timeOverAutoSelect()
         }
     }
     
@@ -459,6 +459,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 // 맞습니다, 아닙니다 선택
                 let yesOrNo = Bool.random()
                 self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
+            } else if self.gameType == .gameAttackFinish {
+                if let attackResult = self.defenderSuccessCheck(self.gameRoomData.value.decision ?? "") {
+                    self.cardIsSame(attackResult)
+                }
+                
             }
         }
     }
