@@ -375,10 +375,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
         // 공격성공, 수비실패 -> 수비자의 boardCard에 추가 / whoseTurn -> whoseGetting으로 변경
         if isDefenderLose {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
+                let boardCards = self.stringToCards(userInGame.boardCard ?? "")
+                self.userCardChange(bugs, boardCards, false, userInGame.id)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
-                    let boardCards = self.stringToCards(userInGame.boardCard ?? "")
                     attackers.append(userInGame.idx)
-                    self.userCardChange(bugs, boardCards, false, userInGame.id)
                     self.gameroomDataUpdate(.gameAttackFinish, userInGame.id, attackers)
                 })
             }
@@ -386,10 +386,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
         // 공격실패, 수비성공 -> 공격자의 boardCard에 추가 / whoseTurn -> 계속 공격지
         else {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
+                let boardCards = self.stringToCards(userInGame.boardCard ?? "")
+                self.userCardChange(bugs, boardCards, false, userInGame.id)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
-                    let boardCards = self.stringToCards(userInGame.boardCard ?? "")
                     attackers.append(userInGame.idx)
-                    self.userCardChange(bugs, boardCards, false, userInGame.id)
                     self.gameroomDataUpdate(.gameAttackFinish, userInGame.id, attackers)
                 })
             }
@@ -464,7 +464,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             } else if self.gameType == .defender {
                 // 맞습니다, 아닙니다 선택
                 let yesOrNo = Bool.random()
-                self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue, true)
+                self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
             } 
 //            else if self.gameType == .gameAttackFinish {
 //                // 자동으로 한 턴의 결과를 db에 업데이트 해줘야 한다
@@ -773,7 +773,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// 수비자의 선택 업데이트
     /// - Parameter decision: 수비자가 선택한 text
-    func decisionUpdate(_ decision: String, _ isAuto: Bool = false) {
+    func decisionUpdate(_ decision: String) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         var decisionFb: String?
         if decision == DefenderAnswer.same.rawValue {
@@ -785,9 +785,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         var updateDic: [String : String] = [:]
         updateDic["decision"] = decisionFb
-        if !isAuto {
-            updateDic["turnStartTime"] = Date().toString
-        }
         
         gameRoomDataRef.updateData(updateDic) { error in
             if let error = error {
