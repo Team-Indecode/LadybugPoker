@@ -59,7 +59,7 @@ extension GameRoomDetailBottomView {
                     }
                 } else {
                     if let userDisplayName = userDisplayName {
-                        ZStack {
+                        VStack(spacing: 0) {
                             HStack(spacing: 0) {
                                 Text(userDisplayName + " 턴 입니다")
                                     .font(.sea(15))
@@ -80,7 +80,6 @@ extension GameRoomDetailBottomView {
                         
                 }
                 VStack(spacing: 0) {
-                    Spacer()
                     ScrollView(.horizontal) {
                         HStack {
                             ForEach(myCards) { card in
@@ -103,7 +102,7 @@ extension GameRoomDetailBottomView {
                                 .padding(.leading, card == myCards.first ? 20 : 0)
                             }
                         }
-                        .padding(.bottom, 15)
+                        .padding([.bottom, .top], 6)
                     }
                 }
                 .opacity(bottomGameType == .defender ? 0.7 : 1.0)
