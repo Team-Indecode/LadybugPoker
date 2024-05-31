@@ -154,7 +154,7 @@ struct GameRoomDetailBottomView: View {
                 
 //                ladyBugLogoText
             }
-//            Spacer()
+            
             Button {
                 if viewModel.isMusicPlaying {
                     viewModel.stopMusic()
@@ -168,6 +168,7 @@ struct GameRoomDetailBottomView: View {
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.trailing)
             .padding(.bottom, 3)
+            Spacer()
             withAnimation {
                 chatTextField
 //                chatTF

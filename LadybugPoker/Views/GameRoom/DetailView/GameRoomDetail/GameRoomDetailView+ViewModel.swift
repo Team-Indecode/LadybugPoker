@@ -124,6 +124,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 self.gameType = .defender
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
                 self.gameType = .gameAttackFinish
+                // 여기는 맞습니다, 틀립니다 선택을 제외하고(decision을 업데이트 하고 나타나는 일 -> ex. 카드회전)
                 guard let decision = data.decision else { return }
                 guard let attackResult = self.defenderSuccessCheck(decision) else { return }
                 if decision == "yes" {
@@ -353,6 +354,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    /// 실제로 지금 유저가 맞습니다, 아닙니다 선택을 할경우 -> 공격결과를 알려줘야 함(즉, 한 턴의 결과를 db에 업데이트)
+    /// - Parameter isDefenderLose: 수비자가 졌는지(true -> 공격성공, false -> 공격실패)
     func cardIsSame(_ isDefenderLose: Bool) {
         var bugs: Bugs = .bee
         var attackers: [Int] = []
@@ -463,6 +466,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 let yesOrNo = Bool.random()
                 self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue, true)
             } else if self.gameType == .gameAttackFinish {
+                // 자동으로 한 턴의 결과를 db에 업데이트 해줘야 한다
                 if let attackResult = self.defenderSuccessCheck(self.gameRoomData.value.decision ?? "") {
                     self.cardIsSame(attackResult)
                 }
@@ -763,7 +767,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             if let error = error {
                 print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
             }
-            print(#fileID, #function, #line, "- update success update")
+            
         }
     }
     
@@ -789,8 +793,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             if let error = error {
                 print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
             }
-            print(#fileID, #function, #line, "- update success update")
             if decision == DefenderAnswer.same.rawValue || decision == DefenderAnswer.different.rawValue {
+                // 지금 유저가 맞습니다, 아닙니다를 선택해야 할때
                 if let attackResult = self.defenderSuccessCheck(decision) {
                     self.cardIsSame(attackResult)
                 }
@@ -895,6 +899,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    //MARK: - 음악관련
     func addTrack(_ musicName: String, _ musicType: String = "mp3") -> AVPlayerItem? {
         guard let url = Bundle.main.url(forResource: musicName, withExtension: musicType) else { return nil }
         let musicItem = AVPlayerItem(url: url)

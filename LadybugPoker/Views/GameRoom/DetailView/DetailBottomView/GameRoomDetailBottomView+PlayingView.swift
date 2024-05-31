@@ -70,6 +70,7 @@ extension GameRoomDetailBottomView {
                                 }
                             }
                             Text("남은 시간: \(self.viewModel.secondsLeft > 0 ? self.viewModel.secondsLeft : 0)초")
+                                .foregroundStyle(viewModel.showAttackerAndDefenderView ? Color.bugLight : Color.black)
                                 .font(.sea(15))
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                                 .padding(.trailing, 5)
@@ -80,6 +81,7 @@ extension GameRoomDetailBottomView {
                         
                 }
                 VStack(spacing: 0) {
+                    Spacer()
                     ScrollView(.horizontal) {
                         HStack {
                             ForEach(myCards) { card in
