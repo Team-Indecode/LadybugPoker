@@ -434,7 +434,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         self.secondsLeft -= 1
         
         if self.secondsLeft == 0 {
-//            timeOverAutoSelect()
+            timeOverAutoSelect()
         }
     }
     
@@ -465,13 +465,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 // 맞습니다, 아닙니다 선택
                 let yesOrNo = Bool.random()
                 self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue, true)
-            } else if self.gameType == .gameAttackFinish {
-                // 자동으로 한 턴의 결과를 db에 업데이트 해줘야 한다
-                if let attackResult = self.defenderSuccessCheck(self.gameRoomData.value.decision ?? "") {
-                    self.cardIsSame(attackResult)
-                }
-                
-            }
+            } 
+//            else if self.gameType == .gameAttackFinish {
+//                // 자동으로 한 턴의 결과를 db에 업데이트 해줘야 한다
+//                if let attackResult = self.defenderSuccessCheck(self.gameRoomData.value.decision ?? "") {
+//                    self.cardIsSame(attackResult)
+//                }
+//            }
         }
     }
     
