@@ -813,7 +813,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 // USERS db에서도 currentGameId삭제
                 
             }
-            print(#fileID, #function, #line, "- delete UserSuccess⭐️: \(userId)")
             self.updateUserCurrentGameId(nil, userId)
         }
     }
@@ -825,7 +824,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
             if let error = error {
                 print(#fileID, #function, #line, "- delete해당 게임방 에러: \(error)")
             }
-            print(#fileID, #function, #line, "- 게임 룸 삭제 success")
             self.updateUserCurrentGameId(nil)
         }
     }
@@ -881,7 +879,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         
         // userRef에 새로운 게임 아이디 업데이트
-        print(#fileID, #function, #line, "- ChangeUserId: \(changeUserId)")
         guard let userId = changeUserId == nil ? Service.shared.myUserModel.id : changeUserId else { return }
         
         let userRef = db.collection(User.path).document(userId)
@@ -910,7 +907,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
 //        let musicList: [String] = gameStatus == .notStarted ? ["sample1", "sample4"] : ["sample2", "sample3"]
         let musicList: [String] = gameStatus == .notStarted ? ["CHONKLAP", "Just_Try_Me(Instrumental)"] : ["Funky_NET", "Sunnydance(spedup)", "Modern_Disco", "New_Car", "So_Fresh"]
         let musicItems = musicList.compactMap { musicName in
-            return addTrack(musicName, "wav")
+            return addTrack(musicName)
         }
         
         // 플레이어 큐에 아이템 추가
