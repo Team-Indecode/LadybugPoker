@@ -50,6 +50,9 @@ struct MainView: View {
                 LazyVStack {
                     ForEach(gameRooms) { gameRoom in
                         Button {
+                            if let password = gameRoom.password, password.isEmpty == false {
+                                
+                            }
                             Task {
                                 do {
                                     try await GameRoom.join(id: gameRoom.id)

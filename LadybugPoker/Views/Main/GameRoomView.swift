@@ -43,6 +43,7 @@ struct GameRoomView: View {
             RoundedRectangle(cornerRadius: 15)
                 .stroke(Color.bugDark)
         }
+        .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 4)
         .padding(.horizontal, 20)
         .foregroundStyle(Color.black)
         
