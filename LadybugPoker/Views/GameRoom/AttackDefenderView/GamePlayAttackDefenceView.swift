@@ -231,7 +231,6 @@ struct GamePlayAttackDefenceView: View {
         } else {
             // 공격 결과
             if let selectBug = selectBug {
-                
                 CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
                     .rotationEffect(startRotation ? Angle(degrees: 360) : Angle(degrees: 0))
                     .padding(.vertical, 30)
@@ -248,6 +247,7 @@ struct GamePlayAttackDefenceView: View {
                 if let selectBug = selectBug {
                     CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
                         .rotationEffect(startRotation ? Angle(degrees: 360) : Angle(degrees: 0))
+                        .padding(.vertical, 30)
                 }
             } else {
                 thisCard

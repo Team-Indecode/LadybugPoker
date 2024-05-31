@@ -423,7 +423,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         self.secondsLeft -= 1
         
         if self.secondsLeft == 0 {
-            timeOverAutoSelect()
+//            timeOverAutoSelect()
         }
     }
     

@@ -12,7 +12,7 @@ extension Date {
     /// 2024-04-26 15:22:32 포멧으로 반환합니다.
     var toString: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         
         return formatter.string(from: self)
     }
