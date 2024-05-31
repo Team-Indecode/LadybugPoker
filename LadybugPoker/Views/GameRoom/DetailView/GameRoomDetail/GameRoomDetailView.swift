@@ -22,7 +22,6 @@ struct GameRoomDetailView: View {
     @State private var showExistThisRoom: Bool = false
     @State var gameRoomId: String
     @State var chat: String = ""
-    @State var safeareaBottomSize: CGFloat = 0
     @FocusState var focusField: Bool
     
     var body: some View {
@@ -93,14 +92,13 @@ struct GameRoomDetailView: View {
                         }
                     })
                     .environmentObject(viewModel)
-                GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, safeareaBottomSize: $safeareaBottomSize, focusField: $focusField)
+                GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, focusField: $focusField)
                     .frame(height: proxy.size.height * 0.3294)
                     .environmentObject(viewModel)
                     .environmentObject(keyboardHeightHelper)
             }
             
             .onAppear(perform: {
-                safeareaBottomSize = proxy.safeAreaInsets.bottom
                 viewModel.preparePlayMusic()
                 viewModel.playMusic()
             })

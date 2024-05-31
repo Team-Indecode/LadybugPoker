@@ -13,7 +13,7 @@ extension String {
     /// 잘못된 포멧일 경우 Date.now를 반환합니다.
     var toDate: Date {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         
         return formatter.date(from: self) ?? .now
     }

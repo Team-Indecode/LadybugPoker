@@ -59,7 +59,7 @@ extension GameRoomDetailBottomView {
                     }
                 } else {
                     if let userDisplayName = userDisplayName {
-                        ZStack {
+                        VStack(spacing: 0) {
                             HStack(spacing: 0) {
                                 Text(userDisplayName + " 턴 입니다")
                                     .font(.sea(15))
@@ -70,6 +70,7 @@ extension GameRoomDetailBottomView {
                                 }
                             }
                             Text("남은 시간: \(self.viewModel.secondsLeft > 0 ? self.viewModel.secondsLeft : 0)초")
+                                .foregroundStyle(viewModel.showAttackerAndDefenderView ? Color.bugLight : Color.black)
                                 .font(.sea(15))
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                                 .padding(.trailing, 5)
@@ -103,7 +104,7 @@ extension GameRoomDetailBottomView {
                                 .padding(.leading, card == myCards.first ? 20 : 0)
                             }
                         }
-                        .padding(.bottom, 15)
+                        .padding([.bottom, .top], 6)
                     }
                 }
                 .opacity(bottomGameType == .defender ? 0.7 : 1.0)

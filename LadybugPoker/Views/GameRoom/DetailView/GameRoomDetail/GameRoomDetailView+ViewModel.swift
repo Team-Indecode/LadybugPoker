@@ -48,7 +48,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 if let doc = doc, doc.exists {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
 //                    if let data = try? doc.data(as: GameRoom.self) {
-                        var beforeTurnStartTime = self.gameRoomData.value.turnStartTime
+                        let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
                         self.gameRoomData.send(data)
                         if data.gameStatus != GameStatus.onAir.rawValue {
                             
@@ -113,20 +113,18 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// - Parameter data: GameRoom
     func gameTypeChecking(_ data: GameRoom, _ beforeTurnStartTime: String?) {
         if data.whoseTurn != nil {
+            
             if data.selectedCard == nil {
                 self.gameType = .selectCard
-//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting == nil {
                 self.gameType = .selectUser
-//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard == nil {
                 self.gameType = .attacker
-//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard != nil && data.decision == nil {
                 self.gameType = .defender
-//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
                 self.gameType = .gameAttackFinish
+                // 여기는 맞습니다, 틀립니다 선택을 제외하고(decision을 업데이트 하고 나타나는 일 -> ex. 카드회전)
                 guard let decision = data.decision else { return }
                 guard let attackResult = self.defenderSuccessCheck(decision) else { return }
                 if decision == "yes" {
@@ -138,21 +136,29 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 }
             }
 
-            #warning("여기다가 이제 이전 시간과 지금 시간이 30초 이상 다르면 ")
+            
             if data.turnStartTime != beforeTurnStartTime {
-    //            self.gameTimer(data.turnTime)
+                guard let beforeTurnStartTime = beforeTurnStartTime?.toDate,
+                      let nowTurnStartTime = data.turnStartTime?.toDate else { return }
+                let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
+                
                 self.gameTimer(10)
+//                if timeDifference > 15 {
+//                    print(#fileID, #function, #line, "- 게임룸 삭제 lets get it")
+//                    self.deleteGameRoom()
+//                } else {
+//                    self.gameTimer(data.turnTime)
+//                    self.gameTimer(10)
+//                }
+    
             }
         }
-        print(#fileID, #function, #line, "- gameType: \(self.gameType)")
     }
 
     /// 공격자인지, 수비자인지, 그 외인지 판단
     /// - Parameter data: GameRoom
     func userTypeChecking(_ data: GameRoom) {
-        print(#fileID, #function, #line, "- showAttackerAndDefender: \(data)")
         if data.whoseTurn != nil && data.whoseGetting != nil {
-            
             if data.whoseTurn == Service.shared.myUserModel.id {
                 self.userType = .attacker
             } else if data.whoseGetting == Service.shared.myUserModel.id {
@@ -162,7 +168,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
             
             self.showAttackerAndDefenderView = true
-            print(#fileID, #function, #line, "- self.showAttackerAndDefender:\(showAttackerAndDefenderView)")
         } else {
             self.showAttackResult = (false, true)
             self.showAttackerAndDefenderView = false
@@ -266,8 +271,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         // Bugs배열을 카드String으로 만들어줌
         usersCardString = bugsTocardString(usersCard)
         
-        print(#fileID, #function, #line, "- usersCard: \(usersCard)")
-        print(#fileID, #function, #line, "- usersCardString⭐️: \(usersCardString)")
+//        print(#fileID, #function, #line, "- usersCard: \(usersCard)")
+//        print(#fileID, #function, #line, "- usersCardString⭐️: \(usersCardString)")
         usersHandCardSetting(usersCardString)
     }
     
@@ -349,6 +354,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    /// 실제로 지금 유저가 맞습니다, 아닙니다 선택을 할경우 -> 공격결과를 알려줘야 함(즉, 한 턴의 결과를 db에 업데이트)
+    /// - Parameter isDefenderLose: 수비자가 졌는지(true -> 공격성공, false -> 공격실패)
     func cardIsSame(_ isDefenderLose: Bool) {
         var bugs: Bugs = .bee
         var attackers: [Int] = []
@@ -368,10 +375,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
         // 공격성공, 수비실패 -> 수비자의 boardCard에 추가 / whoseTurn -> whoseGetting으로 변경
         if isDefenderLose {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
+                let boardCards = self.stringToCards(userInGame.boardCard ?? "")
+                self.userCardChange(bugs, boardCards, false, userInGame.id)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
-                    let boardCards = self.stringToCards(userInGame.boardCard ?? "")
                     attackers.append(userInGame.idx)
-                    self.userCardChange(bugs, boardCards, false, userInGame.id)
                     self.gameroomDataUpdate(.gameAttackFinish, userInGame.id, attackers)
                 })
             }
@@ -379,10 +386,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
         // 공격실패, 수비성공 -> 공격자의 boardCard에 추가 / whoseTurn -> 계속 공격지
         else {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
+                let boardCards = self.stringToCards(userInGame.boardCard ?? "")
+                self.userCardChange(bugs, boardCards, false, userInGame.id)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
-                    let boardCards = self.stringToCards(userInGame.boardCard ?? "")
                     attackers.append(userInGame.idx)
-                    self.userCardChange(bugs, boardCards, false, userInGame.id)
                     self.gameroomDataUpdate(.gameAttackFinish, userInGame.id, attackers)
                 })
             }
@@ -427,12 +434,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
         self.secondsLeft -= 1
         
         if self.secondsLeft == 0 {
-//            timeOverAutoSelect()
+            timeOverAutoSelect()
         }
     }
     
     func timeOverAutoSelect() {
-        print(#fileID, #function, #line, "- gameType: \(gameType)")
         // 방장 퇴장
         if self.gameStatus == .notStarted && self.allPlayerReadied && self.gameRoomData.value.usersInGame.count > 2 {
             changeHost()
@@ -459,12 +465,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 // 맞습니다, 아닙니다 선택
                 let yesOrNo = Bool.random()
                 self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
-            } else if self.gameType == .gameAttackFinish {
-                if let attackResult = self.defenderSuccessCheck(self.gameRoomData.value.decision ?? "") {
-                    self.cardIsSame(attackResult)
-                }
-                
-            }
+            } 
+//            else if self.gameType == .gameAttackFinish {
+//                // 자동으로 한 턴의 결과를 db에 업데이트 해줘야 한다
+//                if let attackResult = self.defenderSuccessCheck(self.gameRoomData.value.decision ?? "") {
+//                    self.cardIsSame(attackResult)
+//                }
+//            }
         }
     }
     
@@ -475,7 +482,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
         guard let hostIdx = usersId.firstIndex(of: self.gameRoomData.value.hostId) else { return }
         var newHostId: String = ""
         for index in hostIdx + 1..<usersId.count {
-            print(#fileID, #function, #line, "- usersId: \(usersId[index])")
             if let id = usersId[index] {
                 newHostId = id
                 break
@@ -484,14 +490,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         if newHostId == "" {
             for index in 0..<hostIdx {
-                print(#fileID, #function, #line, "- usersId: \(usersId[index])")
                 if let id = usersId[index] {
                     newHostId = id
                     break
                 }
             }
         }
-        print(#fileID, #function, #line, "- self.usersId newHostId: \(newHostId)")
+        
         self.deleteUserInGameRoom(self.gameRoomData.value.hostId)
         self.gameroomDataUpdate(.hostId, newHostId)
         if Service.shared.myUserModel.id == newHostId {
@@ -762,7 +767,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             if let error = error {
                 print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
             }
-            print(#fileID, #function, #line, "- update success update")
+            
         }
     }
     
@@ -778,13 +783,15 @@ class GameRoomDetailViewViewModel: ObservableObject {
         } else if decision == DefenderAnswer.cardSkip.rawValue {
             decisionFb = "pass"
         }
+        var updateDic: [String : String] = [:]
+        updateDic["decision"] = decisionFb
         
-        gameRoomDataRef.updateData(["decision" : decisionFb]) { error in
+        gameRoomDataRef.updateData(updateDic) { error in
             if let error = error {
                 print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
             }
-            print(#fileID, #function, #line, "- update success update")
             if decision == DefenderAnswer.same.rawValue || decision == DefenderAnswer.different.rawValue {
+                // 지금 유저가 맞습니다, 아닙니다를 선택해야 할때
                 if let attackResult = self.defenderSuccessCheck(decision) {
                     self.cardIsSame(attackResult)
                 }
@@ -807,7 +814,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 // USERS db에서도 currentGameId삭제
                 
             }
-            print(#fileID, #function, #line, "- delete UserSuccess⭐️: \(userId)")
             self.updateUserCurrentGameId(nil, userId)
         }
     }
@@ -819,7 +825,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
             if let error = error {
                 print(#fileID, #function, #line, "- delete해당 게임방 에러: \(error)")
             }
-            print(#fileID, #function, #line, "- 게임 룸 삭제 success")
             self.updateUserCurrentGameId(nil)
         }
     }
@@ -875,7 +880,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         
         // userRef에 새로운 게임 아이디 업데이트
-        print(#fileID, #function, #line, "- ChangeUserId: \(changeUserId)")
         guard let userId = changeUserId == nil ? Service.shared.myUserModel.id : changeUserId else { return }
         
         let userRef = db.collection(User.path).document(userId)
@@ -892,6 +896,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
     }
     
+    //MARK: - 음악관련
     func addTrack(_ musicName: String, _ musicType: String = "mp3") -> AVPlayerItem? {
         guard let url = Bundle.main.url(forResource: musicName, withExtension: musicType) else { return nil }
         let musicItem = AVPlayerItem(url: url)
@@ -901,9 +906,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func preparePlayMusic() {
         musicPlayer.removeAllItems()
 //        let musicList: [String] = ["Funky_NET", "Love_It", "Hopscotch", "CHONKLAP", "DABOOMJIGGLE"]
-        let musicList: [String] = gameStatus == .notStarted ? ["sample1", "sample4"] : ["sample2", "sample3"]
+//        let musicList: [String] = gameStatus == .notStarted ? ["sample1", "sample4"] : ["sample2", "sample3"]
+        let musicList: [String] = gameStatus == .notStarted ? ["CHONKLAP", "Just_Try_Me(Instrumental)"] : ["Funky_NET", "Sunnydance(spedup)", "Modern_Disco", "New_Car", "So_Fresh"]
         let musicItems = musicList.compactMap { musicName in
-            return addTrack(musicName, "wav")
+            return addTrack(musicName)
         }
         
         // 플레이어 큐에 아이템 추가
@@ -926,7 +932,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     @objc private func musicPlayerDidReachEnd(notication: Notification) {
         currentMusicIndex += 1
-        if currentMusicIndex >= 2 {
+        if currentMusicIndex >= (gameStatus == .notStarted ? 2 : 4) {
             currentMusicIndex = 0
             preparePlayMusic()
             playMusic()

@@ -36,7 +36,6 @@ struct GameRoomDetailBottomView: View {
     /// 카드 선택 시 확인 팝업
     @Binding var showCardSelectedPopup: Bool
     @Binding var gameType: GameType?
-    @Binding var safeareaBottomSize: CGFloat
     @State private var chatTextFieldOffset: CGFloat = 0
     var focusField: FocusState<Bool>.Binding
     
@@ -81,10 +80,10 @@ struct GameRoomDetailBottomView: View {
                         if viewModel.allPlayerReadied {
                             Text(allPlayerReadied)
                                 .font(.sea(15))
-                                .padding(.bottom, 20)
+                                .padding(.bottom, 15)
                             Text("시작하지 않으면 \(self.viewModel.secondsLeft > 0 ? self.viewModel.secondsLeft : 0)초 뒤에 강퇴됩니다.")
                                 .font(.sea(15))
-                                .padding(.bottom, 20)
+                                .padding(.bottom, 15)
                         } else {
                             Text(beforeGameText)
                                 .font(.sea(15))
@@ -151,11 +150,11 @@ struct GameRoomDetailBottomView: View {
                 }
                 .foregroundStyle(.black)
                 .font(.sea(15))
-                .padding(.top, 20)
+                .padding(.top, 10)
                 
 //                ladyBugLogoText
             }
-//            Spacer()
+            
             Button {
                 if viewModel.isMusicPlaying {
                     viewModel.stopMusic()
@@ -167,7 +166,9 @@ struct GameRoomDetailBottomView: View {
                 Image(viewModel.isMusicPlaying ? "musicOn" : "musicOff")
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding([.trailing, .bottom])
+            .padding(.trailing)
+            .padding(.bottom, 3)
+            Spacer()
             withAnimation {
                 chatTextField
 //                chatTF
@@ -182,7 +183,7 @@ struct GameRoomDetailBottomView: View {
 //            withAnimation {
 //                self.chatTextFieldOffset = keyboardHeight - safeareaBottomSize
 //            }
-            self.chatTextFieldOffset = keyboardHeight - safeareaBottomSize
+            self.chatTextFieldOffset = keyboardHeight
         })
         .ignoresSafeArea(.keyboard)
         .frame(maxHeight: .infinity)
