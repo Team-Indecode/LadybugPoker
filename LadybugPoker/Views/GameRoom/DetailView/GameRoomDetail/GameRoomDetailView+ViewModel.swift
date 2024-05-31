@@ -48,7 +48,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 if let doc = doc, doc.exists {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
 //                    if let data = try? doc.data(as: GameRoom.self) {
-                        var beforeTurnStartTime = self.gameRoomData.value.turnStartTime
+                        let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
                         self.gameRoomData.send(data)
                         if data.gameStatus != GameStatus.onAir.rawValue {
                             
@@ -113,6 +113,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// - Parameter data: GameRoom
     func gameTypeChecking(_ data: GameRoom, _ beforeTurnStartTime: String?) {
         if data.whoseTurn != nil {
+            
             if data.selectedCard == nil {
                 self.gameType = .selectCard
             } else if data.selectedCard != nil && data.whoseGetting == nil {
@@ -134,21 +135,29 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 }
             }
 
-            #warning("여기다가 이제 이전 시간과 지금 시간이 30초 이상 다르면 ")
+            
             if data.turnStartTime != beforeTurnStartTime {
-    //            self.gameTimer(data.turnTime)
+                guard let beforeTurnStartTime = beforeTurnStartTime?.toDate,
+                      let nowTurnStartTime = data.turnStartTime?.toDate else { return }
+                let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
+                
                 self.gameTimer(10)
+//                if timeDifference > 15 {
+//                    print(#fileID, #function, #line, "- 게임룸 삭제 lets get it")
+//                    self.deleteGameRoom()
+//                } else {
+//                    self.gameTimer(data.turnTime)
+//                    self.gameTimer(10)
+//                }
+    
             }
         }
-        print(#fileID, #function, #line, "- gameType: \(self.gameType)")
     }
 
     /// 공격자인지, 수비자인지, 그 외인지 판단
     /// - Parameter data: GameRoom
     func userTypeChecking(_ data: GameRoom) {
-        print(#fileID, #function, #line, "- showAttackerAndDefender: \(data)")
         if data.whoseTurn != nil && data.whoseGetting != nil {
-            
             if data.whoseTurn == Service.shared.myUserModel.id {
                 self.userType = .attacker
             } else if data.whoseGetting == Service.shared.myUserModel.id {
@@ -158,7 +167,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
             }
             
             self.showAttackerAndDefenderView = true
-            print(#fileID, #function, #line, "- self.showAttackerAndDefender:\(showAttackerAndDefenderView)")
         } else {
             self.showAttackResult = (false, true)
             self.showAttackerAndDefenderView = false
@@ -428,7 +436,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
     }
     
     func timeOverAutoSelect() {
-        print(#fileID, #function, #line, "- gameType: \(gameType)")
         // 방장 퇴장
         if self.gameStatus == .notStarted && self.allPlayerReadied && self.gameRoomData.value.usersInGame.count > 2 {
             changeHost()
@@ -471,7 +478,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
         guard let hostIdx = usersId.firstIndex(of: self.gameRoomData.value.hostId) else { return }
         var newHostId: String = ""
         for index in hostIdx + 1..<usersId.count {
-            print(#fileID, #function, #line, "- usersId: \(usersId[index])")
             if let id = usersId[index] {
                 newHostId = id
                 break
@@ -480,14 +486,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         if newHostId == "" {
             for index in 0..<hostIdx {
-                print(#fileID, #function, #line, "- usersId: \(usersId[index])")
                 if let id = usersId[index] {
                     newHostId = id
                     break
                 }
             }
         }
-        print(#fileID, #function, #line, "- self.usersId newHostId: \(newHostId)")
+        
         self.deleteUserInGameRoom(self.gameRoomData.value.hostId)
         self.gameroomDataUpdate(.hostId, newHostId)
         if Service.shared.myUserModel.id == newHostId {
@@ -902,7 +907,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
     func preparePlayMusic() {
         musicPlayer.removeAllItems()
 //        let musicList: [String] = ["Funky_NET", "Love_It", "Hopscotch", "CHONKLAP", "DABOOMJIGGLE"]
-        let musicList: [String] = gameStatus == .notStarted ? ["sample1", "sample4"] : ["sample2", "sample3"]
+//        let musicList: [String] = gameStatus == .notStarted ? ["sample1", "sample4"] : ["sample2", "sample3"]
+        let musicList: [String] = gameStatus == .notStarted ? ["CHONKLAP", "Just_Try_Me(Instrumental)"] : ["Funky_NET", "Sunnydance(spedup)", "Modern_Disco", "New_Car", "So_Fresh"]
         let musicItems = musicList.compactMap { musicName in
             return addTrack(musicName, "wav")
         }
@@ -927,7 +933,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     @objc private func musicPlayerDidReachEnd(notication: Notification) {
         currentMusicIndex += 1
-        if currentMusicIndex >= 2 {
+        if currentMusicIndex >= (gameStatus == .notStarted ? 2 : 4) {
             currentMusicIndex = 0
             preparePlayMusic()
             playMusic()

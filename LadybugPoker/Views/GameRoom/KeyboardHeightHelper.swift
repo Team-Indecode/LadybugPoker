@@ -13,7 +13,7 @@ class KeyboardHeightHelper: ObservableObject {
     
     private func listenForKeyboardNotifications() {
         // 키보드가 나타났을떄
-        NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: .main) { notification in
+        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
             guard let userInfo = notification.userInfo,
                   let keyboardRect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
             
@@ -21,7 +21,7 @@ class KeyboardHeightHelper: ObservableObject {
         }
         
         // 키보드가 숨겨졌을 떄
-        NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidHideNotification, object: nil, queue: .main) { notification in
+        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { notification in
             self.keyboardHeight = 0
         }
     }

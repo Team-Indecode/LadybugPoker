@@ -79,6 +79,7 @@ struct PlayerBoardView: View {
     var playerBoard: some View {
         VStack(spacing: 10) {
             profile
+                .frame(height: 30)
             if viewModel.gameStatus == .onAir || viewModel.gameStatus == .finished {
                 userIsPlayGame
             } else {
@@ -136,7 +137,6 @@ struct PlayerBoardView: View {
                 // 유저 선택일 경우인 경우 & whoseTurn인 유저 제외 & attackers에 담겨져 있는 유저 제외
                 if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
                     arrowView
-//                        .blinking()
                 }
             })
         } else {
@@ -144,7 +144,6 @@ struct PlayerBoardView: View {
                 // 유저 선택일 경우인 경우 & whoseTurn인 유저 제외 & attackers에 담겨져 있는 유저 제외
                 if viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
                     arrowView
-//                        .blinking()
                 }
                 Spacer()
                 BoardUserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd, isHost: user.id == viewModel.gameRoomData.value.hostId)
@@ -192,9 +191,6 @@ struct PlayerBoardView: View {
                     CardView(card: Card(bug: bug, cardCnt: cardCnt), cardWidthSize: boardWidth / 4 - 4, cardHeightSize: (boardHeight - 60) / 2, isBottomViewCard: false)
                 }
             }
-        }
-        .onChange(of: bugsArray) { newValue in
-            print(#fileID, #function, #line, "- bugsArray: \(bugsArray)")
         }
     }
     

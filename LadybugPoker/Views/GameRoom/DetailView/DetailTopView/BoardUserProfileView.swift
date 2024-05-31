@@ -39,7 +39,7 @@ struct BoardUserProfileView: View {
                                 .stroke(isHost ? Color.orange : Color(hex: "D1BB9E"), lineWidth: isHost ? 2 : 1)
                         }
                 } else {
-                    Image(Bugs.ladybug.rawValue)
+                    Image("default_profile")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 30, height: 30)

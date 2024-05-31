@@ -36,7 +36,6 @@ struct GameRoomDetailBottomView: View {
     /// 카드 선택 시 확인 팝업
     @Binding var showCardSelectedPopup: Bool
     @Binding var gameType: GameType?
-    @Binding var safeareaBottomSize: CGFloat
     @State private var chatTextFieldOffset: CGFloat = 0
     var focusField: FocusState<Bool>.Binding
     
@@ -182,7 +181,7 @@ struct GameRoomDetailBottomView: View {
 //            withAnimation {
 //                self.chatTextFieldOffset = keyboardHeight - safeareaBottomSize
 //            }
-            self.chatTextFieldOffset = keyboardHeight - safeareaBottomSize
+            self.chatTextFieldOffset = keyboardHeight
         })
         .ignoresSafeArea(.keyboard)
         .frame(maxHeight: .infinity)
