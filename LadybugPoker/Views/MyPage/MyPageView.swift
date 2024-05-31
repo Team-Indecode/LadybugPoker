@@ -53,9 +53,9 @@ struct MyPageView: View {
                                     .clipShape(Circle())
                                     .padding(1)
                             } else {
-                                Image("ladybug")
+                                Image("default_profile")
                                     .resizable()
-                                    .padding(1)
+                                    .padding(10)
                             }
                         }
                 }
