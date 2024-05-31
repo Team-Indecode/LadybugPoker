@@ -88,6 +88,17 @@ struct GamePlayAttackDefenceView: View {
                     default: selectBug = nil
                     }
                 })
+                .onChange(of: viewModel.gameRoomData.value.decision) { oldValue, newValue in
+                    if Service.shared.myUserModel.id == viewModel.gameRoomData.value.whoseGetting && newValue != nil {
+                        switch newValue {
+                        case "yes": self.defenderChooseAnswer = "y"
+                        case "no": self.defenderChooseAnswer = "n"
+                        case "pass": self.defenderChooseAnswer = "p"
+                        default: return
+                        }
+                        self.showDefenderChooseAnser = true
+                    }
+                }
         } else {
             allContent
         }
@@ -233,18 +244,19 @@ struct GamePlayAttackDefenceView: View {
     var playerNotAttackerTopView: some View {
         VStack(spacing: 0) {
             attackerProfileView
-            thisCard
             if showAttackResult {
                 if let selectBug = selectBug {
                     CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
                         .rotationEffect(startRotation ? Angle(degrees: 360) : Angle(degrees: 0))
                 }
             } else {
+                thisCard
                 bugAndCard
+                Text("입니다.")
+                    .font(.sea(50))
+                    .foregroundStyle(Color.white)
             }
-            Text("입니다.")
-                .font(.sea(50))
-                .foregroundStyle(Color.white)
+            
             defenderProfileView
             if showAttackResult {
                 Text(viewModel.showAttackResult.1 ? "공격 성공" : "공격 실패")
@@ -484,7 +496,7 @@ struct GamePlayAttackDefenceView: View {
                 .background(Color(hex: "F1F1F1"))
                 .clipShape(Capsule())
         })
-        
+        .disabled(viewModel.gameRoomData.value.decision != nil)
     }
 }
 

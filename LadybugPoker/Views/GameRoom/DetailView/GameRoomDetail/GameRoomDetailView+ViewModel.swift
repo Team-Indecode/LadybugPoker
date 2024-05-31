@@ -115,16 +115,12 @@ class GameRoomDetailViewViewModel: ObservableObject {
         if data.whoseTurn != nil {
             if data.selectedCard == nil {
                 self.gameType = .selectCard
-//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting == nil {
                 self.gameType = .selectUser
-//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard == nil {
                 self.gameType = .attacker
-//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard != nil && data.decision == nil {
                 self.gameType = .defender
-//                self.gameTimer(data.turnTime)
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
                 self.gameType = .gameAttackFinish
                 guard let decision = data.decision else { return }
@@ -266,8 +262,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         // Bugs배열을 카드String으로 만들어줌
         usersCardString = bugsTocardString(usersCard)
         
-        print(#fileID, #function, #line, "- usersCard: \(usersCard)")
-        print(#fileID, #function, #line, "- usersCardString⭐️: \(usersCardString)")
+//        print(#fileID, #function, #line, "- usersCard: \(usersCard)")
+//        print(#fileID, #function, #line, "- usersCardString⭐️: \(usersCardString)")
         usersHandCardSetting(usersCardString)
     }
     
@@ -427,7 +423,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         self.secondsLeft -= 1
         
         if self.secondsLeft == 0 {
-//            timeOverAutoSelect()
+            timeOverAutoSelect()
         }
     }
     
@@ -458,7 +454,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             } else if self.gameType == .defender {
                 // 맞습니다, 아닙니다 선택
                 let yesOrNo = Bool.random()
-                self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
+                self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue, true)
             } else if self.gameType == .gameAttackFinish {
                 if let attackResult = self.defenderSuccessCheck(self.gameRoomData.value.decision ?? "") {
                     self.cardIsSame(attackResult)
@@ -768,7 +764,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// 수비자의 선택 업데이트
     /// - Parameter decision: 수비자가 선택한 text
-    func decisionUpdate(_ decision: String) {
+    func decisionUpdate(_ decision: String, _ isAuto: Bool = false) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         var decisionFb: String?
         if decision == DefenderAnswer.same.rawValue {
@@ -778,8 +774,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
         } else if decision == DefenderAnswer.cardSkip.rawValue {
             decisionFb = "pass"
         }
+        var updateDic: [String : String] = [:]
+        updateDic["decision"] = decisionFb
+        if !isAuto {
+            updateDic["turnStartTime"] = Date().toString
+        }
         
-        gameRoomDataRef.updateData(["decision" : decisionFb]) { error in
+        gameRoomDataRef.updateData(updateDic) { error in
             if let error = error {
                 print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
             }
