@@ -227,7 +227,24 @@ struct MainView: View {
                     }
                 }
             }
-
+        }
+        .overlay(alignment: .bottomTrailing) {
+            Button {
+                if let url = URL(string: "https://volcano-kayak-10a.notion.site/177f2d3110694ac3805b6c96862d4091?pvs=4") {
+                   UIApplication.shared.open(url)
+                }
+            } label: {
+                Circle()
+                    .fill(Color.bugDark)
+                    .frame(width: 63, height: 63)
+                    .overlay {
+                        Text("게임방법")
+                            .font(.sea(13))
+                    }
+            }
+            .foregroundStyle(Color.white)
+            .padding(.trailing, 20)
+            .padding(.bottom, 70)
         }
     }
 }

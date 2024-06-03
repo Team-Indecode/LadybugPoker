@@ -11,7 +11,7 @@ struct GameRoomCreateView: View {
     @EnvironmentObject private var service: Service
     
     @State private var title: String = ""
-    @State private var maxCount = 0
+    @State private var maxCount = 3
     @State private var password: String = ""
     
     var body: some View {

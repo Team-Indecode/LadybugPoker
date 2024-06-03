@@ -7,11 +7,14 @@
 
 import SwiftUI
 import NukeUI
+import PhotosUI
+import FirebaseStorage
 
 struct MyPageView: View {
     @EnvironmentObject private var service: Service
     @State private var histories = [History]()
-    
+
+    @State private var photo: PhotosPickerItem? = nil
     let id: String
     
     var body: some View {
@@ -41,9 +44,7 @@ struct MyPageView: View {
             }
             
             HStack {
-                Button {
-                    
-                } label: {
+                PhotosPicker(selection: $photo, matching: .images, photoLibrary: .shared()) {
                     Circle()
                         .fill(Color.bugLightMedium)
                         .frame(width: 100, height: 100)
@@ -123,9 +124,27 @@ struct MyPageView: View {
                 histories = try await History.fetchList(id: id, nil)
             }
         }
+        .onChange(of: photo) { newValue in
+            if let image = newValue {
+                Task {
+                    if let data = try? await image.loadTransferable(type: Data.self) {
+                        let ref = Storage.storage().reference().child(service.myUserModel.id + "/profileImages/" + UUID().uuidString + ".jpg")
+                        
+                        let metaData = try await ref.putDataAsync(data)
+                        
+                        let url = try await ref.downloadURL().absoluteString
+                        
+                        service.myUserModel.profileUrl = url
+                    }
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    MyPageView(id: "test")
+    VStack {
+        MyPageView(id: "test")
+    }
+    .environmentObject(Service.shared)
 }
