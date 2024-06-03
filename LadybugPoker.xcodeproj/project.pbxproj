@@ -72,6 +72,7 @@
 		D152E9AD2BC4D1AD005535F1 /* send.png in Resources */ = {isa = PBXBuildFile; fileRef = D152E9AC2BC4D1AD005535F1 /* send.png */; };
 		D152E9B32BC4E700005535F1 /* Bugs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D152E9B22BC4E700005535F1 /* Bugs.swift */; };
 		D16AFC7F2BCFAD4400AEC3B2 /* CommonPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16AFC7E2BCFAD4400AEC3B2 /* CommonPopupView.swift */; };
+		D189A7B52C0DAE0E00F5727A /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = D189A7B42C0DAE0E00F5727A /* FirebaseStorage */; };
 		D19AFD512BBF9B7C008F9297 /* LadybugPokerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AFD502BBF9B7C008F9297 /* LadybugPokerApp.swift */; };
 		D19AFD552BBF9B7D008F9297 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D19AFD542BBF9B7D008F9297 /* Assets.xcassets */; };
 		D19AFD582BBF9B7D008F9297 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D19AFD572BBF9B7D008F9297 /* Preview Assets.xcassets */; };
@@ -188,6 +189,7 @@
 				D125B9D52BC14E1C00A5AE03 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				D125B9E12BC156CD00A5AE03 /* FirebaseFirestore in Frameworks */,
 				D1418E1F2BD6376B00421904 /* KakaoSDKCommon in Frameworks */,
+				D189A7B52C0DAE0E00F5727A /* FirebaseStorage in Frameworks */,
 				D1418E192BD6376B00421904 /* KakaoSDKAuth in Frameworks */,
 				D1418E262BD6415200421904 /* FirebaseAuth in Frameworks */,
 			);
@@ -571,6 +573,7 @@
 				D1418E1E2BD6376B00421904 /* KakaoSDKCommon */,
 				D1418E252BD6415200421904 /* FirebaseAuth */,
 				D1A11BC32BE9CB60004CA7C0 /* NukeUI */,
+				D189A7B42C0DAE0E00F5727A /* FirebaseStorage */,
 			);
 			productName = LadybugPoker;
 			productReference = D19AFD4D2BBF9B7C008F9297 /* LadybugPoker.app */;
@@ -1006,6 +1009,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		D189A7B42C0DAE0E00F5727A /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D125B9CD2BC14E1C00A5AE03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 		D1A11BC32BE9CB60004CA7C0 /* NukeUI */ = {
 			isa = XCSwiftPackageProductDependency;

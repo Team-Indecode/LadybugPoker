@@ -12,7 +12,7 @@ struct User: Codable, Identifiable {
     
     let id: String
     let displayName: String
-    let profileUrl: String?
+    var profileUrl: String?
     let history: [String]
     let win: Int
     let lose: Int
