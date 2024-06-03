@@ -96,7 +96,7 @@ struct GameFinishView: View {
                 .frame(width: 40)
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(self.winnersProfile, id: \.self) { profile in
-                    UserProfileView(user: profile, profileWidth: 118, profileHeight: 33, profileFontSize: 15)
+                    UserProfileView(user: profile, profileWidth: 118, profileHeight: 33, profileFontSize: 15, profileImageSize: 30)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)

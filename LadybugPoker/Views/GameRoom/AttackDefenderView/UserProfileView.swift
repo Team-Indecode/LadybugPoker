@@ -13,12 +13,14 @@ struct UserProfileView: View {
     let profileWidth: CGFloat
     let profileHeight: CGFloat
     let profileFontSize: CGFloat
+    let profileImageSize: CGFloat
     
-    init(user: UserInGame, profileWidth: CGFloat = 171, profileHeight: CGFloat = 69, profileFontSize: CGFloat = 20) {
+    init(user: UserInGame, profileWidth: CGFloat = 171, profileHeight: CGFloat = 69, profileFontSize: CGFloat = 20, profileImageSize: CGFloat = 40) {
         self.user = user
         self.profileWidth = profileWidth
         self.profileHeight = profileHeight
         self.profileFontSize = profileFontSize
+        self.profileImageSize = profileImageSize
     }
     
     var body: some View {
@@ -26,13 +28,13 @@ struct UserProfileView: View {
             if let profileUrl = user.profileUrl {
                 LazyImage(source: URL(string: profileUrl))
                     .scaledToFit()
-                    .frame(width: 50, height: 50)
+                    .frame(width: profileImageSize, height: profileImageSize)
                     .clipShape(Circle())
                     .padding(.leading, 10)
             } else {
-                Image(Bugs.ladybug.rawValue)
+                Image("default_profile")
                     .resizable()
-                    .frame(width: 30, height: 30)
+                    .frame(width: profileImageSize, height: profileImageSize)
                     .clipShape(Circle())
                     .padding(.leading, 10)
             }
