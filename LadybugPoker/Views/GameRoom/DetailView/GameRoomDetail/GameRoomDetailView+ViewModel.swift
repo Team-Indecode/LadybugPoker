@@ -433,7 +433,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @objc func timerCallBack() {
         self.secondsLeft -= 1
         
-        if self.secondsLeft == 0 {
+        if (self.secondsLeft == 0 && self.gameType != .defender) || (self.secondsLeft == -4 && self.gameType == .defender) {
             timeOverAutoSelect()
         }
     }
@@ -461,13 +461,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 let bugs = Bugs.allCases
                 let questionBug = bugs.randomElement() ?? Bugs.bee
                 self.gameroomDataUpdate(.questionCard, questionBug.cardString)
-            } else if self.gameType == .defender {
+            } else if self.gameType == .defender && self.gameRoomData.value.decision == nil {
                 // 맞습니다, 아닙니다 선택
                 let yesOrNo = Bool.random()
                 self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
             } 
 //            else if self.gameType == .gameAttackFinish {
-//                // 자동으로 한 턴의 결과를 db에 업데이트 해줘야 한다
+//                // 자ㅕ으로 한 턴의 결과를 db에 업데이트 해줘야 한다
 //                if let attackResult = self.defenderSuccessCheck(self.gameRoomData.value.decision ?? "") {
 //                    self.cardIsSame(attackResult)
 //                }
@@ -886,8 +886,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
         var currentGameId: [String : String?] = [:]
         if newGameId == nil {
            currentGameId["currentGameId"] = nil as String?
+            Service.shared.myUserModel.currentUserId = nil
         } else {
             currentGameId["currentGameId"] = newGameId
+            
         }
         
         userRef.updateData(currentGameId)
