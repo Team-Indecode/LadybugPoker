@@ -136,8 +136,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 }
             }
 
-            
-            if data.turnStartTime != beforeTurnStartTime {
+            //gameType이 gameAttackFinish인경우는 decision이 업데이트 되었을 때 인데 이때는 시간이 변경이 안되기 때문에 secondsLeft를 그냥 0으로 변경해준다
+            if gameType == .gameAttackFinish {
+                self.secondsLeft = 0
+            }
+            else if data.turnStartTime != beforeTurnStartTime {
                 guard let beforeTurnStartTime = beforeTurnStartTime?.toDate,
                       let nowTurnStartTime = data.turnStartTime?.toDate else { return }
                 let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
@@ -376,8 +379,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         if isDefenderLose {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
                 let boardCards = self.stringToCards(userInGame.boardCard ?? "")
-                self.userCardChange(bugs, boardCards, false, userInGame.id)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
+                    self.userCardChange(bugs, boardCards, false, userInGame.id)
                     attackers.append(userInGame.idx)
                     self.gameroomDataUpdate(.gameAttackFinish, userInGame.id, attackers)
                 })
@@ -387,8 +390,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         else {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
                 let boardCards = self.stringToCards(userInGame.boardCard ?? "")
-                self.userCardChange(bugs, boardCards, false, userInGame.id)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
+                    self.userCardChange(bugs, boardCards, false, userInGame.id)
                     attackers.append(userInGame.idx)
                     self.gameroomDataUpdate(.gameAttackFinish, userInGame.id, attackers)
                 })
@@ -433,7 +436,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @objc func timerCallBack() {
         self.secondsLeft -= 1
         
-        if (self.secondsLeft == 0 && self.gameType != .defender) || (self.secondsLeft == -4 && self.gameType == .defender) {
+//        if (self.secondsLeft == -1 && self.gameType != .defender) || (self.secondsLeft == -4 && self.gameType == .defender) {
+//            timeOverAutoSelect()
+//        }
+        if self.secondsLeft == -1 {
             timeOverAutoSelect()
         }
     }
