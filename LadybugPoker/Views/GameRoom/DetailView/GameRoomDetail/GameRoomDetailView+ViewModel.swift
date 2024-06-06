@@ -55,9 +55,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         if data.usersInGame.count <= 2 && data.gameStatus != GameStatus.finished.rawValue && data.gameStatus != GameStatus.notEnoughUsers.rawValue  {
                             self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
                         }
-//                        if data.gameStatus != GameStatus.onAir.rawValue {
-//                            
-//                        }
+                        if data.gameStatus != GameStatus.onAir.rawValue {
+                            self.timer?.invalidate()
+                        }
                         self.getUsersId(data.usersInGame)
                         self.getUsersChat(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
@@ -129,6 +129,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard != nil && data.decision == nil {
                 self.gameType = .defender
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
+                //gameType이 gameAttackFinish인경우는 decision이 업데이트 되었을 때 인데 이때는 시간이 변경이 안되기 때문에 secondsLeft를 그냥 0으로 변경해준다
+                self.secondsLeft = 0
                 self.gameType = .gameAttackFinish
                 // 여기는 맞습니다, 틀립니다 선택을 제외하고(decision을 업데이트 하고 나타나는 일 -> ex. 카드회전)
                 guard let decision = data.decision else { return }
@@ -142,16 +144,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 }
             }
 
-            //gameType이 gameAttackFinish인경우는 decision이 업데이트 되었을 때 인데 이때는 시간이 변경이 안되기 때문에 secondsLeft를 그냥 0으로 변경해준다
-            if gameType == .gameAttackFinish {
-                self.secondsLeft = 0
-            }
+            
             else if data.turnStartTime != beforeTurnStartTime {
                 guard let beforeTurnStartTime = beforeTurnStartTime?.toDate,
                       let nowTurnStartTime = data.turnStartTime?.toDate else { return }
                 let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
                 
-                self.gameTimer(10)
+                self.gameTimer(60)
 //                if timeDifference > 15 {
 //                    print(#fileID, #function, #line, "- 게임룸 삭제 lets get it")
 //                    self.deleteGameRoom()
@@ -446,9 +445,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
 //        if (self.secondsLeft == -1 && self.gameType != .defender) || (self.secondsLeft == -4 && self.gameType == .defender) {
 //            timeOverAutoSelect()
 //        }
-//        if self.secondsLeft == -1 {
-//            timeOverAutoSelect()
-//        }
+        if self.secondsLeft == -1 {
+            timeOverAutoSelect()
+        }
     }
     
     func timeOverAutoSelect() {
