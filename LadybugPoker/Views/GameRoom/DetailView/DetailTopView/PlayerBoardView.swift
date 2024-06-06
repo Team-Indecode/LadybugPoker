@@ -10,6 +10,7 @@ import SwiftUI
 /// 한 플레이어의 보드판
 struct PlayerBoardView: View {
     @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
+    @StateObject var gameRoomTopVM: GameRoomTopViewModel = GameRoomTopViewModel()
     let user: User
     /// 플레이어가 보드판에서 위치가 어디인지
     let userBoardIndex: Int
@@ -30,7 +31,6 @@ struct PlayerBoardView: View {
     let isOdd: Bool
     let bugsArray = [Bugs.snake, Bugs.ladybug, Bugs.frog, Bugs.rat, Bugs.spider, Bugs.snail, Bugs.worm, Bugs.bee]
     @State private var userChat: Chat = Chat(msg: "", time: "")
-    @State private var userChatShow: Bool = false
     @Binding var showExitAlert: Bool
     @Binding var existUserId: String
     @Binding var existUserDisplayName: String
@@ -40,7 +40,7 @@ struct PlayerBoardView: View {
     var body: some View {
         ZStack {
             playerBoard
-            if userChatShow {
+            if gameRoomTopVM.showMessage {
                 chatView()
                     .padding(.trailing, isOdd ? 0 : 30)
             }
@@ -63,13 +63,12 @@ struct PlayerBoardView: View {
         .onChange(of: viewModel.usersChat[userBoardIndex]) { newValue in
             if let userChat = newValue {
                 self.userChat = userChat
-                self.userChatShow = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: {
-                    self.userChatShow = false
-                })
+                gameRoomTopVM.messageTimer()
             }
-            
         }
+//        .onChange(of: self.userChat, perform: { newValue in
+//            
+//        })
         .onAppear {
             self.cards = viewModel.stringToCards(self.cardsString)
             self.userCardCnt = viewModel.userHandCardCntChecking(self.handCardString)

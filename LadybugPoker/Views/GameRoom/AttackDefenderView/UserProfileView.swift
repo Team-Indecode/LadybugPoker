@@ -9,16 +9,20 @@ import SwiftUI
 import NukeUI
 
 struct UserProfileView: View {
-    let user: UserInGame
+    let user: Player
     let profileWidth: CGFloat
     let profileHeight: CGFloat
     let profileFontSize: CGFloat
+    let profileImageSize: CGFloat
+    let needOpacity: Bool
     
-    init(user: UserInGame, profileWidth: CGFloat = 171, profileHeight: CGFloat = 69, profileFontSize: CGFloat = 20) {
+    init(user: Player, profileWidth: CGFloat = 171, profileHeight: CGFloat = 69, profileFontSize: CGFloat = 20, profileImageSize: CGFloat = 40, needOpacity: Bool = false) {
         self.user = user
         self.profileWidth = profileWidth
         self.profileHeight = profileHeight
         self.profileFontSize = profileFontSize
+        self.profileImageSize = profileImageSize
+        self.needOpacity = needOpacity
     }
     
     var body: some View {
@@ -26,13 +30,13 @@ struct UserProfileView: View {
             if let profileUrl = user.profileUrl {
                 LazyImage(source: URL(string: profileUrl))
                     .scaledToFit()
-                    .frame(width: 50, height: 50)
+                    .frame(width: profileImageSize, height: profileImageSize)
                     .clipShape(Circle())
                     .padding(.leading, 10)
             } else {
-                Image(Bugs.ladybug.rawValue)
+                Image("default_profile")
                     .resizable()
-                    .frame(width: 30, height: 30)
+                    .frame(width: profileImageSize, height: profileImageSize)
                     .clipShape(Circle())
                     .padding(.leading, 10)
             }
@@ -42,10 +46,11 @@ struct UserProfileView: View {
         .frame(width: profileWidth, height: profileHeight, alignment: .leading)
         .background(Color.white)
         .clipShape(Capsule())
-        .padding(.horizontal, 10)
+//        .padding(.horizontal, 10)
+        .opacity(needOpacity ? 0.5 : 1)
     }
 }
 
 #Preview {
-    UserProfileView(user: UserInGame(id: "", readyOrNot: false, handCard: "", boardCard: "", displayName: "", profileUrl: "", idx: 0, chat: Chat(msg: "", time: "")), profileWidth: 171, profileHeight: 69)
+    UserProfileView(user: Player(id: "", profileUrl: "", displayName: ""), profileWidth: 171, profileHeight: 69)
 }

@@ -38,11 +38,17 @@ struct GameRoom: Codable, Identifiable, Equatable {
     /// 수비자의 맞,틀 선택(yes -> 맞습니다, no -> 아닙니다, pass: 카드 넘기기)
     let decision: String?
     let newGame: String?
+    let player: [String: Player]
     
     var toJson: [String: Any] {
         var userGameData: [String: Any] = [:]
         for data in usersInGame {
             userGameData[data.key] = data.value.toJson
+        }
+        
+        var players: [String: Any] = [:]
+        for data in player {
+            players[data.key] = data.value.toJson
         }
         
         return [
@@ -64,11 +70,12 @@ struct GameRoom: Codable, Identifiable, Equatable {
             "loser" : loser,
             "decision" : decision,
             "gameStatus": gameStatus,
-            "newGame": newGame
+            "newGame": newGame,
+            "player": players
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: Int?, decision: String?, newGame: String?) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: Int?, decision: String?, newGame: String?, player: [String: Player]) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -88,6 +95,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.loser = loser
         self.decision = decision
         self.newGame = newGame
+        self.player = player
     }
     
     init?(data: [String: Any]) {
@@ -165,6 +173,18 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.loser = data["loser"] as? Int
         self.decision = data["decision"] as? String
         self.newGame = data["newGame"] as? String
+        
+        var tempPlayers = [String: Player]()
+        let playersData = data["player"] as? [String: Any] ?? [:]
+        for playerData in playersData{
+            let userId = playerData.key
+            let userData = Player(data: playerData.value as? [String: Any] ?? [:])
+            if let userData {
+                tempPlayers[userId] = userData
+            }
+        }
+        
+        self.player = tempPlayers
     }
 }
 

@@ -82,7 +82,7 @@ extension GameRoomDetailBottomView {
                 }
                 VStack(spacing: 0) {
                     Spacer()
-                    ScrollView(.horizontal) {
+                    ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(myCards) { card in
                                 Button {
@@ -106,6 +106,7 @@ extension GameRoomDetailBottomView {
                         }
                         .padding([.bottom, .top], 6)
                     }
+                    
                 }
                 .opacity(bottomGameType == .defender ? 0.7 : 1.0)
             }

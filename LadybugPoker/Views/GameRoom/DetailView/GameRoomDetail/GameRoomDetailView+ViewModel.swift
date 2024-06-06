@@ -15,7 +15,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var gameRoomId: String = ""
     @Published var gameStatus: GameStatus = .notStarted
     
-    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil))
+    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil, player: [:]))
 
     /// userIdx와 userId
     @Published var usersId: [String?] = Array(repeating: nil, count: 6)
@@ -28,7 +28,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 게임 타입(ex. 카드 선택, whoseGetting 선택 등)
     @Published var gameType: GameType? = nil
     /// 플레이어가 어떤 타입인지(공격자, 수비자, 둘다 아님)
-    @Published var userType: Player? = nil
+    @Published var userType: PlayerRole? = nil
     /// 공격 & 수비 뷰 보여줄지
     @Published var showAttackerAndDefenderView: Bool = false
     /// 0: 한번의 공격이 종료되고 결과를 보여줄지 , 1: 공격성공(true), 공격실패(false)
@@ -43,6 +43,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// 해당 게임방의 데이터를 가지고 온다
     func getGameData(_ gameRoomId: String) async throws {
+        print(#fileID, #function, #line, "- documentId: \(gameRoomId)")
         db.collection(GameRoom.path).document(gameRoomId)
             .addSnapshotListener { doc, error in
                 if let doc = doc, doc.exists {
@@ -50,8 +51,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
 //                    if let data = try? doc.data(as: GameRoom.self) {
                         let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
                         self.gameRoomData.send(data)
-                        if data.gameStatus != GameStatus.onAir.rawValue {
-                            
+                        
+                        if data.usersInGame.count <= 2 && data.gameStatus != GameStatus.finished.rawValue && data.gameStatus != GameStatus.notEnoughUsers.rawValue  {
+                            self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
                         }
                         self.getUsersId(data.usersInGame)
                         self.getUsersChat(data.usersInGame)
@@ -75,6 +77,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                                 guard let newGameId = data.newGame else { return }
                                 self.updateUserCurrentGameId(newGameId)
                             }
+                            
                         } else {
                             self.showLoserView = false
                             self.showAttackerAndDefenderView = false
@@ -113,7 +116,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// - Parameter data: GameRoom
     func gameTypeChecking(_ data: GameRoom, _ beforeTurnStartTime: String?) {
         if data.whoseTurn != nil {
-            
             if data.selectedCard == nil {
                 self.gameType = .selectCard
             } else if data.selectedCard != nil && data.whoseGetting == nil {
@@ -123,6 +125,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             } else if data.selectedCard != nil && data.whoseGetting != nil && data.questionCard != nil && data.decision == nil {
                 self.gameType = .defender
             } else if data.selectedCard != nil && data.questionCard != nil && data.whoseGetting != nil && data.decision != nil {
+                //gameType이 gameAttackFinish인경우는 decision이 업데이트 되었을 때 인데 이때는 시간이 변경이 안되기 때문에 secondsLeft를 그냥 0으로 변경해준다
+                self.secondsLeft = 0
                 self.gameType = .gameAttackFinish
                 // 여기는 맞습니다, 틀립니다 선택을 제외하고(decision을 업데이트 하고 나타나는 일 -> ex. 카드회전)
                 guard let decision = data.decision else { return }
@@ -135,14 +139,14 @@ class GameRoomDetailViewViewModel: ObservableObject {
                     return
                 }
             }
-
+        }
+        
+        if data.turnStartTime != beforeTurnStartTime {
+            guard let beforeTurnStartTime = beforeTurnStartTime?.toDate,
+                  let nowTurnStartTime = data.turnStartTime?.toDate else { return }
+            let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
             
-            if data.turnStartTime != beforeTurnStartTime {
-                guard let beforeTurnStartTime = beforeTurnStartTime?.toDate,
-                      let nowTurnStartTime = data.turnStartTime?.toDate else { return }
-                let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
-                
-                self.gameTimer(10)
+            self.gameTimer(10)
 //                if timeDifference > 15 {
 //                    print(#fileID, #function, #line, "- 게임룸 삭제 lets get it")
 //                    self.deleteGameRoom()
@@ -150,8 +154,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
 //                    self.gameTimer(data.turnTime)
 //                    self.gameTimer(10)
 //                }
-    
-            }
+
         }
     }
 
@@ -208,7 +211,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     }
     
     /// 게임 시작(처음 게임 시작할 떄 카드 분배)
-    func cardDistribute() {
+    func gameStartSetting() async {
         self.gameStatus = .onAir
         var allCards: [Bugs] = []
         Bugs.allCases.forEach { bug in
@@ -222,6 +225,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         let oneUserCardCount = allCards.count / self.gameRoomData.value.usersInGame.count
 //        userCard(oneUserCardCount, allCards, userCnt)
         userFirstCardTwo(allCards, userCnt)
+        try? await self.gameRoomPlayerUpdate(self.gameRoomData.value.usersInGame)
     }
     
     
@@ -376,8 +380,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         if isDefenderLose {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseGetting ?? ""] {
                 let boardCards = self.stringToCards(userInGame.boardCard ?? "")
-                self.userCardChange(bugs, boardCards, false, userInGame.id)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
+                    self.userCardChange(bugs, boardCards, false, userInGame.id)
                     attackers.append(userInGame.idx)
                     self.gameroomDataUpdate(.gameAttackFinish, userInGame.id, attackers)
                 })
@@ -387,8 +391,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         else {
             if let userInGame = self.gameRoomData.value.usersInGame[self.gameRoomData.value.whoseTurn ?? ""] {
                 let boardCards = self.stringToCards(userInGame.boardCard ?? "")
-                self.userCardChange(bugs, boardCards, false, userInGame.id)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.5, execute: {
+                    self.userCardChange(bugs, boardCards, false, userInGame.id)
                     attackers.append(userInGame.idx)
                     self.gameroomDataUpdate(.gameAttackFinish, userInGame.id, attackers)
                 })
@@ -413,8 +417,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
     }
     
     /// userID에 해당하는 유저 데이터를 가지고 온다
-    func getUserData(_ userID: String) -> UserInGame? {
-        let userDataDic = gameRoomData.value.usersInGame.first(where: { $0.key == userID })
+    func getUserData(_ userID: String) -> Player? {
+        let userDataDic = gameRoomData.value.player.first(where: { $0.key == userID })
         return userDataDic?.value
     }
     
@@ -433,7 +437,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @objc func timerCallBack() {
         self.secondsLeft -= 1
         
-        if self.secondsLeft == 0 {
+//        if (self.secondsLeft == -1 && self.gameType != .defender) || (self.secondsLeft == -4 && self.gameType == .defender) {
+//            timeOverAutoSelect()
+//        }
+        if self.secondsLeft == -1 {
             timeOverAutoSelect()
         }
     }
@@ -461,13 +468,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 let bugs = Bugs.allCases
                 let questionBug = bugs.randomElement() ?? Bugs.bee
                 self.gameroomDataUpdate(.questionCard, questionBug.cardString)
-            } else if self.gameType == .defender {
+            } else if self.gameType == .defender && self.gameRoomData.value.decision == nil {
                 // 맞습니다, 아닙니다 선택
                 let yesOrNo = Bool.random()
                 self.decisionUpdate(yesOrNo ? DefenderAnswer.same.rawValue : DefenderAnswer.different.rawValue)
             } 
 //            else if self.gameType == .gameAttackFinish {
-//                // 자동으로 한 턴의 결과를 db에 업데이트 해줘야 한다
+//                // 자ㅕ으로 한 턴의 결과를 db에 업데이트 해줘야 한다
 //                if let attackResult = self.defenderSuccessCheck(self.gameRoomData.value.decision ?? "") {
 //                    self.cardIsSame(attackResult)
 //                }
@@ -668,7 +675,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     ///   - updateType: 유저 업데이트 타입
     func userInGameUpdate(_ userInGame: UserInGame, _ userId: String, _ updateType: GameUpdateType?) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
-        print(#fileID, #function, #line, "- userInGame: \(userInGame)")
+        
         let oneUserData = [
             "boardCard" : userInGame.boardCard,
             "displayName" : userInGame.displayName,
@@ -844,7 +851,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             settingUser[key] = afterValue
         }
         
-        let model = GameRoom(id: newGameId, hostId: self.gameRoomData.value.hostId, title: self.gameRoomData.value.title, password: self.gameRoomData.value.password, maxUserCount: self.gameRoomData.value.maxUserCount, code: self.gameRoomData.value.code, usersInGame: settingUser, whoseGetting: nil, turnStartTime: nil, attackers: [], createdAt: Date().toString, turnTime: self.gameRoomData.value.turnTime, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil)
+        let model = GameRoom(id: newGameId, hostId: self.gameRoomData.value.hostId, title: self.gameRoomData.value.title, password: self.gameRoomData.value.password, maxUserCount: self.gameRoomData.value.maxUserCount, code: self.gameRoomData.value.code, usersInGame: settingUser, whoseGetting: nil, turnStartTime: nil, attackers: [], createdAt: Date().toString, turnTime: self.gameRoomData.value.turnTime, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil, player: [:])
         
         do {
             try await GameRoom.create(model: model)
@@ -886,14 +893,32 @@ class GameRoomDetailViewViewModel: ObservableObject {
         var currentGameId: [String : String?] = [:]
         if newGameId == nil {
            currentGameId["currentGameId"] = nil as String?
+            Service.shared.myUserModel.currentUserId = nil
         } else {
             currentGameId["currentGameId"] = newGameId
+            
         }
         
         userRef.updateData(currentGameId)
         if changeUserId == Service.shared.myUserModel.id {
             Service.shared.myUserModel.currentUserId = newGameId
         }
+    }
+    
+    func gameRoomPlayerUpdate(_ usersInGame: [String: UserInGame]) async throws {
+        let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+        var playersData: [String: Player] = [:]
+        for userInGame in usersInGame {
+            playersData[userInGame.key] = Player(id: userInGame.value.id, profileUrl: userInGame.value.profileUrl, displayName: userInGame.value.displayName)
+        }
+        
+        var playerJsonData: [String : Any] = [:]
+        for data in playersData {
+            playerJsonData[data.key] = data.value.toJson
+        }
+        
+        try await gameRoomDataRef
+            .updateData(["player": playerJsonData])
     }
     
     //MARK: - 음악관련

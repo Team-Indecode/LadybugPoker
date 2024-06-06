@@ -11,8 +11,8 @@ struct GameFinishView: View {
     @EnvironmentObject private var service: Service
     @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
     
-    @State private var loserProfile: UserInGame = UserInGame(id: "", readyOrNot: false, handCard: nil, boardCard: nil, displayName: "", profileUrl: nil, idx: 0, chat: nil)
-    @State private var winnersProfile: [UserInGame] = []
+    @State private var loserProfile: Player = Player(id: "", profileUrl: nil, displayName: "")
+    @State private var winnersProfile: [Player] = []
     
     let isHost: Bool
     let loserIndex: Int?
@@ -30,7 +30,6 @@ struct GameFinishView: View {
                     .frame(height: proxy.size.height * 0.31)
                     .background(Color.black.opacity(0.0))
             }
-            
         }
         .onAppear {
             guard let loserIndex = loserIndex else { return }
@@ -38,7 +37,16 @@ struct GameFinishView: View {
             for idx in 0..<6 {
                 let userId = viewModel.usersId[idx]
                 if let userId = userId {
-                    guard let userData =  viewModel.gameRoomData.value.usersInGame[userId] else {
+                    guard let userData =  viewModel.gameRoomData.value.player[userId] else {
+                        return
+                    }
+                    if idx == loserIndex {
+                        self.loserProfile = userData
+                    } else {
+                        self.winnersProfile.append(userData)
+                    }
+                } else if idx == 3 {
+                    guard let userData =  viewModel.gameRoomData.value.player["Undefined60"] else {
                         return
                     }
                     if idx == loserIndex {
@@ -48,7 +56,6 @@ struct GameFinishView: View {
                     }
                 }
             }
-            
         }
     }
     
@@ -77,7 +84,7 @@ struct GameFinishView: View {
                     .foregroundStyle(Color.white)
             }
             Spacer()
-            UserProfileView(user: loserProfile)
+            UserProfileView(user: loserProfile, needOpacity: viewModel.gameRoomData.value.usersInGame.contains(where: { $0.key == loserProfile.id }) == false)
         }
         .padding(.horizontal, 20)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
@@ -96,7 +103,7 @@ struct GameFinishView: View {
                 .frame(width: 40)
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(self.winnersProfile, id: \.self) { profile in
-                    UserProfileView(user: profile, profileWidth: 118, profileHeight: 33, profileFontSize: 15)
+                    UserProfileView(user: profile, profileWidth: 118, profileHeight: 33, profileFontSize: 15, profileImageSize: 30, needOpacity: viewModel.gameRoomData.value.usersInGame.contains(where: { $0.key == profile.id }) == false)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)

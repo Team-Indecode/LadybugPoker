@@ -16,7 +16,7 @@ struct GamePlayAttackDefenceView: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     /// 플레이어 역할
-    @State private var player: Player = .attacker
+    @State private var player: PlayerRole = .attacker
     /// 남은 타이머
     @State private var gameTimer: Int = 48
     /// 공격자가 공격한 벌레
@@ -231,9 +231,10 @@ struct GamePlayAttackDefenceView: View {
         } else {
             // 공격 결과
             if let selectBug = selectBug {
-                CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
+                CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false, bugViewTopPadding: 13)
                     .rotationEffect(startRotation ? Angle(degrees: 360) : Angle(degrees: 0))
-                    .padding(.vertical, 30)
+                    .padding(.top, 40)
+                    .padding(.bottom, 30)
             }
         }
     }
@@ -245,9 +246,10 @@ struct GamePlayAttackDefenceView: View {
             attackerProfileView
             if showAttackResult {
                 if let selectBug = selectBug {
-                    CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false)
+                    CardView(card: Card(bug: selectBug, cardCnt: 0), cardWidthSize: 86, cardHeightSize: 129, isBottomViewCard: false, bugViewTopPadding: 13)
                         .rotationEffect(startRotation ? Angle(degrees: 360) : Angle(degrees: 0))
-                        .padding(.vertical, 30)
+                        .padding(.top, 40)
+                        .padding(.bottom, 30)
                 }
             } else {
                 thisCard

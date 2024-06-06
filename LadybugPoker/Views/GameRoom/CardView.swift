@@ -15,6 +15,15 @@ struct CardView: View {
     let cardHeightSize: CGFloat
     /// 아래 뷰의 카드인지
     let isBottomViewCard: Bool
+    let bugViewTopPadding: CGFloat
+    
+    init(card: Card, cardWidthSize: CGFloat, cardHeightSize: CGFloat, isBottomViewCard: Bool, bugViewTopPadding: CGFloat = 4) {
+        self.card = card
+        self.cardWidthSize = cardWidthSize
+        self.cardHeightSize = cardHeightSize
+        self.isBottomViewCard = isBottomViewCard
+        self.bugViewTopPadding = bugViewTopPadding
+    }
     
     var body: some View {
         ZStack {
@@ -51,7 +60,7 @@ struct CardView: View {
             .scaledToFit()
             .background(Color(hex: "FFF2E1"))
             .clipShape(Circle())
-            .padding(.top, isBottomViewCard ? 10 : 4)
+            .padding(.top, isBottomViewCard ? 10 : bugViewTopPadding)
     }
     
     /// 해당 곤충의 카드를 몇 장 모았는지

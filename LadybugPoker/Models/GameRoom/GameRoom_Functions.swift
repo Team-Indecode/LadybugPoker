@@ -54,11 +54,8 @@ extension GameRoom {
                 .documents
         }
         
-        print(#fileID, #function, #line, "- doccousnt: \(documents.count)")
         var rooms = [GameRoom]()
-        print(#fileID, #function, #line, "- document checking⭐️: \(documents)")
         for document in documents {
-            print(#fileID, #function, #line, "- document: \(document)")
             if let room = GameRoom(data: document.data()) {
 //            if let room = try? document.data(as: GameRoom.self) {
                 print(room.id, room.createdAt)
