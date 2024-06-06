@@ -52,7 +52,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
                         self.gameRoomData.send(data)
                         
-                        if data.usersInGame.count <= 2 && data.gameStatus != GameStatus.finished.rawValue && data.gameStatus != GameStatus.notEnoughUsers.rawValue  {
+                        if data.usersInGame.count <= 2 && data.gameStatus == GameStatus.notStarted.rawValue  {
                             self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
                         }
                         self.getUsersId(data.usersInGame)
