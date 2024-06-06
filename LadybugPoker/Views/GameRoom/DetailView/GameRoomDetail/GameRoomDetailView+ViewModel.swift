@@ -50,13 +50,14 @@ class GameRoomDetailViewViewModel: ObservableObject {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
 //                    if let data = try? doc.data(as: GameRoom.self) {
                         let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
-//                        if data.usersInGame.count <= 2 && data.gameStatus != GameStatus.finished.rawValue {
-//                            self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
-//                        }
                         self.gameRoomData.send(data)
-                        if data.gameStatus != GameStatus.onAir.rawValue {
-                            
+                        
+                        if data.usersInGame.count <= 2 && data.gameStatus != GameStatus.finished.rawValue && data.gameStatus != GameStatus.notEnoughUsers.rawValue  {
+                            self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
                         }
+//                        if data.gameStatus != GameStatus.onAir.rawValue {
+//                            
+//                        }
                         self.getUsersId(data.usersInGame)
                         self.getUsersChat(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
