@@ -49,6 +49,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
 //                    if let data = try? doc.data(as: GameRoom.self) {
                         let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
+                        if data.usersInGame.count <= 2 {
+                            self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
+                        }
                         self.gameRoomData.send(data)
                         if data.gameStatus != GameStatus.onAir.rawValue {
                             
@@ -439,9 +442,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
 //        if (self.secondsLeft == -1 && self.gameType != .defender) || (self.secondsLeft == -4 && self.gameType == .defender) {
 //            timeOverAutoSelect()
 //        }
-        if self.secondsLeft == -1 {
-            timeOverAutoSelect()
-        }
+//        if self.secondsLeft == -1 {
+//            timeOverAutoSelect()
+//        }
     }
     
     func timeOverAutoSelect() {
