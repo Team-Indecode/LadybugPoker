@@ -132,7 +132,10 @@ struct GameRoomDetailBottomView: View {
                 // 게임 시작 버튼
                 Button {
                     if isHost {
-                        viewModel.cardDistribute()
+                        Task {
+                            await viewModel.gameStartSetting()
+                        }
+                        
                     } else {
                         amIReadied ? cancelReady() : ready()
                     }
