@@ -14,8 +14,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "702"
-            endingLineNumber = "702"
+            startingLineNumber = "698"
+            endingLineNumber = "698"
             landmarkName = "userInGameUpdate(_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "755"
-            endingLineNumber = "755"
+            startingLineNumber = "751"
+            endingLineNumber = "751"
             landmarkName = "gameroomDataUpdate(_:_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -517,8 +517,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "802"
-            endingLineNumber = "802"
+            startingLineNumber = "798"
+            endingLineNumber = "798"
             landmarkName = "decisionUpdate(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -596,8 +596,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
             landmarkName = "allPlayerIsReadyChecking(_:)"
             landmarkType = "7">
             <Locations>
@@ -659,8 +659,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "432"
-            endingLineNumber = "432"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
             landmarkName = "gameTimer(_:)"
             landmarkType = "7">
             <Locations>
@@ -722,8 +722,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "214"
-            endingLineNumber = "214"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
             landmarkName = "allPlayerIsReadyChecking(_:)"
             landmarkType = "7">
             <Locations>
@@ -818,8 +818,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
             landmarkName = "getGameData(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -834,8 +834,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "getGameData(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -850,8 +850,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "906"
-            endingLineNumber = "906"
+            startingLineNumber = "902"
+            endingLineNumber = "902"
             landmarkName = "updateUserCurrentGameId(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -866,8 +866,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
             landmarkName = "gameTypeChecking(_:_:)"
             landmarkType = "7">
             <Locations>
@@ -914,8 +914,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "382"
-            endingLineNumber = "382"
+            startingLineNumber = "378"
+            endingLineNumber = "378"
             landmarkName = "cardIsSame(_:)"
             landmarkType = "7">
             <Locations>
@@ -962,8 +962,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
             landmarkName = "gameTypeChecking(_:_:)"
             landmarkType = "7">
             <Locations>
@@ -1010,8 +1010,8 @@
             filePath = "LadybugPoker/Views/GameRoom/DetailView/GameRoomDetail/GameRoomDetailView+ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
             landmarkName = "gameTypeChecking(_:_:)"
             landmarkType = "7">
          </BreakpointContent>

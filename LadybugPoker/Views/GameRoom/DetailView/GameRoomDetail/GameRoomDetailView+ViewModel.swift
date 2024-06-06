@@ -55,9 +55,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         if data.usersInGame.count <= 2 && data.gameStatus != GameStatus.finished.rawValue && data.gameStatus != GameStatus.notEnoughUsers.rawValue  {
                             self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
                         }
-//                        if data.gameStatus != GameStatus.onAir.rawValue {
-//                            self.timer?.invalidate()
-//                        }
                         self.getUsersId(data.usersInGame)
                         self.getUsersChat(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
@@ -119,7 +116,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// - Parameter data: GameRoom
     func gameTypeChecking(_ data: GameRoom, _ beforeTurnStartTime: String?) {
         if data.whoseTurn != nil {
-            
             if data.selectedCard == nil {
                 self.gameType = .selectCard
             } else if data.selectedCard != nil && data.whoseGetting == nil {
