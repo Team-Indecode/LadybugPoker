@@ -55,9 +55,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         if data.usersInGame.count <= 2 && data.gameStatus != GameStatus.finished.rawValue && data.gameStatus != GameStatus.notEnoughUsers.rawValue  {
                             self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
                         }
-                        if data.gameStatus != GameStatus.onAir.rawValue {
-                            self.timer?.invalidate()
-                        }
+//                        if data.gameStatus != GameStatus.onAir.rawValue {
+//                            self.timer?.invalidate()
+//                        }
                         self.getUsersId(data.usersInGame)
                         self.getUsersChat(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
@@ -143,14 +143,14 @@ class GameRoomDetailViewViewModel: ObservableObject {
                     return
                 }
             }
-
+        }
+        
+        if data.turnStartTime != beforeTurnStartTime {
+            guard let beforeTurnStartTime = beforeTurnStartTime?.toDate,
+                  let nowTurnStartTime = data.turnStartTime?.toDate else { return }
+            let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
             
-            else if data.turnStartTime != beforeTurnStartTime {
-                guard let beforeTurnStartTime = beforeTurnStartTime?.toDate,
-                      let nowTurnStartTime = data.turnStartTime?.toDate else { return }
-                let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
-                
-                self.gameTimer(60)
+            self.gameTimer(10)
 //                if timeDifference > 15 {
 //                    print(#fileID, #function, #line, "- 게임룸 삭제 lets get it")
 //                    self.deleteGameRoom()
@@ -158,8 +158,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
 //                    self.gameTimer(data.turnTime)
 //                    self.gameTimer(10)
 //                }
-    
-            }
+
         }
     }
 
