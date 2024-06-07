@@ -34,7 +34,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
     let createdAt: String
     let turnTime: Int
     let gameStatus: String
-    var loser: Int?
+    var loser: String?
     /// 수비자의 맞,틀 선택(yes -> 맞습니다, no -> 아닙니다, pass: 카드 넘기기)
     let decision: String?
     let newGame: String?
@@ -75,7 +75,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: Int?, decision: String?, newGame: String?, player: [String: Player]) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: String?, decision: String?, newGame: String?, player: [String: Player]) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -170,7 +170,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.createdAt = createdAt
         self.turnTime = turnTime
         self.gameStatus = gameStatus
-        self.loser = data["loser"] as? Int
+        self.loser = data["loser"] as? String
         self.decision = data["decision"] as? String
         self.newGame = data["newGame"] as? String
         

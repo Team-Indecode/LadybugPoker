@@ -867,9 +867,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
         let userRef  = db.collection(User.path).document(Service.shared.myUserModel.id)
         // Firebase DB에 User data 업데이트
         guard let myUserInGameData = gameRoomData.usersInGame[Service.shared.myUserModel.id] else { return }
-        guard let loserIdx = gameRoomData.loser else { return }
+        guard let loserId = gameRoomData.loser else { return }
         
-        let gameRoomResultData = History(id: gameRoomData.id, title: gameRoomData.title, isWinner: myUserInGameData.idx != loserIdx, maxUserCount: gameRoomData.maxUserCount, userCount: gameRoomData.usersInGame.count, createdAt: gameRoomData.createdAt)
+        let gameRoomResultData = History(id: gameRoomData.id, title: gameRoomData.title, isWinner: myUserInGameData.id != loserId, maxUserCount: gameRoomData.maxUserCount, userCount: gameRoomData.usersInGame.count, createdAt: gameRoomData.createdAt)
         
         userRef.collection(History.path).document(gameRoomData.id)
             .setData(gameRoomResultData.toJson)
