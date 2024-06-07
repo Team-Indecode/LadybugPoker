@@ -921,7 +921,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         
         try await gameRoomDataRef
-            .updateData(["player": playerJsonData])
+            .updateData(["players": playerJsonData])
     }
     
     //MARK: - 음악관련
@@ -948,7 +948,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     func playMusic() {
         isMusicPlaying = true
-        musicPlayer.play()
+//        musicPlayer.play()
     }
     
     func stopMusic() {

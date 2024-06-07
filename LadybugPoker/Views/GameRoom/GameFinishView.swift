@@ -32,12 +32,14 @@ struct GameFinishView: View {
             }
         }
         .onAppear {
+            print(#fileID, #function, #line, "- ???")
             guard let loserId = loserId else { return }
             self.winnersProfile = []
             for idx in 0..<6 {
                 let userId = viewModel.usersId[idx]
+                print(#fileID, #function, #line, "- gameFinished usersId: \(userId)")
                 if let userId = userId {
-                    guard let userData =  viewModel.gameRoomData.value.players[userId] else {
+                    guard let userData =  viewModel.getUserData(userId) else {
                         return
                     }
                     if loserId == userId {
