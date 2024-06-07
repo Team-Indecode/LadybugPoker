@@ -144,7 +144,7 @@ struct GameRoomCreateView: View {
                                          loser: nil,
                                          decision: nil,
                                          newGame: nil,
-                                         player: [:]
+                                         players: [:]
                                          )
                     
                     try await GameRoom.create(model: model)

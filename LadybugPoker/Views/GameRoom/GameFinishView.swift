@@ -37,7 +37,7 @@ struct GameFinishView: View {
             for idx in 0..<6 {
                 let userId = viewModel.usersId[idx]
                 if let userId = userId {
-                    guard let userData =  viewModel.gameRoomData.value.player[userId] else {
+                    guard let userData =  viewModel.gameRoomData.value.players[userId] else {
                         return
                     }
                     if loserId == userId {

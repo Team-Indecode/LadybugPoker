@@ -15,7 +15,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     @Published var gameRoomId: String = ""
     @Published var gameStatus: GameStatus = .notStarted
     
-    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil, player: [:]))
+    @Published var gameRoomData = CurrentValueSubject<GameRoom, Never>(GameRoom(id: "", hostId: "", title: "", password: "", maxUserCount: 0, code: "", usersInGame: [:], whoseTurn: nil, whoseGetting: nil, selectedCard: nil, turnStartTime: "", questionCard: nil, attackers: [], createdAt: "", turnTime: 0, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil, players: [:]))
 
     /// userIdx와 userId
     @Published var usersId: [String?] = Array(repeating: nil, count: 6)
@@ -146,7 +146,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                   let nowTurnStartTime = data.turnStartTime?.toDate else { return }
             let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
             
-            self.gameTimer(10)
+            self.gameTimer(60)
 //                if timeDifference > 15 {
 //                    print(#fileID, #function, #line, "- 게임룸 삭제 lets get it")
 //                    self.deleteGameRoom()
@@ -418,7 +418,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// userID에 해당하는 유저 데이터를 가지고 온다
     func getUserData(_ userID: String) -> Player? {
-        let userDataDic = gameRoomData.value.player.first(where: { $0.key == userID })
+        print(#fileID, #function, #line, "- players😥: \(gameRoomData.value.players)")
+        let userDataDic = gameRoomData.value.players.first(where: { $0.key == userID })
+        print(#fileID, #function, #line, "- userDataDic: \(userDataDic)")
         return userDataDic?.value
     }
     
@@ -440,9 +442,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
 //        if (self.secondsLeft == -1 && self.gameType != .defender) || (self.secondsLeft == -4 && self.gameType == .defender) {
 //            timeOverAutoSelect()
 //        }
-        if self.secondsLeft == -1 {
-            timeOverAutoSelect()
-        }
+        
+//        if self.secondsLeft == -1 {
+//            timeOverAutoSelect()
+//        }
     }
     
     func timeOverAutoSelect() {
@@ -590,7 +593,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// - Parameters:
     ///   - userIndex: <#userIndex description#>
     ///   - cards: <#cards description#>
-    func userIsLoserChecking(_ userIndex: Int, _ cards: [Card]) {
+    func userIsLoserChecking(_ userId: String, _ cards: [Card]) {
         var userIsLoser: Bool = false
         if cards.count == Bugs.allCases.count {
             userIsLoser = true
@@ -602,7 +605,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         }
         if userIsLoser {
 //            self.gameRoomData.value.loser = userIndex
-            loserUpdate(userIndex)
+            loserUpdate(userId)
             gameroomDataUpdate(.gameStatus, "finished")
         }
     }
@@ -753,10 +756,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
     }
     
     /// 게임 종료 시 진 사람이 누구인지 판별
-    func loserUpdate(_ loser: Int) {
+    func loserUpdate(_ loser: String) {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         
-        let updateDataDic: [String : Int?] = ["loser" : loser]
+        let updateDataDic: [String : String?] = ["loser" : loser]
         
         gameRoomDataRef.updateData(updateDataDic) { error in
             if let error = error {
@@ -851,7 +854,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             settingUser[key] = afterValue
         }
         
-        let model = GameRoom(id: newGameId, hostId: self.gameRoomData.value.hostId, title: self.gameRoomData.value.title, password: self.gameRoomData.value.password, maxUserCount: self.gameRoomData.value.maxUserCount, code: self.gameRoomData.value.code, usersInGame: settingUser, whoseGetting: nil, turnStartTime: nil, attackers: [], createdAt: Date().toString, turnTime: self.gameRoomData.value.turnTime, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil, player: [:])
+        let model = GameRoom(id: newGameId, hostId: self.gameRoomData.value.hostId, title: self.gameRoomData.value.title, password: self.gameRoomData.value.password, maxUserCount: self.gameRoomData.value.maxUserCount, code: self.gameRoomData.value.code, usersInGame: settingUser, whoseGetting: nil, turnStartTime: nil, attackers: [], createdAt: Date().toString, turnTime: self.gameRoomData.value.turnTime, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil, players: [:])
         
         do {
             try await GameRoom.create(model: model)

@@ -57,7 +57,7 @@ struct PlayerBoardView: View {
         }
         .onChange(of: self.cards) { newValue in
             if viewModel.gameStatus != .finished {
-                viewModel.userIsLoserChecking(userBoardIndex, newValue)
+                viewModel.userIsLoserChecking(user.id, newValue)
             }
         }
         .onChange(of: viewModel.usersChat[userBoardIndex]) { newValue in
