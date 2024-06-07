@@ -55,7 +55,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         if data.usersInGame.count <= 2 && data.gameStatus == GameStatus.notStarted.rawValue  {
                             self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
                         }
-                        self.getUsersId(data.usersInGame)
+                        if data.gameStatus != GameStatus.onAir.rawValue {
+                            self.getUsersId(data.usersInGame)
+                        }
                         self.getUsersChat(data.usersInGame)
                         print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
                         // 게임방의 status 체크
@@ -180,10 +182,20 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 이거 순서를 단순히 그냥 순서를 가지고 오는 것이 아니라 UserInGame의 idx순서 대로 가져와야 한다
     // 1. tuple을 만들어서(userIdx, userId)이런식으로 만들어서 userIdx를 오름차순으로 정렬한다
     // 2. 그런다음 userId만 그 tuple에서 추출한다
-    func getUsersId(_ usersInGame: [String : UserInGame]) {
-        usersInGame.forEach { (key: String, value: UserInGame) in
-            usersId[value.idx] = key
+    func getUsersId(_ usersInGameDic: [String : UserInGame]) {
+        print(#fileID, #function, #line, "- usersId checking: \(usersId)")
+        let usersInGame = usersInGameDic.values
+        for index in 0..<6 {
+            if let userData = usersInGame.first(where: { $0.idx == index }) {
+                usersId[index] = userData.id
+            } else {
+                usersId[index] = nil
+            }
+            
         }
+//        usersInGame.forEach { (key: String, value: UserInGame) in
+//            usersId[value.idx] = key
+//        }
     }
     
     func getUsersChat(_ usersInGame: [String : UserInGame]) {
@@ -948,7 +960,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     func playMusic() {
         isMusicPlaying = true
-//        musicPlayer.play()
+        musicPlayer.play()
     }
     
     func stopMusic() {
