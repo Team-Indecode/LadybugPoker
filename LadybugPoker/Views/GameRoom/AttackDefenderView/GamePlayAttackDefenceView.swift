@@ -387,7 +387,10 @@ struct GamePlayAttackDefenceView: View {
     var attackerProfileView: some View {
         HStack(spacing: 0) {
             if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseTurn ?? "") {
-                UserProfileView(user: userData)
+                let playerData = Player(id: userData.id, profileUrl: userData.profileUrl, displayName: userData.displayName)
+                UserProfileView(user: playerData)
+            } else {
+                Text("없어")
             }
             Image("attacker")
                 .resizable()
@@ -400,7 +403,8 @@ struct GamePlayAttackDefenceView: View {
         HStack(spacing: 5) {
             Spacer()
             if let userData = viewModel.getUserData(viewModel.gameRoomData.value.whoseGetting ?? "") {
-                UserProfileView(user: userData)
+                let playerData = Player(id: userData.id, profileUrl: userData.profileUrl, displayName: userData.displayName)
+                UserProfileView(user: playerData)
             }
         }
     }

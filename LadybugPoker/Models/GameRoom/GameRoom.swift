@@ -38,7 +38,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
     /// 수비자의 맞,틀 선택(yes -> 맞습니다, no -> 아닙니다, pass: 카드 넘기기)
     let decision: String?
     let newGame: String?
-    let player: [String: Player]
+    let players: [String: Player]
     
     var toJson: [String: Any] {
         var userGameData: [String: Any] = [:]
@@ -46,9 +46,9 @@ struct GameRoom: Codable, Identifiable, Equatable {
             userGameData[data.key] = data.value.toJson
         }
         
-        var players: [String: Any] = [:]
-        for data in player {
-            players[data.key] = data.value.toJson
+        var playersData: [String: Any] = [:]
+        for data in players {
+            playersData[data.key] = data.value.toJson
         }
         
         return [
@@ -71,11 +71,11 @@ struct GameRoom: Codable, Identifiable, Equatable {
             "decision" : decision,
             "gameStatus": gameStatus,
             "newGame": newGame,
-            "player": players
+            "players": playersData
         ]
     }
     
-    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: String?, decision: String?, newGame: String?, player: [String: Player]) {
+    init(id: String, hostId: String, title: String, password: String?, maxUserCount: Int, code: String, usersInGame: [String: UserInGame], whoseTurn: String? = nil, whoseGetting: String?, selectedCard: String? = nil, turnStartTime: String?, questionCard: String? = nil, attackers: [Int], createdAt: String, turnTime: Int, gameStatus: String, loser: String?, decision: String?, newGame: String?, players: [String: Player]) {
         self.id = id
         self.hostId = hostId
         self.title = title
@@ -95,7 +95,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.loser = loser
         self.decision = decision
         self.newGame = newGame
-        self.player = player
+        self.players = players
     }
     
     init?(data: [String: Any]) {
@@ -175,7 +175,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
         self.newGame = data["newGame"] as? String
         
         var tempPlayers = [String: Player]()
-        let playersData = data["player"] as? [String: Any] ?? [:]
+        let playersData = data["players"] as? [String: Any] ?? [:]
         for playerData in playersData{
             let userId = playerData.key
             let userData = Player(data: playerData.value as? [String: Any] ?? [:])
@@ -184,7 +184,7 @@ struct GameRoom: Codable, Identifiable, Equatable {
             }
         }
         
-        self.player = tempPlayers
+        self.players = tempPlayers
     }
 }
 
