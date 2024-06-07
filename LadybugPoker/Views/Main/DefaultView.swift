@@ -11,6 +11,7 @@ import Photos
 
 struct DefaultView: View {
     @EnvironmentObject private var service: Service
+    @StateObject var viewModel = GameRoomDetailViewViewModel()
     @State private var showText = false
     
     var body: some View {

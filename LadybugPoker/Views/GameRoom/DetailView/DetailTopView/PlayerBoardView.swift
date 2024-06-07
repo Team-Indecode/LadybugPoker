@@ -9,7 +9,7 @@ import SwiftUI
 
 /// 한 플레이어의 보드판
 struct PlayerBoardView: View {
-    @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
+    @StateObject var viewModel: GameRoomDetailViewViewModel
     @StateObject var gameRoomTopVM: GameRoomTopViewModel = GameRoomTopViewModel()
     let user: User
     /// 플레이어가 보드판에서 위치가 어디인지

@@ -10,7 +10,7 @@ import NukeUI
 import Combine
 
 struct GamePlayAttackDefenceView: View {
-    @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
+    @StateObject var viewModel: GameRoomDetailViewViewModel
     @StateObject var attackDefenceVM = AttackDefenceViewModel()
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
@@ -507,5 +507,5 @@ struct GamePlayAttackDefenceView: View {
 }
 
 #Preview {
-    GamePlayAttackDefenceView(showView: .constant(false))
+    GamePlayAttackDefenceView(viewModel: GameRoomDetailViewViewModel(), showView: .constant(false))
 }

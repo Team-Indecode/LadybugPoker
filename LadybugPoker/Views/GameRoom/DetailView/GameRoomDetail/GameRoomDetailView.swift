@@ -72,7 +72,7 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
+                GameRoomDetailTopView(viewModel: viewModel, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                     .frame(height: proxy.size.height * 0.6706)
                     .overlay(content: {
                         if viewModel.gameType == .selectCard && viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id {
@@ -91,16 +91,19 @@ struct GameRoomDetailView: View {
                             EmptyView()
                         }
                     })
-                    .environmentObject(viewModel)
-                GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, focusField: $focusField)
+                    
+                GameRoomDetailBottomView(viewModel: viewModel,amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, focusField: $focusField)
                     .frame(height: proxy.size.height * 0.3294)
-                    .environmentObject(viewModel)
                     .environmentObject(keyboardHeightHelper)
             }
             
             .onAppear(perform: {
                 viewModel.preparePlayMusic()
                 viewModel.playMusic()
+            })
+            .onDisappear(perform: {
+                print(#fileID, #function, #line, "- deinit")
+                viewModel.stopMusic()
             })
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(viewModel.gameRoomData.value.title)
@@ -114,14 +117,12 @@ struct GameRoomDetailView: View {
                 }
             })
             .transparentFullScreenCover(isPresented: $viewModel.showAttackerAndDefenderView, content: {
-                GamePlayAttackDefenceView(showView: $viewModel.showAttackerAndDefenderView)
+                GamePlayAttackDefenceView(viewModel: viewModel, showView: $viewModel.showAttackerAndDefenderView)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .environmentObject(viewModel)
             })
             .transparentFullScreenCover(isPresented: $viewModel.showLoserView, content: {
-                GameFinishView(isHost: viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id, loserId: viewModel.gameRoomData.value.loser)
+                GameFinishView(viewModel: viewModel, isHost: viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id, loserId: viewModel.gameRoomData.value.loser)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .environmentObject(viewModel)
                     .environmentObject(Service.shared)
                 
             })

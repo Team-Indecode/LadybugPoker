@@ -146,7 +146,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                   let nowTurnStartTime = data.turnStartTime?.toDate else { return }
             let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
             
-            self.gameTimer(60)
+            self.gameTimer(10)
 //                if timeDifference > 15 {
 //                    print(#fileID, #function, #line, "- 게임룸 삭제 lets get it")
 //                    self.deleteGameRoom()
@@ -970,4 +970,5 @@ class GameRoomDetailViewViewModel: ObservableObject {
     init() {
         NotificationCenter.default.addObserver(self, selector: #selector(musicPlayerDidReachEnd(notication:)), name: AVPlayerItem.didPlayToEndTimeNotification, object: nil)
     }
+    
 }
