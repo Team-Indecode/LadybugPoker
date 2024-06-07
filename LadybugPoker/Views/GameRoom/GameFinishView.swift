@@ -15,7 +15,7 @@ struct GameFinishView: View {
     @State private var winnersProfile: [Player] = []
     
     let isHost: Bool
-    let loserIndex: Int?
+    let loserId: String?
     
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
@@ -32,7 +32,7 @@ struct GameFinishView: View {
             }
         }
         .onAppear {
-            guard let loserIndex = loserIndex else { return }
+            guard let loserId = loserId else { return }
             self.winnersProfile = []
             for idx in 0..<6 {
                 let userId = viewModel.usersId[idx]
@@ -40,16 +40,7 @@ struct GameFinishView: View {
                     guard let userData =  viewModel.gameRoomData.value.player[userId] else {
                         return
                     }
-                    if idx == loserIndex {
-                        self.loserProfile = userData
-                    } else {
-                        self.winnersProfile.append(userData)
-                    }
-                } else if idx == 3 {
-                    guard let userData =  viewModel.gameRoomData.value.player["Undefined60"] else {
-                        return
-                    }
-                    if idx == loserIndex {
+                    if loserId == userId {
                         self.loserProfile = userData
                     } else {
                         self.winnersProfile.append(userData)
@@ -170,5 +161,5 @@ struct GameFinishView: View {
 }
 
 #Preview {
-    GameFinishView(isHost: false, loserIndex: 0)
+    GameFinishView(isHost: false, loserId: "")
 }
