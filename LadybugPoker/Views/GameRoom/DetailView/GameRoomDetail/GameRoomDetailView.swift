@@ -31,7 +31,6 @@ struct GameRoomDetailView: View {
                 .ignoresSafeArea(.keyboard)
                 .onChange(of: viewModel.gameRoomData.value.usersInGame) { oldValue, newValue in
                     myCards = viewModel.getUserCard(true)
-                    print(#fileID, #function, #line, "- myCards: \(myCards)")
                     let myId = Service.shared.myUserModel.id
                     if newValue[myId] == nil {
                         Service.shared.path.removeLast()
@@ -65,7 +64,25 @@ struct GameRoomDetailView: View {
             allContent
                 .onChange(of: viewModel.gameRoomData.value.usersInGame) { newValue in
                     myCards = viewModel.getUserCard(true)
+                    let myId = Service.shared.myUserModel.id
+                    if newValue[myId] == nil {
+                        Service.shared.path.removeLast()
+                    }
+                    if viewModel.gameStatus == .notEnoughUsers || viewModel.gameStatus == .notStarted {
+                        if let user = newValue[myId] {
+                            amIReadied = user.readyOrNot
+                        }
+                    }
                 }
+                .onChange(of: viewModel.errorMessage, perform: { errorMessage in
+                    self.showError.toggle()
+                })
+                .onChange(of: viewModel.gameStatus, perform: { new in
+                    if  viewModel.isMusicPlaying && (new == .notStarted || (new == .onAir)) {
+                        viewModel.preparePlayMusic()
+                        viewModel.playMusic()
+                    }
+                })
                 .onChange(of: viewModel.gameRoomData.value.hostId) { newValue in
                     isHost = Service.shared.myUserModel.id == newValue
                 }
