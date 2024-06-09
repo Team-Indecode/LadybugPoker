@@ -43,23 +43,17 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// 해당 게임방의 데이터를 가지고 온다
     func getGameData(_ gameRoomId: String) async throws {
-        print(#fileID, #function, #line, "- documentId: \(gameRoomId)")
         db.collection(GameRoom.path).document(gameRoomId)
             .addSnapshotListener { doc, error in
                 if let doc = doc, doc.exists {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
-//                    if let data = try? doc.data(as: GameRoom.self) {
                         let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
                         self.gameRoomData.send(data)
                         
-                        if data.usersInGame.count <= 2 && data.gameStatus == GameStatus.notStarted.rawValue  {
-                            self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
-                        }
                         if data.gameStatus != GameStatus.onAir.rawValue {
                             self.getUsersId(data.usersInGame)
                         }
                         self.getUsersChat(data.usersInGame)
-                        print(#fileID, #function, #line, "- self.gameRoomData: \(self.gameRoomData.value)")
                         // 게임방의 status 체크
                         if data.gameStatus != self.gameStatus.rawValue {
                             self.gameStatusChecking(data.gameStatus, data.turnTime)
@@ -79,17 +73,23 @@ class GameRoomDetailViewViewModel: ObservableObject {
                                 guard let newGameId = data.newGame else { return }
                                 self.updateUserCurrentGameId(newGameId)
                             }
-                            
                         } else {
+                            if data.usersInGame.count <= 2 && data.gameStatus == GameStatus.notStarted.rawValue  {
+                                self.gameroomDataUpdate(.gameStatus, GameStatus.notEnoughUsers.rawValue)
+                            } else if data.usersInGame.count > 2 && data.gameStatus == GameStatus.notEnoughUsers.rawValue {
+                                self.gameroomDataUpdate(.gameStatus, GameStatus.notStarted.rawValue)
+                            }
+                            
                             self.showLoserView = false
                             self.showAttackerAndDefenderView = false
                             self.allPlayerIsReadyChecking(data.usersInGame)
                         }
                     } else {
                         print(#fileID, #function, #line, "- wrong data")
+                        
+//                        throw FirestoreError.parseError
                     }
                 }
-                
             }
     }
     
@@ -148,13 +148,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
                   let nowTurnStartTime = data.turnStartTime?.toDate else { return }
             let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
             
-            self.gameTimer(10)
+            self.gameTimer(60)
 //                if timeDifference > 15 {
 //                    print(#fileID, #function, #line, "- 게임룸 삭제 lets get it")
 //                    self.deleteGameRoom()
 //                } else {
 //                    self.gameTimer(data.turnTime)
-//                    self.gameTimer(10)
+//                    self.gameTimer(60)
 //                }
 
         }
@@ -183,7 +183,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
     // 1. tuple을 만들어서(userIdx, userId)이런식으로 만들어서 userIdx를 오름차순으로 정렬한다
     // 2. 그런다음 userId만 그 tuple에서 추출한다
     func getUsersId(_ usersInGameDic: [String : UserInGame]) {
-        print(#fileID, #function, #line, "- usersId checking: \(usersId)")
         let usersInGame = usersInGameDic.values
         for index in 0..<6 {
             if let userData = usersInGame.first(where: { $0.idx == index }) {
@@ -191,11 +190,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             } else {
                 usersId[index] = nil
             }
-            
         }
-//        usersInGame.forEach { (key: String, value: UserInGame) in
-//            usersId[value.idx] = key
-//        }
     }
     
     func getUsersChat(_ usersInGame: [String : UserInGame]) {
@@ -234,7 +229,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         /// 게임에 참가하는 총 유저 수
         let userCnt = self.gameRoomData.value.usersInGame.count
         /// 한 유저 당 가지는 카드 개수
-        let oneUserCardCount = allCards.count / self.gameRoomData.value.usersInGame.count
+//        let oneUserCardCount = allCards.count / self.gameRoomData.value.usersInGame.count
 //        userCard(oneUserCardCount, allCards, userCnt)
         userFirstCardTwo(allCards, userCnt)
         try? await self.gameRoomPlayerUpdate(self.gameRoomData.value.usersInGame)
@@ -286,9 +281,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         // Bugs배열을 카드String으로 만들어줌
         usersCardString = bugsTocardString(usersCard)
-        
-//        print(#fileID, #function, #line, "- usersCard: \(usersCard)")
-//        print(#fileID, #function, #line, "- usersCardString⭐️: \(usersCardString)")
         usersHandCardSetting(usersCardString)
     }
     
@@ -430,9 +422,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     /// userID에 해당하는 유저 데이터를 가지고 온다
     func getUserData(_ userID: String) -> Player? {
-        print(#fileID, #function, #line, "- players😥: \(gameRoomData.value.players)")
         let userDataDic = gameRoomData.value.players.first(where: { $0.key == userID })
-        print(#fileID, #function, #line, "- userDataDic: \(userDataDic)")
         return userDataDic?.value
     }
     
@@ -498,7 +488,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
     }
     
     func changeHost() {
-        print(#fileID, #function, #line, "- self.usersId: \(self.usersId)")
         // 방장 퇴장 로직 삽입
         // 그리고 USERS의 currentGameId업데이트
         guard let hostIdx = usersId.firstIndex(of: self.gameRoomData.value.hostId) else { return }
@@ -536,7 +525,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 }
             }
         }
-        print(#fileID, #function, #line, "- whoseGetting 후보 확인: \(whoseGettingArray)")
         return whoseGettingArray.randomElement() ?? ("", -1)
     }
     
@@ -705,7 +693,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         gameRoomDataRef.updateData(["usersInGame.\(userId)" : oneUserData] ) { error in
             if let error {
-                print(#fileID, #function, #line, "- sendIamReady change error: \(error.localizedDescription)")
+                
             }
             /// 게임 시작
             if updateType == .gameStart {
@@ -761,9 +749,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         gameRoomDataRef.updateData(updateDataDic) { error in
             if let error = error {
-                print(#fileID, #function, #line, "- update \(updateDataType) error: \(error.localizedDescription)")
+                
             }
-            print(#fileID, #function, #line, "- update \(updateDataType) success update")
+            
         }
     }
     
@@ -775,9 +763,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         gameRoomDataRef.updateData(updateDataDic) { error in
             if let error = error {
-                print(#fileID, #function, #line, "- update loser error: \(error.localizedDescription)")
+                
             }
-            print(#fileID, #function, #line, "- update loser success update")
         }
     }
     

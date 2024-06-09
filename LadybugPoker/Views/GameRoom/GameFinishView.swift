@@ -47,6 +47,7 @@ struct GameFinishView: View {
                     }
                 }
             }
+            print(#fileID, #function, #line, "- \(viewModel.gameRoomData.value.usersInGame.contains(where: { $0.key == loserProfile.id }))")
         }
     }
     
@@ -120,7 +121,7 @@ struct GameFinishView: View {
     var outRoom: some View {
         Button {
             viewModel.updateUserCurrentGameId(nil)
-//            viewModel.deleteUserInGameRoom(Service.shared.myUserModel.id)
+            viewModel.deleteUserInGameRoom(Service.shared.myUserModel.id)
             viewModel.showLoserView = false
             service.path.removeLast()
         } label: {

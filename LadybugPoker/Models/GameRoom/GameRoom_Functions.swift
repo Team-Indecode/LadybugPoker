@@ -127,9 +127,8 @@ extension GameRoom {
         guard let myUserModel = Service.shared.myUserModel else {
             throw GameError.noCurrentUser
         }
-        print(#fileID, #function, #line, "- id")
+        
         let gameRoom = try await fetch(id: id)
-        print(#fileID, #function, #line, "- gameRoom: \(gameRoom)")
         /// User 현재 가득찼는지 판단
         if gameRoom.maxUserCount <= gameRoom.usersInGame.count { throw GameError.tooManyUsers }
         try await addMySelfInGame(gameId: id, currentData: gameRoom.usersInGame)
