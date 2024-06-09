@@ -89,10 +89,11 @@ struct PlayerBoardView: View {
         }
         .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)
         .frame(width: boardWidth, height: boardHeight)
-        
         .onAppear {
+            
             self.cards = viewModel.stringToCards(self.cardsString)
             self.userCardCnt = viewModel.userHandCardCntChecking(self.handCardString)
+            print(#fileID, #function, #line, "- self.cards: \(self.cardsString)")
         }
     }
     
@@ -118,7 +119,7 @@ struct PlayerBoardView: View {
     func chatView() -> some View {
         VStack(spacing: 0) {
             Spacer()
-                .frame(height: 37)
+                .frame(height: 40)
             HStack(spacing: 0) {
                 Spacer()
                     .frame(width: isOdd ? 20 : boardWidth - 90)

@@ -51,10 +51,10 @@ class GameRoomDetailViewViewModel: ObservableObject {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
                         let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
                         self.gameRoomData.send(data)
-                        
-                        if data.gameStatus != GameStatus.onAir.rawValue {
-                            self.getUsersId(data.usersInGame)
-                        }
+//                        if data.gameStatus != GameStatus.onAir.rawValue {
+//                            
+//                        }
+                        self.getUsersId(data.usersInGame)
                         self.getUsersChat(data.usersInGame)
                         // 게임방의 status 체크
                         if data.gameStatus != self.gameStatus.rawValue {
