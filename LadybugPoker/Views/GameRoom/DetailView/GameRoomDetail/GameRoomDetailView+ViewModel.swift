@@ -41,6 +41,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
     var musicPlayer: AVQueuePlayer = AVQueuePlayer()
     var currentMusicIndex : Int = 0
     
+    @Published var errorMessage: String = ""
+    
     /// 해당 게임방의 데이터를 가지고 온다
     func getGameData(_ gameRoomId: String) async throws {
         db.collection(GameRoom.path).document(gameRoomId)
@@ -693,7 +695,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         gameRoomDataRef.updateData(["usersInGame.\(userId)" : oneUserData] ) { error in
             if let error {
-                
+                self.errorMessage = error.localizedDescription
             }
             /// 게임 시작
             if updateType == .gameStart {
@@ -749,7 +751,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         gameRoomDataRef.updateData(updateDataDic) { error in
             if let error = error {
-                
+                self.errorMessage = error.localizedDescription
             }
             
         }
@@ -763,7 +765,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         gameRoomDataRef.updateData(updateDataDic) { error in
             if let error = error {
-                
+                self.errorMessage = error.localizedDescription
             }
         }
     }
@@ -774,7 +776,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         gameRoomDataRef.updateData(["attackers" : attackers]) { error in
             if let error = error {
-                print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
+                self.errorMessage = error.localizedDescription
             }
             
         }
@@ -797,7 +799,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         gameRoomDataRef.updateData(updateDic) { error in
             if let error = error {
-                print(#fileID, #function, #line, "- update error: \(error.localizedDescription)")
+                self.errorMessage = error.localizedDescription
             }
             if decision == DefenderAnswer.same.rawValue || decision == DefenderAnswer.different.rawValue {
                 // 지금 유저가 맞습니다, 아닙니다를 선택해야 할때
@@ -819,9 +821,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         gameRoomDataRef.updateData(["usersInGame.\(userId)" : FieldValue.delete()] ) { error in
             if let error = error {
-                print(#fileID, #function, #line, "- delete \(userId) error: \(error.localizedDescription)")
                 // USERS db에서도 currentGameId삭제
-                
+                self.errorMessage = error.localizedDescription
             }
             self.updateUserCurrentGameId(nil, userId)
         }
@@ -832,7 +833,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
         gameRoomDataRef.delete { error in
             if let error = error {
-                print(#fileID, #function, #line, "- delete해당 게임방 에러: \(error)")
+                self.errorMessage = error.localizedDescription
             }
             self.updateUserCurrentGameId(nil)
         }
@@ -861,7 +862,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             self.gameroomDataUpdate(.newGameId, newGameId)
             self.updateUserCurrentGameId(newGameId)
         } catch {
-            print(#fileID, #function, #line, "- make new gameRoom error: \(error.localizedDescription)")
+            self.errorMessage = error.localizedDescription
         }
     }
     

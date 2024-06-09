@@ -23,6 +23,7 @@ struct GameRoomDetailView: View {
     @State var gameRoomId: String
     @State var chat: String = ""
     @FocusState var focusField: Bool
+    @State var showError: Bool = false
     
     var body: some View {
         if #available(iOS 17, *) {
@@ -44,10 +45,12 @@ struct GameRoomDetailView: View {
                 .onChange(of: viewModel.gameRoomId) { _, viewGameRoomId in
                     gameRoomId = viewGameRoomId
                     Task {
-                        print(#fileID, #function, #line, "- new gameRoomId⭐️: \(gameRoomId)")
                         try? await viewModel.getGameData(gameRoomId)
                     }
                 }
+                .onChange(of: viewModel.errorMessage, { _, errorMessage in
+                    self.showError.toggle()
+                })
                 .onChange(of: viewModel.gameStatus) { old, new in
                     if  viewModel.isMusicPlaying && (new == .notStarted || (new == .onAir && old == .notStarted)) {
                         viewModel.preparePlayMusic()
@@ -137,6 +140,7 @@ struct GameRoomDetailView: View {
                 }
             })
             .customCheckAlert(title: "방장이 되었습니다.", subTitle: "", isPresented: $viewModel.showHostChange)
+            .customCheckAlert(title: "에러가 발생했습니다", subTitle: viewModel.errorMessage, isPresented: self.$showError)
             .task {
                 print(#fileID, #function, #line, "- gameId gameRoomId: \(gameRoomId)")
                 viewModel.gameRoomId = gameRoomId
