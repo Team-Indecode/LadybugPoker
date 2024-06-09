@@ -23,6 +23,7 @@ struct GameRoomDetailView: View {
     @State var gameRoomId: String
     @State var chat: String = ""
     @FocusState var focusField: Bool
+    @State var showError: Bool = false
     
     var body: some View {
         if #available(iOS 17, *) {
@@ -30,7 +31,6 @@ struct GameRoomDetailView: View {
                 .ignoresSafeArea(.keyboard)
                 .onChange(of: viewModel.gameRoomData.value.usersInGame) { oldValue, newValue in
                     myCards = viewModel.getUserCard(true)
-                    print(#fileID, #function, #line, "- myCards: \(myCards)")
                     let myId = Service.shared.myUserModel.id
                     if newValue[myId] == nil {
                         Service.shared.path.removeLast()
@@ -44,10 +44,12 @@ struct GameRoomDetailView: View {
                 .onChange(of: viewModel.gameRoomId) { _, viewGameRoomId in
                     gameRoomId = viewGameRoomId
                     Task {
-                        print(#fileID, #function, #line, "- new gameRoomId⭐️: \(gameRoomId)")
                         try? await viewModel.getGameData(gameRoomId)
                     }
                 }
+                .onChange(of: viewModel.errorMessage, { _, errorMessage in
+                    self.showError.toggle()
+                })
                 .onChange(of: viewModel.gameStatus) { old, new in
                     if  viewModel.isMusicPlaying && (new == .notStarted || (new == .onAir && old == .notStarted)) {
                         viewModel.preparePlayMusic()
@@ -62,7 +64,25 @@ struct GameRoomDetailView: View {
             allContent
                 .onChange(of: viewModel.gameRoomData.value.usersInGame) { newValue in
                     myCards = viewModel.getUserCard(true)
+                    let myId = Service.shared.myUserModel.id
+                    if newValue[myId] == nil {
+                        Service.shared.path.removeLast()
+                    }
+                    if viewModel.gameStatus == .notEnoughUsers || viewModel.gameStatus == .notStarted {
+                        if let user = newValue[myId] {
+                            amIReadied = user.readyOrNot
+                        }
+                    }
                 }
+                .onChange(of: viewModel.errorMessage, perform: { errorMessage in
+                    self.showError.toggle()
+                })
+                .onChange(of: viewModel.gameStatus, perform: { new in
+                    if  viewModel.isMusicPlaying && (new == .notStarted || (new == .onAir)) {
+                        viewModel.preparePlayMusic()
+                        viewModel.playMusic()
+                    }
+                })
                 .onChange(of: viewModel.gameRoomData.value.hostId) { newValue in
                     isHost = Service.shared.myUserModel.id == newValue
                 }
@@ -72,7 +92,7 @@ struct GameRoomDetailView: View {
     var allContent: some View {
         GeometryReader(content: { proxy in
             VStack(spacing: 0) {
-                GameRoomDetailTopView(showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
+                GameRoomDetailTopView(viewModel: viewModel, showExistAlert: $showExistAlert, existUserId: $existUserId, existUserDisplayName: $existUserDisplayName)
                     .frame(height: proxy.size.height * 0.6706)
                     .overlay(content: {
                         if viewModel.gameType == .selectCard && viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id {
@@ -91,16 +111,18 @@ struct GameRoomDetailView: View {
                             EmptyView()
                         }
                     })
-                    .environmentObject(viewModel)
-                GameRoomDetailBottomView(amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, focusField: $focusField)
+                    
+                GameRoomDetailBottomView(viewModel: viewModel,amIReadied: $amIReadied, isHost: $isHost, myCards: $myCards, showCardSelectedPopup: $showCardSelectedPopup, gameType: $viewModel.gameType, focusField: $focusField)
                     .frame(height: proxy.size.height * 0.3294)
-                    .environmentObject(viewModel)
                     .environmentObject(keyboardHeightHelper)
             }
             
             .onAppear(perform: {
                 viewModel.preparePlayMusic()
                 viewModel.playMusic()
+            })
+            .onDisappear(perform: {
+                viewModel.stopMusic()
             })
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(viewModel.gameRoomData.value.title)
@@ -114,14 +136,12 @@ struct GameRoomDetailView: View {
                 }
             })
             .transparentFullScreenCover(isPresented: $viewModel.showAttackerAndDefenderView, content: {
-                GamePlayAttackDefenceView(showView: $viewModel.showAttackerAndDefenderView)
+                GamePlayAttackDefenceView(viewModel: viewModel, showView: $viewModel.showAttackerAndDefenderView)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .environmentObject(viewModel)
             })
             .transparentFullScreenCover(isPresented: $viewModel.showLoserView, content: {
-                GameFinishView(isHost: viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id, loserId: viewModel.gameRoomData.value.loser)
+                GameFinishView(viewModel: viewModel, isHost: viewModel.gameRoomData.value.hostId == Service.shared.myUserModel.id, loserId: viewModel.gameRoomData.value.loser)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .environmentObject(viewModel)
                     .environmentObject(Service.shared)
                 
             })
@@ -136,8 +156,8 @@ struct GameRoomDetailView: View {
                 }
             })
             .customCheckAlert(title: "방장이 되었습니다.", subTitle: "", isPresented: $viewModel.showHostChange)
+            .customCheckAlert(title: "에러가 발생했습니다", subTitle: viewModel.errorMessage, isPresented: self.$showError)
             .task {
-                print(#fileID, #function, #line, "- gameId gameRoomId: \(gameRoomId)")
                 viewModel.gameRoomId = gameRoomId
                 try? await viewModel.getGameData(gameRoomId)
             }

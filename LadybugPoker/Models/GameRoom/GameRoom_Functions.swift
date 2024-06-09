@@ -38,7 +38,7 @@ extension GameRoom {
     static func fetchList(_ last: GameRoom?) async throws -> GameRooms {
         var documents = [QueryDocumentSnapshot]()
         if let last {
-            print(last.createdAt, last.title)
+//            print(last.createdAt, last.title)
             
             documents = try await Firestore.firestore().collection(path)
                 .whereField("createdAt", isLessThan: last.createdAt)
@@ -76,7 +76,6 @@ extension GameRoom {
         
         var indexes = [0, 1, 2, 3, 4, 5]
         for data in currentData.values {
-            print("indexes: \(data.idx)")
             indexes.removeAll(where: { $0 == data.idx })
         }
         
@@ -94,8 +93,6 @@ extension GameRoom {
                                  profileUrl: myUserModel.profileUrl,
                                  idx: indexes.first ?? 0,
                                  chat: nil)
-        
-        print(#fileID, #function, #line, "- newData: \(newData)")
         
         var newJsonData = [String: Any]()
         
@@ -127,15 +124,13 @@ extension GameRoom {
         guard let myUserModel = Service.shared.myUserModel else {
             throw GameError.noCurrentUser
         }
-        print(#fileID, #function, #line, "- id")
+        
         let gameRoom = try await fetch(id: id)
-        print(#fileID, #function, #line, "- gameRoom: \(gameRoom)")
         /// User 현재 가득찼는지 판단
         if gameRoom.maxUserCount <= gameRoom.usersInGame.count { throw GameError.tooManyUsers }
         try await addMySelfInGame(gameId: id, currentData: gameRoom.usersInGame)
         
         try await User.changeCurrentGameId(id: id)
-        print("JOININING : \(id)")
     }
     
     /// 게임방에서 퇴장합니다.

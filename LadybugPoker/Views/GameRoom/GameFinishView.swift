@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GameFinishView: View {
     @EnvironmentObject private var service: Service
-    @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
+    @StateObject var viewModel: GameRoomDetailViewViewModel
     
     @State private var loserProfile: Player = Player(id: "", profileUrl: nil, displayName: "")
     @State private var winnersProfile: [Player] = []
@@ -37,7 +37,7 @@ struct GameFinishView: View {
             for idx in 0..<6 {
                 let userId = viewModel.usersId[idx]
                 if let userId = userId {
-                    guard let userData =  viewModel.gameRoomData.value.players[userId] else {
+                    guard let userData =  viewModel.getUserData(userId) else {
                         return
                     }
                     if loserId == userId {
@@ -120,6 +120,7 @@ struct GameFinishView: View {
     var outRoom: some View {
         Button {
             viewModel.updateUserCurrentGameId(nil)
+            viewModel.deleteUserInGameRoom(Service.shared.myUserModel.id)
             viewModel.showLoserView = false
             service.path.removeLast()
         } label: {
@@ -160,6 +161,6 @@ struct GameFinishView: View {
     }
 }
 
-#Preview {
-    GameFinishView(isHost: false, loserId: "")
-}
+//#Preview {
+//    GameFinishView(isHost: false, loserId: "")
+//}

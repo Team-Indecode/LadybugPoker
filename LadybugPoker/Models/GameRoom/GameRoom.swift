@@ -105,23 +105,22 @@ struct GameRoom: Codable, Identifiable, Equatable {
         }
         
         guard let hostId = data["hostId"] as? String else {
-            print(#function, #fileID, "wrong Host Id")
+//            print(#function, #fileID, "wrong Host Id")
             return nil
         }
         
         guard let title = data["title"] as? String else {
-            print(#function, #fileID, "wrong Title")
+//            print(#function, #fileID, "wrong Title")
             return nil
         }
         
         guard let maxUserCount = data["maxUserCount"] as? Int else {
-            print(#function, #fileID, "wrong max user count")
+//            print(#function, #fileID, "wrong max user count")
             return nil
         }
         
         guard let code = data["code"] as? String else {
-            print(#function, #fileID, "wrong code")
-            
+//            print(#function, #fileID, "wrong code")
             return nil
         }
         

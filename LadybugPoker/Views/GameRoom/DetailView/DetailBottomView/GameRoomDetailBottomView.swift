@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GameRoomDetailBottomView: View {
-    @EnvironmentObject private var viewModel: GameRoomDetailViewViewModel
+    @StateObject var viewModel: GameRoomDetailViewViewModel
     @EnvironmentObject private var keyboardHeightHelper: KeyboardHeightHelper
     @StateObject private var bottomViewModel = GameRoomBottomViewModel()
     

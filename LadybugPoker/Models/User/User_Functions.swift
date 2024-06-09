@@ -34,7 +34,6 @@ extension User {
               let win = data["win"] as? Int,
               let lose = data["lose"] as? Int,
               let history = data["history"] as? [String] else {
-            print(#fileID, #function, #line, "- dudlasfd")
                   throw UserError.invalidData
               }
         

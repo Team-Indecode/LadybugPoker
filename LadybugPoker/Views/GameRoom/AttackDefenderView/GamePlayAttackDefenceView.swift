@@ -10,7 +10,7 @@ import NukeUI
 import Combine
 
 struct GamePlayAttackDefenceView: View {
-    @EnvironmentObject var viewModel: GameRoomDetailViewViewModel
+    @StateObject var viewModel: GameRoomDetailViewViewModel
     @StateObject var attackDefenceVM = AttackDefenceViewModel()
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
@@ -63,7 +63,6 @@ struct GamePlayAttackDefenceView: View {
                         withAnimation(.linear(duration: 1.0)) {
                             disappearBugView = true
                         }
-                        
                     })
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
@@ -101,6 +100,57 @@ struct GamePlayAttackDefenceView: View {
                 }
         } else {
             allContent
+                .onChange(of: attackDefenceVM.circleDots) { newValue in
+                    withAnimation {
+                        circleSize = [7.0, 7.0, 7.0]
+                        circleSize[newValue % 3] = 12.0
+                    }
+                }
+                .onChange(of: viewModel.userType) { userType in
+                    if let userType = userType {
+                        player = userType
+                    }
+                }
+                .onChange(of: viewModel.showAttackResult.0) { newValue in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                        withAnimation(.linear(duration: 1.0)) {
+                            disappearBugView = true
+                        }
+                    })
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                        withAnimation {
+                            showAttackResult = true
+                        }
+                        withAnimation(.linear(duration: 0.7)) {
+                            startRotation = true
+                        }
+                    })
+                }
+                .onChange(of: viewModel.gameRoomData.value.selectedCard) { newValue in
+                    switch newValue {
+                    case Bugs.bee.cardString: selectBug = .bee
+                    case Bugs.frog.cardString: selectBug = .frog
+                    case Bugs.ladybug.cardString: selectBug = .ladybug
+                    case Bugs.rat.cardString: selectBug = .rat
+                    case Bugs.snail.cardString: selectBug = .snail
+                    case Bugs.snake.cardString: selectBug = .snake
+                    case Bugs.spider.cardString: selectBug = .spider
+                    case Bugs.worm.cardString: selectBug = .worm
+                    default: selectBug = nil
+                    }
+                }
+                .onChange(of: viewModel.gameRoomData.value.decision) { newValue in
+                    if Service.shared.myUserModel.id == viewModel.gameRoomData.value.whoseGetting && newValue != nil {
+                        switch newValue {
+                        case "yes": self.defenderChooseAnswer = "y"
+                        case "no": self.defenderChooseAnswer = "n"
+                        case "pass": self.defenderChooseAnswer = "p"
+                        default: return
+                        }
+                        self.showDefenderChooseAnser = true
+                    }
+                }
         }
     }
     
@@ -397,6 +447,7 @@ struct GamePlayAttackDefenceView: View {
                 .frame(width: 40, height: 40)
             Spacer()
         }
+        .padding(.leading)
     }
     
     var defenderProfileView: some View {
@@ -407,6 +458,7 @@ struct GamePlayAttackDefenceView: View {
                 UserProfileView(user: playerData)
             }
         }
+        .padding(.trailing)
     }
     
     //MARK: - 바텀
@@ -507,5 +559,5 @@ struct GamePlayAttackDefenceView: View {
 }
 
 #Preview {
-    GamePlayAttackDefenceView(showView: .constant(false))
+    GamePlayAttackDefenceView(viewModel: GameRoomDetailViewViewModel(), showView: .constant(false))
 }
