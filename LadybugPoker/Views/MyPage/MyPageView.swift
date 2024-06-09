@@ -9,6 +9,7 @@ import SwiftUI
 import NukeUI
 import PhotosUI
 import FirebaseStorage
+import FirebaseFirestore
 
 struct MyPageView: View {
     @EnvironmentObject private var service: Service
@@ -133,8 +134,8 @@ struct MyPageView: View {
                         let metaData = try await ref.putDataAsync(data)
                         
                         let url = try await ref.downloadURL().absoluteString
-                        
-                        service.myUserModel.profileUrl = url
+                                                
+                        try await User.changeProfileUrl(url: url)
                     }
                 }
             }

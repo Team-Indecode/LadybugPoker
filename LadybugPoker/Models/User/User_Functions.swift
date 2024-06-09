@@ -60,6 +60,15 @@ extension User {
         Service.shared.myUserModel.currentUserId = id
     }
     
+    static func changeProfileUrl(url: String) async throws {
+        guard let user = Service.shared.myUserModel else { throw GameError.noCurrentUser }
+        
+        try await Firestore.firestore().collection(path)
+            .document(user.id).updateData(["profileUrl": url])
+        
+        Service.shared.myUserModel.profileUrl = url
+    }
+    
     static func random() -> User {
         let randomNumber = Int.random(in: 0..<100000)
         let names = [
