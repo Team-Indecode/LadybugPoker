@@ -47,7 +47,6 @@ struct GameFinishView: View {
                     }
                 }
             }
-            print(#fileID, #function, #line, "- \(viewModel.gameRoomData.value.usersInGame.contains(where: { $0.key == loserProfile.id }))")
         }
     }
     

@@ -93,7 +93,6 @@ struct PlayerBoardView: View {
             
             self.cards = viewModel.stringToCards(self.cardsString)
             self.userCardCnt = viewModel.userHandCardCntChecking(self.handCardString)
-            print(#fileID, #function, #line, "- self.cards: \(self.cardsString)")
         }
     }
     
@@ -241,7 +240,6 @@ struct PlayerBoardView: View {
     
     var exitButton: some View {
         Button {
-            print(#fileID, #function, #line, "- 퇴장 버튼 클릭⭐️")
             existUserId = user.id
             existUserDisplayName = user.displayName
             showExitAlert.toggle()

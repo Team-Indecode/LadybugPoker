@@ -87,9 +87,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                             self.allPlayerIsReadyChecking(data.usersInGame)
                         }
                     } else {
-                        print(#fileID, #function, #line, "- wrong data")
-                        
-//                        throw FirestoreError.parseError
+                        self.errorMessage = "wrong data"
                     }
                 }
             }
@@ -651,7 +649,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
         let tempCnt = tempCardString.popLast()
         if let tempCnt = tempCnt {
             if let cnt = Int(String(tempCnt)) {
-                print(#fileID, #function, #line, "- cnt: \(cnt)")
                 switch tempCardString {
                 case Bugs.snake.cardString: return Card(bug: .snake, cardCnt: cnt)
                 case Bugs.ladybug.cardString: return Card(bug: .ladybug, cardCnt: cnt)

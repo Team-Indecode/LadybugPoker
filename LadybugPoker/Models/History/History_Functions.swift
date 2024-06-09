@@ -31,12 +31,9 @@ extension History {
                 .getDocuments()
                 .documents
         }
-
-        print(#fileID, #function, #line, "- doccousnt: \(documents.count)")
         var histories = [History]()
-        print(#fileID, #function, #line, "- document checking⭐️: \(documents)")
+        
         for document in documents {
-            print(#fileID, #function, #line, "- document: \(document)")
             if let history = History(data: document.data()) {
 //            if let room = try? document.data(as: GameRoom.self) {
                 histories.append(history)
