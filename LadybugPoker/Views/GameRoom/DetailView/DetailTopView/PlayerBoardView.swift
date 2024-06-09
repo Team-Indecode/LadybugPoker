@@ -38,6 +38,48 @@ struct PlayerBoardView: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
+        if #available(iOS 17, *) {
+            allContent
+                .onChange(of: self.cardsString) { oldValue, newValue in
+                    self.cards = viewModel.stringToCards(newValue)
+                }
+                .onChange(of: self.handCardString) { oldValue, newValue in
+                    self.userCardCnt = viewModel.userHandCardCntChecking(newValue)
+                }
+                .onChange(of: self.cards) { oldValue, newValue in
+                    if viewModel.gameStatus != .finished {
+                        viewModel.userIsLoserChecking(user.id, newValue)
+                    }
+                }
+                .onChange(of: viewModel.usersChat[userBoardIndex]) { oldValue, newValue in
+                    if let userChat = newValue {
+                        self.userChat = userChat
+                        gameRoomTopVM.messageTimer()
+                    }
+                }
+        } else {
+            allContent
+                .onChange(of: self.cardsString) { newValue in
+                    self.cards = viewModel.stringToCards(newValue)
+                }
+                .onChange(of: self.handCardString) { newValue in
+                    self.userCardCnt = viewModel.userHandCardCntChecking(newValue)
+                }
+                .onChange(of: self.cards) { newValue in
+                    if viewModel.gameStatus != .finished {
+                        viewModel.userIsLoserChecking(user.id, newValue)
+                    }
+                }
+                .onChange(of: viewModel.usersChat[userBoardIndex]) { newValue in
+                    if let userChat = newValue {
+                        self.userChat = userChat
+                        gameRoomTopVM.messageTimer()
+                    }
+                }
+        }
+    }
+    
+    var allContent: some View {
         ZStack {
             playerBoard
             if gameRoomTopVM.showMessage {
@@ -47,28 +89,7 @@ struct PlayerBoardView: View {
         }
         .padding(isOdd ? [.trailing, .top] : [.leading, .top], 5)
         .frame(width: boardWidth, height: boardHeight)
-        .onChange(of: self.cardsString) { newValue in
-            print(#fileID, #function, #line, "- self.cardsString⭐️: \(newValue)")
-            self.cards = viewModel.stringToCards(newValue)
-        }
-        .onChange(of: self.handCardString) { newValue in
-            print(#fileID, #function, #line, "- handCardString: \(handCardString)")
-            self.userCardCnt = viewModel.userHandCardCntChecking(newValue)
-        }
-        .onChange(of: self.cards) { newValue in
-            if viewModel.gameStatus != .finished {
-                viewModel.userIsLoserChecking(user.id, newValue)
-            }
-        }
-        .onChange(of: viewModel.usersChat[userBoardIndex]) { newValue in
-            if let userChat = newValue {
-                self.userChat = userChat
-                gameRoomTopVM.messageTimer()
-            }
-        }
-//        .onChange(of: self.userChat, perform: { newValue in
-//            
-//        })
+        
         .onAppear {
             self.cards = viewModel.stringToCards(self.cardsString)
             self.userCardCnt = viewModel.userHandCardCntChecking(self.handCardString)
