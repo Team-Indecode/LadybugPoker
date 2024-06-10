@@ -14,6 +14,7 @@ struct MainView: View {
     @State private var showPasswordView: GameRoom? = nil
     @State private var showWrongPasswordPopup = false
     @State private var showTooManyUserPopup = false
+    @State private var finishedGamePopup = false
     
     @State private var password: String = ""
     
@@ -67,13 +68,19 @@ struct MainView: View {
                             if let password = gameRoom.password, password.isEmpty == false {
                                 showPasswordView = gameRoom
                             } else {
-                                Task {
-                                    do {
-                                        try await GameRoom.join(id: gameRoom.id)
-                                        service.path.append(.gameRoom(gameRoomId: gameRoom.id))
-                                    } catch {
-                                        print("JOINING ERROR")
-                                        print(error)
+                                if gameRoom.gameStatus == GameStatus.notStarted.rawValue || gameRoom.gameStatus == GameStatus.notEnoughUsers.rawValue {
+                                    Task {
+                                        do {
+                                            try await GameRoom.join(id: gameRoom.id)
+                                            service.path.append(.gameRoom(gameRoomId: gameRoom.id))
+                                        } catch {
+                                            print("JOINING ERROR")
+                                            print(error)
+                                        }
+                                    }
+                                } else {
+                                    withAnimation {
+                                        finishedGamePopup.toggle()
                                     }
                                 }
                             }
@@ -220,13 +227,32 @@ struct MainView: View {
                 }
                 
                 if showWrongPasswordPopup {
-                    CommonPopupView($showWrongPasswordPopup, title: "잘못된 비밀번호입니다.", subTitle: "", yesButtonHandler: {})
+                    CommonPopupView($showWrongPasswordPopup, title: "잘못된 비밀번호입니다.", subTitle: "", yesButtonHandler: {
+                        withAnimation {
+                            showWrongPasswordPopup.toggle()
+                        }
+                    })
                 }
                 
                 if showTooManyUserPopup {
                     ZStack {
                         Color.black.opacity(0.3)
-                        CommonPopupView($showTooManyUserPopup, title: "인원이 가득찬 게임입니다.", subTitle: "참가할 수 없습니다.", yesButtonHandler: {})
+                        CommonPopupView($showTooManyUserPopup, title: "인원이 가득찬 게임입니다.", subTitle: "참가할 수 없습니다.", yesButtonHandler: {
+                            withAnimation {
+                                showTooManyUserPopup = false
+                            }
+                        })
+                    }
+                }
+                
+                if finishedGamePopup {
+                    ZStack {
+                        Color.black.opacity(0.3)
+                        CommonPopupView($finishedGamePopup, title: "이미 진행중이거나\n종료된 게임입니다.", subTitle: "참가할 수 없습니다.", yesButtonHandler: {
+                            withAnimation {
+                                finishedGamePopup = false
+                            }
+                        })
                     }
                 }
             }
