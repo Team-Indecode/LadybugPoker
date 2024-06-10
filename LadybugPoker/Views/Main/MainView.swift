@@ -120,7 +120,7 @@ struct MainView: View {
                     if let gameId = user.currentUserId {
                         service.path.append(.gameRoom(gameRoomId: gameId))
                     } else {
-                        if UserDefaults.standard.bool(forKey: "loggedIn") == true {
+                        if UserDefaults.standard.bool(forKey: "loggedIn") == false {
                             service.path.append(.guide)
                             UserDefaults.standard.setValue(true, forKey: "loggedIn")
                         }

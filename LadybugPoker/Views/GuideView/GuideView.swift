@@ -753,7 +753,7 @@ struct GuideView: View {
                 }
             }
             
-            if newLevel == 20 {
+            if newLevel == 27 {
                 service.path.removeLast()
             }
         }
