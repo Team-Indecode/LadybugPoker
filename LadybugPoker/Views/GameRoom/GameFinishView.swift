@@ -120,7 +120,11 @@ struct GameFinishView: View {
     var outRoom: some View {
         Button {
             viewModel.updateUserCurrentGameId(nil)
-            viewModel.deleteUserInGameRoom(Service.shared.myUserModel.id)
+            if Service.shared.myUserModel.id == viewModel.gameRoomData.value.hostId {
+                viewModel.changeHost()
+            } else {
+                viewModel.deleteUserInGameRoom(Service.shared.myUserModel.id)
+            }
             viewModel.showLoserView = false
             service.path.removeLast()
         } label: {
