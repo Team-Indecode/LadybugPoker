@@ -307,7 +307,7 @@ struct GuideView: View {
                         Image("ladybug")
                             .padding(.bottom, 70)
                         
-                        Text("화난 신사동 호랑이가")
+                        Text("화난 \(users[1].displayName)가")
                         
                         Text("공격을 해왔어요 !")
                     }
@@ -751,6 +751,10 @@ struct GuideView: View {
                         level += 1
                     }                    
                 }
+            }
+            
+            if newLevel == 27 {
+                service.path.removeLast()
             }
         }
     }

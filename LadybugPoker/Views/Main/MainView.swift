@@ -120,7 +120,10 @@ struct MainView: View {
                     if let gameId = user.currentUserId {
                         service.path.append(.gameRoom(gameRoomId: gameId))
                     } else {
-//                        service.path.append(.guide)
+                        if UserDefaults.standard.bool(forKey: "loggedIn") == false {
+                            service.path.append(.guide)
+                            UserDefaults.standard.setValue(true, forKey: "loggedIn")
+                        }
                     }
                 }
             }
@@ -230,7 +233,7 @@ struct MainView: View {
         }
         .overlay(alignment: .bottomTrailing) {
             Button {
-                if let url = URL(string: "https://volcano-kayak-10a.notion.site/177f2d3110694ac3805b6c96862d4091?pvs=4") {
+                if let url = URL(string: "https://velog.io/@app_shawn/%EB%AC%B4%EB%8B%B9%EB%B2%8C%EB%A0%88-%ED%8F%AC%EC%BB%A4-%EA%B0%80%EC%9D%B4%EB%93%9C") {
                    UIApplication.shared.open(url)
                 }
             } label: {
