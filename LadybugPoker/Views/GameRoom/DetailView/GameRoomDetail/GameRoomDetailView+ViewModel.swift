@@ -50,10 +50,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 if let doc = doc, doc.exists {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
                         let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
+                        let originalHostId = self.gameRoomData.value.hostId
                         self.gameRoomData.send(data)
-//                        if data.gameStatus != GameStatus.onAir.rawValue {
-//                            
-//                        }
+                        if originalHostId != data.hostId && Service.shared.myUserModel.id == data.hostId {
+                            self.showHostChange = true
+                        }
                         self.getUsersId(data.usersInGame)
                         self.getUsersChat(data.usersInGame)
                         // 게임방의 status 체크
@@ -512,9 +513,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         self.deleteUserInGameRoom(self.gameRoomData.value.hostId)
         self.gameroomDataUpdate(.hostId, newHostId)
-        if Service.shared.myUserModel.id == newHostId {
-            showHostChange = true
-        }
     }
     
     func selectWhoseGetting() -> (String, Int) {
