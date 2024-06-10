@@ -485,13 +485,18 @@ struct GamePlayAttackDefenceView: View {
     /// 타이머
     var timerView: some View {
         ZStack {
-            Text("내 차례 입니다!")
-                .font(.sea(10))
-                .foregroundStyle(Color(hex: "494949"))
-                .frame(maxWidth: .infinity, alignment: .leading)
+            if (viewModel.gameType == .attacker && Service.shared.myUserModel.id == viewModel.gameRoomData.value.whoseTurn) || (viewModel.gameType == .defender && Service.shared.myUserModel.id == viewModel.gameRoomData.value.whoseGetting){
+                Text("내 차례 입니다!")
+                    .font(.sea(10))
+                    .foregroundStyle(Color(hex: "494949"))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 5)
+            }
+            
             Text("남은 시간: \(viewModel.secondsLeft > 0 ? viewModel.secondsLeft : 0)")
                 .font(.sea(15))
                 .foregroundStyle(Color(hex: "393939"))
+                .frame(maxWidth: .infinity)
         }
         .padding(.vertical, 3)
         .background(Color(hex: "D1BB9E"))
@@ -515,7 +520,7 @@ struct GamePlayAttackDefenceView: View {
                 }
             }
             .padding(.bottom, 26)
-            if viewModel.gameRoomData.value.attackers.count != viewModel.gameRoomData.value.usersInGame.count {
+            if viewModel.gameRoomData.value.attackers.count != viewModel.gameRoomData.value.usersInGame.count - 1 {
                 if (showDefenderChooseAnser && defenderChooseAnswer == "p") || !showDefenderChooseAnser {
                     guessText(DefenderAnswer.cardSkip.rawValue)
                 }

@@ -71,6 +71,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                             self.timer?.invalidate()
                             self.showLoserView = true
                             self.updateUserGameHistory(self.gameRoomData.value)
+                            //방장이 새 게임 생성해서 다른 유저들도 새 게임하러 넘어감
                             if data.newGame != nil && data.hostId != Service.shared.myUserModel.id {
                                 guard let newGameId = data.newGame else { return }
                                 self.updateUserCurrentGameId(newGameId)
@@ -147,8 +148,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
             guard let beforeTurnStartTime = beforeTurnStartTime?.toDate,
                   let nowTurnStartTime = data.turnStartTime?.toDate else { return }
             let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
-            
-            self.gameTimer(60)
+            #warning("gameTimer시간 변경")
+//            self.gameTimer(60)
+            self.gameTimer(10)
 //                if timeDifference > 15 {
 //                    print(#fileID, #function, #line, "- 게임룸 삭제 lets get it")
 //                    self.deleteGameRoom()
@@ -445,9 +447,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
 //            timeOverAutoSelect()
 //        }
         
-//        if self.secondsLeft == -1 {
-//            timeOverAutoSelect()
-//        }
+        if self.secondsLeft == -1 {
+            timeOverAutoSelect()
+        }
     }
     
     func timeOverAutoSelect() {
@@ -821,6 +823,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 // USERS db에서도 currentGameId삭제
                 self.errorMessage = error.localizedDescription
             }
+            // 새 게임 생성 x, 인자로 넘겨주는 userId의 db를 업데이트
             self.updateUserCurrentGameId(nil, userId)
         }
     }
@@ -828,11 +831,18 @@ class GameRoomDetailViewViewModel: ObservableObject {
     /// 게임룸 삭제
     func deleteGameRoom()  {
         let gameRoomDataRef  = db.collection(GameRoom.path).document(gameRoomData.value.id)
+        var usersId: [String] = []
+        self.gameRoomData.value.usersInGame.forEach { (key: String, value: UserInGame) in
+            usersId.append(key)
+        }
+        
         gameRoomDataRef.delete { error in
             if let error = error {
                 self.errorMessage = error.localizedDescription
+                usersId.forEach { id in
+                    self.updateUserCurrentGameId(nil, id)
+                }
             }
-            self.updateUserCurrentGameId(nil)
         }
     }
     
@@ -846,9 +856,13 @@ class GameRoomDetailViewViewModel: ObservableObject {
             var afterValue = value
             afterValue.chat = nil
             afterValue.boardCard = nil
-            afterValue.readyOrNot = false
             afterValue.handCard = nil
             settingUser[key] = afterValue
+            if key == self.gameRoomData.value.hostId {
+                afterValue.readyOrNot = true
+            } else {
+                afterValue.readyOrNot = false
+            }
         }
         
         let model = GameRoom(id: newGameId, hostId: self.gameRoomData.value.hostId, title: self.gameRoomData.value.title, password: self.gameRoomData.value.password, maxUserCount: self.gameRoomData.value.maxUserCount, code: self.gameRoomData.value.code, usersInGame: settingUser, whoseGetting: nil, turnStartTime: nil, attackers: [], createdAt: Date().toString, turnTime: self.gameRoomData.value.turnTime, gameStatus: GameStatus.notStarted.rawValue, loser: nil, decision: nil, newGame: nil, players: [:])
@@ -876,8 +890,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
     }
     
     
-    /// 새로운 게임 아이디 업데이트
-    /// - Parameter newGameId: 새로운 게임아이디
+    /// 게임 아이디 업데이트( changeUserId의 firebase db를 newGameId로 업데이트)
+    /// - Parameter newGameId: 새로운 게임 아이디
+    /// - Parameter changeUserId: db의 currentGameId를 업데이트 할 id
     func updateUserCurrentGameId(_ newGameId: String?, _ changeUserId: String? = nil) {
         if let newGameId = newGameId {
             DispatchQueue.main.async {
@@ -893,7 +908,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
         var currentGameId: [String : String?] = [:]
         if newGameId == nil {
            currentGameId["currentGameId"] = nil as String?
-            Service.shared.myUserModel.currentUserId = nil
+            if changeUserId == Service.shared.myUserModel.currentUserId {
+                Service.shared.myUserModel.currentUserId = nil
+            }
         } else {
             currentGameId["currentGameId"] = newGameId
             
@@ -930,8 +947,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
     
     func preparePlayMusic() {
         musicPlayer.removeAllItems()
-//        let musicList: [String] = ["Funky_NET", "Love_It", "Hopscotch", "CHONKLAP", "DABOOMJIGGLE"]
-//        let musicList: [String] = gameStatus == .notStarted ? ["sample1", "sample4"] : ["sample2", "sample3"]
         let musicList: [String] = gameStatus == .notStarted ? ["CHONKLAP", "Just_Try_Me(Instrumental)", "Groove_It_Forward"] : ["Funky_NET", "Sunnydance(Sped_Up)", "Modern_Disco", "New_Car", "So_Fresh"]
         let musicItems = musicList.compactMap { musicName in
             return addTrack(musicName)

@@ -63,10 +63,11 @@ extension GameRoomDetailBottomView {
                             HStack(spacing: 0) {
                                 Text(userDisplayName + " 턴 입니다")
                                     .font(.sea(15))
+                                    .foregroundStyle(viewModel.showAttackerAndDefenderView ? Color.bugLight : Color.black)
                                 ForEach(0..<bottomViewModel.dots % 5, id:\.self) { _ in
                                     Text(".")
                                         .font(.sea(15))
-                                        .foregroundStyle(Color.black)
+                                        .foregroundStyle(viewModel.showAttackerAndDefenderView ? Color.bugLight : Color.black)
                                 }
                             }
                             Text("남은 시간: \(self.viewModel.secondsLeft > 0 ? self.viewModel.secondsLeft : 0)초")

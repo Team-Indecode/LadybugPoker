@@ -132,8 +132,10 @@ struct GameRoomDetailBottomView: View {
                 // 게임 시작 버튼
                 Button {
                     if isHost {
-                        Task {
-                            await viewModel.gameStartSetting()
+                        if viewModel.allPlayerReadied && viewModel.gameStatus == GameStatus.notStarted {
+                            Task {
+                                await viewModel.gameStartSetting()
+                            }
                         }
                         
                     } else {
@@ -154,8 +156,6 @@ struct GameRoomDetailBottomView: View {
                 .foregroundStyle(.black)
                 .font(.sea(15))
                 .padding(.top, 10)
-                
-//                ladyBugLogoText
             }
             
             Button {
