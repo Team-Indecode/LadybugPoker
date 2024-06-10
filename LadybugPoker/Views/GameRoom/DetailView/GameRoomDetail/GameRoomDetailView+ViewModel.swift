@@ -721,7 +721,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 updateDataDic["decision"] = nil as String?
             }
             guard let updateDatas = updateIntDatas else { return }
-            attackersUpdate(updateDatas)
+//            attackersUpdate(updateDatas)
         } else if updateDataType == .gameAttackFinish {
             updateDataDic = [:]
             updateDataDic["turnStartTime"] = Date().toString
