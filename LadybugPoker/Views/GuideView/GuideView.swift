@@ -725,7 +725,7 @@ struct GuideView: View {
         }
         .onAppear {
             /// Test Code
-            service.myUserModel = User.random()
+//            service.myUserModel = User.random()
             
             if let user = service.myUserModel {
                 users.insert(user, at: 0)
