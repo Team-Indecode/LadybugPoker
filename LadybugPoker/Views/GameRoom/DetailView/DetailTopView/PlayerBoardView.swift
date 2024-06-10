@@ -155,15 +155,19 @@ struct PlayerBoardView: View {
                 BoardUserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd, isHost: user.id == viewModel.gameRoomData.value.hostId)
                 Spacer()
                 // 유저 선택일 경우인 경우 & whoseTurn인 유저 제외 & attackers에 담겨져 있는 유저 제외
-                if viewModel.gameStatus == .onAir && viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
-                    arrowView
+                if viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id {
+                    if viewModel.gameStatus == .onAir && viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
+                        arrowView
+                    }
                 }
             })
         } else {
             return AnyView(HStack {
                 // 유저 선택일 경우인 경우 & whoseTurn인 유저 제외 & attackers에 담겨져 있는 유저 제외
-                if viewModel.gameStatus == .onAir && viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
-                    arrowView
+                if viewModel.gameRoomData.value.whoseTurn == Service.shared.myUserModel.id {
+                    if viewModel.gameStatus == .onAir && viewModel.gameType == .selectUser && viewModel.gameRoomData.value.whoseTurn != user.id && !viewModel.gameRoomData.value.attackers.contains(userBoardIndex) {
+                        arrowView
+                    }
                 }
                 Spacer()
                 BoardUserProfileView(userImageUrl: user.profileUrl, userNickname: user.displayName, userCardCnt: userCardCnt, isOdd: isOdd, isHost: user.id == viewModel.gameRoomData.value.hostId)
