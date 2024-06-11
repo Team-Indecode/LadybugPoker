@@ -202,7 +202,7 @@ enum GameRoomUpdateType: String {
     /// 한번의 공격 종료(수비자가 decision결정)
     case gameAttackFinish
     case cardSkip
-    case newGameId
+    case newGame
     /// host 변경
     case hostId
 }

@@ -52,7 +52,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
                         let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
                         let originalHostId = self.gameRoomData.value.hostId
                         self.gameRoomData.send(data)
-                        if originalHostId != data.hostId && Service.shared.myUserModel.id == data.hostId {
+                        if originalHostId != "" && originalHostId != data.hostId && Service.shared.myUserModel.id == data.hostId {
                             self.showHostChange = true
                         }
                         self.getUsersId(data.usersInGame)
@@ -511,6 +511,12 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         self.deleteUserInGameRoom(self.gameRoomData.value.hostId)
         self.gameroomDataUpdate(.hostId, newHostId)
+        //만약에 host가 된 유저가 readyOrNot의 상태가 false라면 readyOrNot을 true로 변경해준다
+        guard var userInGame = self.gameRoomData.value.usersInGame[newHostId] else { return }
+        if userInGame.readyOrNot == false {
+            userInGame.readyOrNot = true
+            self.userInGameUpdate(userInGame, newHostId, .sendUserReady)
+        }
     }
     
     func selectWhoseGetting() -> (String, Int) {
@@ -866,7 +872,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
         do {
             try await GameRoom.create(model: model)
             // 유저들이 방을 이동할 수 있도록 새로운 게임방의 아이디를 GameRoom에 업데이트 해준다.
-            self.gameroomDataUpdate(.newGameId, newGameId)
+            self.gameroomDataUpdate(.newGame, newGameId)
             self.updateUserCurrentGameId(newGameId)
         } catch {
             self.errorMessage = error.localizedDescription
