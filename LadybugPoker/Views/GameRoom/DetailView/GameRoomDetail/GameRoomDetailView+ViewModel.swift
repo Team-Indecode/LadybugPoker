@@ -50,10 +50,11 @@ class GameRoomDetailViewViewModel: ObservableObject {
                 if let doc = doc, doc.exists {
                     if let data = GameRoom(data: doc.data() ?? [:]) {
                         let beforeTurnStartTime = self.gameRoomData.value.turnStartTime
+                        let originalHostId = self.gameRoomData.value.hostId
                         self.gameRoomData.send(data)
-//                        if data.gameStatus != GameStatus.onAir.rawValue {
-//                            
-//                        }
+                        if originalHostId != data.hostId && Service.shared.myUserModel.id == data.hostId {
+                            self.showHostChange = true
+                        }
                         self.getUsersId(data.usersInGame)
                         self.getUsersChat(data.usersInGame)
                         // 게임방의 status 체크
@@ -110,7 +111,7 @@ class GameRoomDetailViewViewModel: ObservableObject {
             
 //            let whoseTurnIdx = self.gameRoomData.value.usersInGame[]
 //                                self.secondsLeft = data.turnTime
-            self.gameTimer(turnTime)
+            self.gameTimer(60)
         default: self.gameStatus = .notStarted
         }
     }
@@ -148,16 +149,14 @@ class GameRoomDetailViewViewModel: ObservableObject {
             guard let beforeTurnStartTime = beforeTurnStartTime?.toDate,
                   let nowTurnStartTime = data.turnStartTime?.toDate else { return }
             let timeDifference = beforeTurnStartTime.timeIntervalSince(nowTurnStartTime)
-            #warning("gameTimer시간 변경")
 //            self.gameTimer(60)
-            self.gameTimer(10)
-//                if timeDifference > 15 {
-//                    print(#fileID, #function, #line, "- 게임룸 삭제 lets get it")
-//                    self.deleteGameRoom()
-//                } else {
-//                    self.gameTimer(data.turnTime)
-//                    self.gameTimer(60)
-//                }
+//            self.gameTimer(10)
+                if timeDifference > 120 {
+                    self.deleteGameRoom()
+                } else {
+                    self.gameTimer(data.turnTime)
+                    self.gameTimer(60)
+                }
 
         }
     }
@@ -512,9 +511,6 @@ class GameRoomDetailViewViewModel: ObservableObject {
         
         self.deleteUserInGameRoom(self.gameRoomData.value.hostId)
         self.gameroomDataUpdate(.hostId, newHostId)
-        if Service.shared.myUserModel.id == newHostId {
-            showHostChange = true
-        }
     }
     
     func selectWhoseGetting() -> (String, Int) {
@@ -722,8 +718,8 @@ class GameRoomDetailViewViewModel: ObservableObject {
             if self.gameRoomData.value.decision != nil {
                 updateDataDic["decision"] = nil as String?
             }
-            guard let updateDatas = updateIntDatas else { return }
-            attackersUpdate(updateDatas)
+//            guard let updateDatas = updateIntDatas else { return }
+//            attackersUpdate(updateDatas)
         } else if updateDataType == .gameAttackFinish {
             updateDataDic = [:]
             updateDataDic["turnStartTime"] = Date().toString

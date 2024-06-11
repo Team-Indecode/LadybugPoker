@@ -11,7 +11,7 @@ struct CommonCheckPopupView: View {
     @Binding var isPresented: Bool
     
     @State var title: String
-    @State var subTitle: String = "설명이 들어갑니다."
+    @State var subTitle: String = ""
     
     init(_ isPresented: Binding<Bool>, title: String, subTitle: String) {
         _isPresented = isPresented
@@ -20,7 +20,14 @@ struct CommonCheckPopupView: View {
     }
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Color.black
+                .ignoresSafeArea()
+                .opacity(isPresented ? 0.5 : 0)
+            alertView
+        }
+        .ignoresSafeArea()
+        .zIndex(.greatestFiniteMagnitude)
     }
     
     var alertView: some View {

@@ -11,7 +11,7 @@ struct CommonPopupView: View {
     @Binding var isPresented: Bool
     
     @State var title: String
-    @State var subTitle: String = "설명이 들어갑니다."
+    @State var subTitle: String = ""
     var yesButtonHandler: (() -> Void)
     
     init(_ isPresented: Binding<Bool>, title: String, subTitle: String, yesButtonHandler: @escaping () -> Void) {
