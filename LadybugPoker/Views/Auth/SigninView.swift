@@ -178,6 +178,7 @@ struct SigninView: View {
             }
         } catch {
             print(error)
+            try? Auth.auth().signOut()
             service.path.append(.signup(email: email, password: password))
         }
     }

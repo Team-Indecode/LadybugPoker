@@ -8,7 +8,7 @@
 import FirebaseFirestore
 
 extension User {
-    static func create(id: String, displayName: String) async throws {
+    static func create(id: String, displayName: String) async throws -> User {
         try await Firestore
             .firestore()
             .collection(path)
@@ -20,6 +20,8 @@ extension User {
                 "profileUrl": nil,
                 "currentGameId": nil,
             ])
+        
+        return User(id: id, displayName: displayName, history: [], win: 0, lose: 0)
     }
     
     static func fetch(id: String) async throws -> User {

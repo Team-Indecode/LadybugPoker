@@ -131,7 +131,7 @@ struct SignUpView: View {
                     _ = try await Auth.auth().createUser(withEmail: email, password: password)
                     if let user = Auth.auth().currentUser {
                         print("user: \(user.uid)")
-                        try await User.create(id: user.uid, displayName: displayName)
+                        service.myUserModel = try await User.create(id: user.uid, displayName: displayName)
                         service.path = [.main]
                     }
                 }

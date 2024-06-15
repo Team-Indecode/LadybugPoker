@@ -109,6 +109,8 @@ struct DefaultView: View {
                             }
                         } catch {
                             print(error)
+                            try? Auth.auth().signOut()
+                            service.path.append(.signin)
                         }
                         
                     }
