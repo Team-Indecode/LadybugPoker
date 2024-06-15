@@ -154,6 +154,7 @@ struct GameRoomDetailView: View {
                 } else {
                     viewModel.deleteGameRoom()
                 }
+                Service.shared.path.removeLast()
             })
             .customCheckAlert(title: "방장이 되었습니다.", subTitle: "", isPresented: $viewModel.showHostChange)
             .customCheckAlert(title: "에러가 발생했습니다", subTitle: viewModel.errorMessage, isPresented: self.$showError)
