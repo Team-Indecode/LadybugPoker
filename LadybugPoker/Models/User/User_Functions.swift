@@ -19,6 +19,8 @@ extension User {
                 "history": [],
                 "profileUrl": nil,
                 "currentGameId": nil,
+                "win": 0,
+                "lose": 0
             ])
         
         return User(id: id, displayName: displayName, history: [], win: 0, lose: 0)
