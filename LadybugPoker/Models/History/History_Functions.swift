@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 extension History {
-    static func fetchList(id: String, _ last: History?) async throws -> [History] {
+    static func (id: String, _ last: History?) async throws -> [History] {
         var documents = [QueryDocumentSnapshot]()
         if let last {
             print(last.createdAt, last.title)
