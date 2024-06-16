@@ -26,6 +26,14 @@ extension User {
         return User(id: id, displayName: displayName, history: [], win: 0, lose: 0)
     }
     
+    static func delete(id: String) async throws {
+        try await Firestore
+            .firestore()
+            .collection(path)
+            .document(id)
+            .delete()
+    }
+    
     static func fetch(id: String) async throws -> User {
         let document = try await Firestore.firestore().collection(path)
             .document(id)

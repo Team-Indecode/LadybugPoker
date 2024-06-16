@@ -16,6 +16,8 @@ struct MyPageView: View {
     @State private var histories = [History]()
 
     @State private var photo: PhotosPickerItem? = nil
+    
+    @State private var showDeletePopup = false
     let id: String
     
     var body: some View {
@@ -117,9 +119,17 @@ struct MyPageView: View {
                         .padding(.vertical, 7)
                     }
                 }
+                
+
             }
 
-            
+            Button {
+                showDeletePopup.toggle()
+            } label: {
+                Text("회원 탈퇴")
+                    .font(.sea(18))
+                    .foregroundStyle(Color.red)
+            }
         }
         .background(Color.bugLight)
         .onAppear {
@@ -127,6 +137,12 @@ struct MyPageView: View {
                 histories = try await History.fetchList(id: id, nil)
             }
         }
+        .customAlert(title: "회원 탈퇴 하시겠습니까?", subTitle: "이 행동은 되돌릴 수 없습니다.", isPresented: $showDeletePopup, yesButtonHandler: {
+            Task {
+                try await User.delete(id: service.myUserModel.id)
+                service.path = []
+            }
+        })
         .onChange(of: photo) { newValue in
             if let image = newValue {
                 Task {
