@@ -841,9 +841,9 @@ class GameRoomDetailViewViewModel: ObservableObject {
         gameRoomDataRef.delete { error in
             if let error = error {
                 self.errorMessage = error.localizedDescription
-                usersId.forEach { id in
-                    self.updateUserCurrentGameId(nil, id)
-                }
+            }
+            usersId.forEach { id in
+                self.updateUserCurrentGameId(nil, id)
             }
         }
     }
