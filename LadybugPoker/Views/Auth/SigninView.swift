@@ -77,9 +77,8 @@ struct SigninView: View {
                 }
                 
             }
-            .frame(height: 50)
             .padding(.horizontal, 30)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .frame(height: 50)
             .signInWithAppleButtonStyle(.white)
             .padding(.top, 10)
             
